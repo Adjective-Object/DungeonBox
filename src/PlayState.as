@@ -2,7 +2,7 @@ package
 {
 	import flash.net.GroupSpecifier;
 	import org.flixel.*;
-	import managedobjs.MSLib;
+	import managedobjs.*;
 	
 	import flash.utils.Dictionary;
 	
@@ -26,23 +26,25 @@ package
 			FlxG.worldBounds = new FlxRect(0,0,Manager.mapSize.x, Manager.mapSize.y);
 			
 			this.manager = new LocalManager(true);
-			this.add(managedSprites);
 			
-			this.player = manager.getPlayer();
-			this.add(player);
-			FlxG.camera.zoom = 3;
-			FlxG.camera.follow(player, FlxCamera.STYLE_TOPDOWN_TIGHT);
-
+			FlxG.camera.zoom = 2;
+			this.add(managedSprites);
+		}
+		
+		protected function setPlayer(p:Player):void
+		{
+			this.player = p;
+			FlxG.camera.follow(player, FlxCamera.STYLE_LOCKON);
 		}
 		
 		override public function update():void
 		{
 			manager.update();
+			this.manager.update();//should do nothing come networked time, but for now it updates game lojyxx
 			
 			//PARSE EVENTS FROM MANAGER
 			var event:Array = this.manager.getGameEvent();
-			while (event != null)
-			{
+			while (event != null){
 				parseEvent(event.splice(0,1)[0],event);
 				event = this.manager.getGameEvent();
 			}
@@ -55,36 +57,36 @@ package
 			
 		}
 		
+		
+		//TODO can you spell duplicate code?
 		protected function parseEvent(type:int, args:Array):void
 		{
 			switch(type) 
 			{
 				case Manager.event_spawn:
 					this.gameObjects[args[0]] = makeGameSprite(args[0], args[1], args[2], args[3])
+					if (this.gameObjects[args[0]].type == Player.MSType) {
+						setPlayer(this.gameObjects[args[0]]);
+					}
 					managedSprites.add(this.gameObjects[args[0]]);
 				break;
-				case Manager.event_update_position:
-					this.gameObjects[args[0]].x=args[1]
-					this.gameObjects[args[0]].x=args[2]
+				trace(args);
+					this.gameObjects[args[0]].x = args[1];
+					this.gameObjects[args[0]].y = args[2];
 				break;
 				case Manager.event_update_health:
-					this.gameObjects[args[0]].hp=args[1]
+					this.gameObjects[args[0]].hp = args[1];
 				break;
 				
 				default:
 				break;
 			}
-		}
+		}	
 		
 		protected function makeGameSprite(id:int, x:int, y:int, MSID:int ):FlxSprite {
-			//TODO loading specific in response to specific types
 			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID,x,y,this.manager,id)
-			f.makeGraphic(10, 12, 0xff11aa11);
 			return f
 		}
-
-		
-		
 		
 	}
 }

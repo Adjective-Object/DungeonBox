@@ -41,6 +41,7 @@ package
 		
 		/**
 		 * updates each of the sprites in the game, reporting the events that happen as a result
+		 * will do nothing on networked version
 		 */
 		public function update():void {}
 		

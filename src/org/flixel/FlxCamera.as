@@ -297,8 +297,8 @@ package org.flixel
 				else
 				{
 					var edge:Number;
-					var targetX:Number = target.x + ((target.x > 0)?0.0000001:-0.0000001);
-					var targetY:Number = target.y + ((target.y > 0)?0.0000001:-0.0000001);
+					var targetX:Number = (int)(target.x) + ((target.x > 0)?0.0000001:-0.0000001);
+					var targetY:Number = (int)(target.y) + ((target.y > 0)?0.0000001:-0.0000001);
 					
 					edge = targetX - deadzone.x;
 					if(scroll.x > edge)
@@ -396,7 +396,7 @@ package org.flixel
 					break;
 				case STYLE_LOCKON:
 				default:
-					deadzone = null;
+					deadzone = new FlxRect((width)/2,(height)/2,0,0);
 					break;
 			}
 		}

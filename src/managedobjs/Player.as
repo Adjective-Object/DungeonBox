@@ -1,6 +1,7 @@
 package managedobjs 
 {	
 	import org.flixel.FlxG;
+	import org.flixel.FlxU;
 	import org.flixel.FlxSprite;
 	
 	
@@ -11,7 +12,7 @@ package managedobjs
 	public class Player extends ManagedFlxSprite
 	{
 		
-		public static var MStype:int = 0; // the value by which this is registered is MSLib
+		public static var MSType:int = 0;
 		
 		protected static var moveSpeed:Number = 100;
 		protected static var diagMovespeed:Number = Math.sqrt(2) / 2 * moveSpeed;
@@ -23,13 +24,14 @@ package managedobjs
 		public function Player(x:Number, y:Number, parent:Manager, managedID:int) 
 		{
 			super(x, y, parent, managedID, 10);
+			this.type = Player.MSType;
 			this.makeGraphic(10, 12, 0xffaa1111);
 			this.maxVelocity.x = moveSpeed*2;
 			this.maxVelocity.y = moveSpeed * 2;
 			
 			loadGraphic(playerSprite, true, true, 11, 15);
-			addAnimation("stnd", [0,0], 10, true);
-			addAnimation("walk", [0,1, 0,2, 0,3, 0,2], 10, true);
+			addAnimation("stnd", [0], 10, true);
+			addAnimation("walk", [1, 2, 3, 2], 5, true);
 			play("stnd");
 		}
 		
@@ -62,9 +64,19 @@ package managedobjs
 			
 			if (this.velocity.x != 0 || this.velocity.y != 0) {
 				play("walk");
-			} else {
+			}
+			else {
 				play("stnd");
 			}
+			
+		}
+		
+		override public function postUpdate():void {
+			super.postUpdate();
+			if (this.x < FlxG.worldBounds.left) 	{ this.x = FlxG.worldBounds.left;  }
+			if (this.y < FlxG.worldBounds.top) 		{ this.y = FlxG.worldBounds.top;   }
+			if (this.x > FlxG.worldBounds.right) 	{ this.x = FlxG.worldBounds.right; }
+			if (this.y > FlxG.worldBounds.bottom) 	{ this.y = FlxG.worldBounds.bottom;}
 		}
 		
 	}
