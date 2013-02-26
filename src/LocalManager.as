@@ -1,11 +1,10 @@
 package  
 {
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	
-	import managedobjs.MSLib;
-	
-	import managedobjs.Player;
+	import managedobjs.*;
 	
 	import flash.utils.Dictionary;
 	
@@ -31,13 +30,14 @@ package
 			
 			this.idCounter = 0;
 			
+			this.mapSize = new FlxPoint(PlayState.data[0].length * 32, PlayState.data.length * 32);
+			
 			this.playerOne = new Player(mapSize.x / 2 - 50, mapSize.y / 2, this, idCounter);
 			this.playerOne.spawn();
-			idCounter++;
-			/* TODO spawning player 2, reporting players as diff. entity types
+			
+			/* TODO spawning player 2, reporting players as diff. entity types to diff clients
 			this.playerTwo =  new Player(mapSize.x / 2 + 50, mapSize.y / 2, this, idCounter);
 			this.playerTwo.spawn();
-			idCounter++;
 			*/
 			super();
 		}
@@ -51,44 +51,53 @@ package
 		{
 			super.update();
 			
-			while (this.gameEvents.length > 0) {//implementing events on entities
+			while (this.gameEvents.length > 0) {//implementing incoming events on entities
 				var temp:Array = gameEvents.splice(0, 1)[0];
 				parseEvent(temp);
-				parsedEvents.push(temp)
 			}
 			
 			//updating each entity
-			for each( var gameObject:FlxSprite in objectMap)
+			for each( var gameObject:ManagedFlxSprite in objectMap)
 			{
 				gameObject.update();
+				gameObject.postUpdate();
 			}
 			
 			//TODO game logic (enemy spawning, etcetera) goes here, instead of this random ass random
 			
 			if (FlxG.random() < 0.01)
 			{
-				var f:ManagedFlxSprite = new ManagedFlxSprite(mapSize.x * FlxG.random(), mapSize.y * FlxG.random(), this, idCounter, 10);
-				this.objectMap[f.managedID] = f;
-				reportEvent( new Array(event_spawn, idCounter, f.x, f.y, f.type) );// spawn new game object of ID 0 at random coordinates within map;
-				idCounter++;
+				var f:ExampleEnemy = new ExampleEnemy((mapSize.x-11) * FlxG.random(), (mapSize.y-15) * FlxG.random(), this, idCounter);
+				f.spawn();
 			}
 		}
 		
 		override public function reportEvent( event:Array ):void
 		{
-			trace(event);
+			//trace(event);
 			this.gameEvents.push(event);
+		}
+		
+		/**
+		 * pushes event to clients w/o parsing it in the local manager
+		 * @param	event
+		 */
+		protected function pushEvent( event:Array ):void
+		{
+			//trace(event);
+			this.parsedEvents.push(event);
 		}
 		
 		override public function getGameEvent():Array {
 			//returns first element in gameEvents
 			if (parsedEvents.length > 0) {
-				return parsedEvents.splice(0,1)[0];//remove and return first element
+				var p:Array = parsedEvents.splice(0, 1)[0];
+				return p;//remove and return first element
 			}
 			return null;
 		}
 		
-		override public function getPlayer():FlxSprite
+		override public function getPlayer():ManagedFlxSprite
 		{
 			return this.playerOne;
 		}
@@ -114,10 +123,46 @@ package
 			}
 		}	
 		
-		protected function makeGameSprite(id:int, x:int, y:int, MSID:int ):FlxSprite {
+		protected function makeGameSprite(id:int, x:int, y:int, MSID:int ):ManagedFlxSprite {
 			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID, x, y, this, id)
-			trace(f);
 			return f
+		}
+		
+		public override function getEntity( id:uint):ManagedFlxSprite
+		{
+			return this.objectMap[id];
+		}
+		
+		public override function spawn( e:ManagedFlxSprite ):void
+		{
+			this.objectMap[idCounter] = e;
+			idCounter++;
+			this.pushEvent( new Array( Manager.event_spawn, e.managedID, e.x, e.y, e.type) );
+		}
+		
+		public override function updatePosition( e:ManagedFlxSprite):void
+		{
+			this.pushEvent( new Array( Manager.event_update_position, e.managedID, e.x, e.y) );
+		}
+		
+		public override function updateHealth( e:ManagedFlxSprite):void
+		{
+			this.pushEvent( new Array( Manager.event_update_health, e.managedID, e.x, e.y) );
+		}
+		
+		public override function kill( e:ManagedFlxSprite):void
+		{
+			this.pushEvent( new Array( Manager.event_kill, e.managedID) );
+			delete this.objectMap[e.managedID];
+		}
+		
+		public static function countKeys(myDictionary:flash.utils.Dictionary):int 
+		{		
+			var n:int = 0;
+			for (var key:* in myDictionary) {
+				n++;
+			}
+			return n;
 		}
 		
 	}

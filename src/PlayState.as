@@ -13,8 +13,34 @@ package
 	
 	public class PlayState extends FlxState
 	{
+		[Embed(source = "/../res/cursor.png")] private var cursor:Class;
 		
-		protected var manager:LocalManager;
+		
+		
+		[Embed(source = "/../res/T_0.png")] private var T0:Class;
+		[Embed(source = "/../res/T_1.png")] private var T1:Class;
+		[Embed(source = "/../res/T_2.png")] private var T2:Class;
+		[Embed(source = "/../res/T_3.png")] private var T3:Class;
+		[Embed(source = "/../res/T_4.png")] private var T4:Class;
+		[Embed(source = "/../res/T_5.png")] private var T5:Class;
+		[Embed(source = "/../res/T_6.png")] private var T6:Class;
+		[Embed(source = "/../res/T_7.png")] private var T7:Class;
+		[Embed(source = "/../res/T_8.png")] private var T8:Class;
+		var images:Array = new Array( T0, T1, T2, T3, T4, T5, T6, T7, T8);
+		
+		static var data:Array = new Array(
+			new Array(0,1,1,1,1,1,2),
+			new Array(3,4,4,4,4,4,5),
+			new Array(3,4,4,4,4,4,5),
+			new Array(3,4,4,4,4,4,5),
+			new Array(3,4,4,4,4,4,5),
+			new Array(3,4,4,4,4,4,5),
+			new Array(6,7,7,7,7,7,8)
+			 );
+			 
+		
+		protected var manager:Manager;//manager that simulates server connectio
+		
 		protected var gameObjects:Dictionary = new Dictionary();//dictionary of manager-handled object
 		protected var player:FlxSprite;
 		
@@ -22,18 +48,33 @@ package
 		
 		override public function create():void
 		{
-			FlxG.bgColor = 0xff4a515c;
-			FlxG.worldBounds = new FlxRect(0,0,Manager.mapSize.x, Manager.mapSize.y);
+			FlxG.bgColor = 0xff000000;
+			FlxG.worldBounds = new FlxRect(0, 0,  data[0].length * 32, data.length * 32);
+			FlxG.mouse.show(cursor);
 			
-			this.manager = new LocalManager(true);
+			this.manager = new DummyManager(new LocalManager());
 			
 			FlxG.camera.zoom = 2;
+			for (var y:int = 0; y < data.length; y++ ) {
+				for (var x:int = 0; x < data[y].length; x++ ) {
+					var b:FlxSprite = new FlxSprite( x * 32, y * 32, images[data[y][x]] );
+					this.add(b);
+				}
+			}
+			
+			/*
+			FlxG.camera.setBounds(
+				FlxG.worldBounds.x,
+				FlxG.worldBounds.y,
+				FlxG.worldBounds.x+FlxG.worldBounds.width,
+				FlxG.worldBounds.y+FlxG.worldBounds.height);*/
 			this.add(managedSprites);
 		}
 		
 		protected function setPlayer(p:Player):void
 		{
 			this.player = p;
+			//p.clientControlled = true;
 			FlxG.camera.follow(player, FlxCamera.STYLE_LOCKON);
 		}
 		
@@ -52,9 +93,6 @@ package
 			//MOVEMENT, LOCAL STUFF
 			
 			super.update();
-			
-			//GENERATE EVENTS AND REPORT THEM TO THE MANAGER
-			
 		}
 		
 		
@@ -70,7 +108,7 @@ package
 					}
 					managedSprites.add(this.gameObjects[args[0]]);
 				break;
-				trace(args);
+				case Manager.event_update_position:
 					this.gameObjects[args[0]].x = args[1];
 					this.gameObjects[args[0]].y = args[2];
 				break;

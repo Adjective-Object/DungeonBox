@@ -7,8 +7,11 @@ package
 
 	public class Main extends FlxGame
 	{
+		
 		public function Main()
 		{
+			trace("=============START=============");
+			
 			MSLib.instanciateMSLib();
 			super(640,480,PlayState); //Create a new FlxGame object and load "PlayState"
 		}

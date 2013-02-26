@@ -12,7 +12,7 @@ package
 	public class Manager
 	{
 		//game variables
-		public static var mapSize:FlxPoint = new FlxPoint(500,500);
+		public var mapSize:FlxPoint;
 		
 		//What are more or less networking constants
 		public static var event_spawn:int = 0;
@@ -69,9 +69,29 @@ package
 		 * 
 		 * @return the player FlxSprite
 		 */
-		public function getPlayer():FlxSprite
-		{
-			return null
+		public function getPlayer():ManagedFlxSprite{return null}
+		public function getEntity( id:uint):ManagedFlxSprite{return null;}
+		
+		public function spawn( e:ManagedFlxSprite):void{}
+		public function updatePosition( e:ManagedFlxSprite):void{}
+		public function updateHealth( e:ManagedFlxSprite):void{}
+		public function kill( e:ManagedFlxSprite):void { }
+		
+		public static function getDamageEvent(p:ManagedFlxSprite, damage:uint):Array {
+			return new Array( Manager.event_damage, p.managedID, damage)
 		}
+		public static function getSpawnEvent(p:ManagedFlxSprite):Array {
+			return new Array( Manager.event_spawn, p.managedID, p.x, p.y, p.type);
+		}
+		public static function getUpdatePosEvent(p:ManagedFlxSprite):Array {
+			return new Array( Manager.event_update_position, p.managedID, p.x, p.y);
+		}
+		public static function getUpdateHPEvent(p:ManagedFlxSprite):Array {
+			return new Array( Manager.event_update_health, p.managedID, p.health);
+		}
+		public static function getKillEvent(p:ManagedFlxSprite):Array {
+			return new Array( Manager.event_kill, p.managedID);
+		}
+		
 	}
 }
