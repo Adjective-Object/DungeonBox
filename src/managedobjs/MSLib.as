@@ -15,6 +15,7 @@ package managedobjs
 		{
 			MSLib.managedIDs[Player.MSType] = Player;
 			MSLib.managedIDs[ExampleEnemy.MSType] = ExampleEnemy;
+			MSLib.managedIDs[ShortLaser.MSType] = ShortLaser;
 		}
 		
 		/**

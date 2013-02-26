@@ -110,6 +110,7 @@ package managedobjs
 					play("shot");
 					this.channeling = true;
 					this.stopMotion = true;
+					this.parent.spawn(new ShortLaser(x,y,this.parent,100));
 				}
 				
 				if (FlxG.keys.W)

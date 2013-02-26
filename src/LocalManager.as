@@ -61,6 +61,9 @@ package
 			{
 				gameObject.update();
 				gameObject.postUpdate();
+				if(!gameObject.alive){
+					delete objectMap[gameObject.managedID];
+				}
 			}
 			
 			//TODO game logic (enemy spawning, etcetera) goes here, instead of this random ass random
@@ -74,7 +77,6 @@ package
 		
 		override public function reportEvent( event:Array ):void
 		{
-			//trace(event);
 			this.gameEvents.push(event);
 		}
 		
@@ -102,13 +104,18 @@ package
 			return this.playerOne;
 		}
 		
+		override public function getAllSprites():Dictionary
+		{
+			return this.objectMap;
+		}
+		
 		protected function parseEvent(args:Array):void
 		{
 			var type = args[0]
 			switch(type) 
 			{
 				case Manager.event_spawn:
-					this.objectMap[args[1]] = makeGameSprite(args[1], args[2], args[3], args[4])
+					spawn(makeGameSprite(args[1], args[2], args[3], args[4]));
 				break;
 				case Manager.event_update_position:
 					this.objectMap[args[1]].x = args[2];
@@ -135,6 +142,9 @@ package
 		
 		public override function spawn( e:ManagedFlxSprite ):void
 		{
+			PlayState.consoleOutput.text = "Server Spawning  " + this.idCounter + " " + e.toString();
+
+			e.managedID=idCounter;
 			this.objectMap[idCounter] = e;
 			idCounter++;
 			this.pushEvent( new Array( Manager.event_spawn, e.managedID, e.x, e.y, e.type) );
@@ -148,6 +158,11 @@ package
 		public override function updateHealth( e:ManagedFlxSprite):void
 		{
 			this.pushEvent( new Array( Manager.event_update_health, e.managedID, e.x, e.y) );
+		}
+		
+		public override function damage( e:ManagedFlxSprite, damage:int ):void
+		{
+			this.pushEvent( new Array( Manager.event_damage, damage) );
 		}
 		
 		public override function kill( e:ManagedFlxSprite):void

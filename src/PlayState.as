@@ -1,10 +1,11 @@
 package  
 {
 	import flash.net.GroupSpecifier;
-	import org.flixel.*;
+	import flash.utils.Dictionary;
+	
 	import managedobjs.*;
 	
-	import flash.utils.Dictionary;
+	import org.flixel.*;
 	
 	/**
 	 * ...
@@ -39,20 +40,23 @@ package
 			 );
 			 
 		
-		protected var manager:Manager;//manager that simulates server connectio
+		public var manager:Manager;//manager that simulates server connectio
 		
-		protected var gameObjects:Dictionary = new Dictionary();//dictionary of manager-handled object
-		protected var player:FlxSprite;
+		public var player:FlxSprite;
 		
-		protected var managedSprites:FlxGroup = new FlxGroup();
+		public var managedSprites:FlxGroup = new FlxGroup();
+		
+		public static var consoleOutput:FlxText;
 		
 		override public function create():void
 		{
+			PlayState.consoleOutput = new FlxText(0,0,100,"START");
+			
 			FlxG.bgColor = 0xff000000;
 			FlxG.worldBounds = new FlxRect(0, 0,  data[0].length * 32, data.length * 32);
 			FlxG.mouse.show(cursor);
 			
-			this.manager = new DummyManager(new LocalManager());
+			this.manager = new DummyManager(new LocalManager(),this);
 			
 			FlxG.camera.zoom = 2;
 			for (var y:int = 0; y < data.length; y++ ) {
@@ -62,6 +66,7 @@ package
 				}
 			}
 			
+			
 			/*
 			FlxG.camera.setBounds(
 				FlxG.worldBounds.x,
@@ -69,9 +74,11 @@ package
 				FlxG.worldBounds.x+FlxG.worldBounds.width,
 				FlxG.worldBounds.y+FlxG.worldBounds.height);*/
 			this.add(managedSprites);
+			
+			this.add(PlayState.consoleOutput);
 		}
 		
-		protected function setPlayer(p:Player):void
+		public function setPlayer(p:Player):void
 		{
 			this.player = p;
 			//p.clientControlled = true;
@@ -83,47 +90,9 @@ package
 			manager.update();
 			this.manager.update();//should do nothing come networked time, but for now it updates game lojyxx
 			
-			//PARSE EVENTS FROM MANAGER
-			var event:Array = this.manager.getGameEvent();
-			while (event != null){
-				parseEvent(event.splice(0,1)[0],event);
-				event = this.manager.getGameEvent();
-			}
-			
 			//MOVEMENT, LOCAL STUFF
 			
 			super.update();
-		}
-		
-		
-		//TODO can you spell duplicate code?
-		protected function parseEvent(type:int, args:Array):void
-		{
-			switch(type) 
-			{
-				case Manager.event_spawn:
-					this.gameObjects[args[0]] = makeGameSprite(args[0], args[1], args[2], args[3])
-					if (this.gameObjects[args[0]].type == Player.MSType) {
-						setPlayer(this.gameObjects[args[0]]);
-					}
-					managedSprites.add(this.gameObjects[args[0]]);
-				break;
-				case Manager.event_update_position:
-					this.gameObjects[args[0]].x = args[1];
-					this.gameObjects[args[0]].y = args[2];
-				break;
-				case Manager.event_update_health:
-					this.gameObjects[args[0]].hp = args[1];
-				break;
-				
-				default:
-				break;
-			}
-		}	
-		
-		protected function makeGameSprite(id:int, x:int, y:int, MSID:int ):FlxSprite {
-			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID,x,y,this.manager,id)
-			return f
 		}
 		
 	}

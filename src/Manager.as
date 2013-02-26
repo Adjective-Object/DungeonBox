@@ -3,6 +3,8 @@ package
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	
+	import flash.utils.Dictionary;
+	
 	/**
 	 * An Essentially abstract class that manages nonplayer sprites
 	 * (other player counts as nonplayer)
@@ -64,6 +66,11 @@ package
 			
 		}
 		
+		public function getAllSprites():Dictionary
+		{
+			return new Dictionary();
+		}
+		
 		/**
 		 * tells the PlayState the sprite it is in control of.
 		 * 
@@ -72,10 +79,11 @@ package
 		public function getPlayer():ManagedFlxSprite{return null}
 		public function getEntity( id:uint):ManagedFlxSprite{return null;}
 		
-		public function spawn( e:ManagedFlxSprite):void{}
-		public function updatePosition( e:ManagedFlxSprite):void{}
-		public function updateHealth( e:ManagedFlxSprite):void{}
-		public function kill( e:ManagedFlxSprite):void { }
+		public function spawn( e:ManagedFlxSprite):void {}
+		public function updatePosition( e:ManagedFlxSprite):void {}
+		public function updateHealth( e:ManagedFlxSprite):void {}
+		public function kill( e:ManagedFlxSprite):void {}
+		public function damage( e:ManagedFlxSprite, damage:int ):void {}
 		
 		public static function getDamageEvent(p:ManagedFlxSprite, damage:uint):Array {
 			return new Array( Manager.event_damage, p.managedID, damage)

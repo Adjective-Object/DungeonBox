@@ -100,6 +100,13 @@ package
 			return !( lhs && rhs ) && ( lhs || rhs );
 		}
 		
+		override public function kill():void {
+			this.parent.kill(this);
+			if ( (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled) ){
+				super.kill();
+			}
+		}
+			
 	}
 
 }
