@@ -76,12 +76,12 @@ package managedobjs
 			if ((FlxG.keys.LEFT || FlxG.keys.RIGHT) && !this.channeling) {
 				this.drag.x = 0; 
 			}
-			else if (this.stopMotion) { this.drag.x = dragValue; }
+			else if (this.stopMotion) { this.velocity.x = 0; }
 				
 			if ( (FlxG.keys.UP || FlxG.keys.DOWN) && !this.channeling) {
 				this.drag.y = 0;
 			}
-			else if (this.stopMotion) { this.drag.y = dragValue; }
+			else if (this.stopMotion) { this.velocity.y = 0; }
 				
 			if (!this.channeling) {//only if is taking actions right now
 				//movement;
@@ -110,7 +110,11 @@ package managedobjs
 					play("shot");
 					this.channeling = true;
 					this.stopMotion = true;
-					this.parent.spawn(new ShortLaser(x,y,this.parent,100));
+					if(facing == 0){
+						this.parent.spawn( new ShortLaser(this.getMidpoint().x+19, this.getMidpoint().y-1, this.parent, 999) );
+					} else {
+						this.parent.spawn( new ShortLaser(this.getMidpoint().x-19, this.getMidpoint().y-1, this.parent, 999) );
+					}
 				}
 				
 				if (FlxG.keys.W)

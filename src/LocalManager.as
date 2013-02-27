@@ -3,6 +3,7 @@ package
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
 	
 	import managedobjs.*;
 	
@@ -14,7 +15,7 @@ package
 	 */
 	public class LocalManager extends Manager
 	{	
-		protected var objectMap:Dictionary = new Dictionary();//dictionary of server-handled object
+		protected var objectMap:FlxGroup = new FlxGroup();//dictionary of server-handled object
 		protected var playerOne:ManagedFlxSprite;
 		protected var playerTwo:ManagedFlxSprite;
 		
@@ -35,6 +36,9 @@ package
 			this.playerOne = new Player(mapSize.x / 2 - 50, mapSize.y / 2, this, idCounter);
 			this.playerOne.spawn();
 			
+			var f:ExampleEnemy = new ExampleEnemy((mapSize.x-11) * FlxG.random(), (mapSize.y-15) * FlxG.random(), this, idCounter);
+			f.spawn();
+			
 			/* TODO spawning player 2, reporting players as diff. entity types to diff clients
 			this.playerTwo =  new Player(mapSize.x / 2 + 50, mapSize.y / 2, this, idCounter);
 			this.playerTwo.spawn();
@@ -51,27 +55,34 @@ package
 		{
 			super.update();
 			
+			PlayState.consoleOutput.text = (int)(this.playerOne.x) + ", " + (int)(this.playerOne.y) + ", " + this.playerOne.toString();
+			
 			while (this.gameEvents.length > 0) {//implementing incoming events on entities
 				var temp:Array = gameEvents.splice(0, 1)[0];
 				parseEvent(temp);
 			}
 			
 			//updating each entity
-			for each( var gameObject:ManagedFlxSprite in objectMap)
+			for each( var gameObject:ManagedFlxSprite in objectMap.members)
 			{
 				gameObject.update();
 				gameObject.postUpdate();
-				if(!gameObject.alive){
-					delete objectMap[gameObject.managedID];
+				if (!gameObject.alive) {
+					trace(gameObject+" "+ gameObject.managedID + " has died");
+					this.pushEvent(Manager.getKillEvent(gameObject));
+					delete objectMap.members[gameObject.managedID];
 				}
 			}
 			
 			//TODO game logic (enemy spawning, etcetera) goes here, instead of this random ass random
-			
-			if (FlxG.random() < 0.01)
-			{
-				var f:ExampleEnemy = new ExampleEnemy((mapSize.x-11) * FlxG.random(), (mapSize.y-15) * FlxG.random(), this, idCounter);
-				f.spawn();
+			if (FlxG.random() < 0.001) {
+				this.spawn( MSLib.getMFlxSprite(
+					ExampleEnemy.MSType,
+					FlxG.random() * this.mapSize.x,
+					FlxG.random() * this.mapSize.y,
+					this,
+					this.idCounter
+					));
 			}
 		}
 		
@@ -104,7 +115,7 @@ package
 			return this.playerOne;
 		}
 		
-		override public function getAllSprites():Dictionary
+		override public function getAllSprites():FlxGroup
 		{
 			return this.objectMap;
 		}
@@ -115,14 +126,19 @@ package
 			switch(type) 
 			{
 				case Manager.event_spawn:
+					trace("spawn_via_event");
 					spawn(makeGameSprite(args[1], args[2], args[3], args[4]));
 				break;
 				case Manager.event_update_position:
-					this.objectMap[args[1]].x = args[2];
-					this.objectMap[args[1]].y = args[3];
+					this.objectMap.members[args[1]].x = args[2];
+					this.objectMap.members[args[1]].y = args[3];
 				break;
 				case Manager.event_update_health:
-					this.objectMap[args[1]].hp = args[2];
+					this.objectMap.members[args[1]].hp = args[2];
+				break;
+				case Manager.event_kill:
+					trace("kill_via_event "+this.objectMap.members[args[1]]);
+					delete this.objectMap.members[args[1]];
 				break;
 				
 				default:
@@ -137,41 +153,41 @@ package
 		
 		public override function getEntity( id:uint):ManagedFlxSprite
 		{
-			return this.objectMap[id];
+			return this.objectMap.members[id];
 		}
 		
 		public override function spawn( e:ManagedFlxSprite ):void
 		{
-			PlayState.consoleOutput.text = "Server Spawning  " + this.idCounter + " " + e.toString();
-
 			e.managedID=idCounter;
-			this.objectMap[idCounter] = e;
+			this.objectMap.members[idCounter] = e;
 			idCounter++;
-			this.pushEvent( new Array( Manager.event_spawn, e.managedID, e.x, e.y, e.type) );
+			this.pushEvent(  Manager.getSpawnEvent(e) );
 		}
 		
 		public override function updatePosition( e:ManagedFlxSprite):void
 		{
-			this.pushEvent( new Array( Manager.event_update_position, e.managedID, e.x, e.y) );
+			this.pushEvent( Manager.getUpdatePosEvent(e) );
 		}
-		
 		public override function updateHealth( e:ManagedFlxSprite):void
 		{
-			this.pushEvent( new Array( Manager.event_update_health, e.managedID, e.x, e.y) );
+			this.pushEvent( Manager.getUpdateAnimEvent(e) );
 		}
-		
+		public override function updateAnimation( e:ManagedFlxSprite):void
+		{
+			this.pushEvent(Manager.getUpdateAnimEvent(e));
+		}
 		public override function damage( e:ManagedFlxSprite, damage:int ):void
 		{
 			this.pushEvent( new Array( Manager.event_damage, damage) );
 		}
-		
 		public override function kill( e:ManagedFlxSprite):void
 		{
-			this.pushEvent( new Array( Manager.event_kill, e.managedID) );
-			delete this.objectMap[e.managedID];
+			this.pushEvent( Manager.getKillEvent(e) );
+			delete this.objectMap.members[e.managedID];
 		}
 		
-		public static function countKeys(myDictionary:flash.utils.Dictionary):int 
+		
+		public static function countKeys(myDictionary:FlxGroup):int 
 		{		
 			var n:int = 0;
 			for (var key:* in myDictionary) {

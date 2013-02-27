@@ -66,7 +66,6 @@ package
 				}
 			}
 			
-			
 			/*
 			FlxG.camera.setBounds(
 				FlxG.worldBounds.x,
@@ -87,6 +86,7 @@ package
 		
 		override public function update():void
 		{
+			
 			manager.update();
 			this.manager.update();//should do nothing come networked time, but for now it updates game lojyxx
 			

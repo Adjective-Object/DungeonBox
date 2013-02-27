@@ -31,7 +31,9 @@ package
 		
 		public static var bar:BitmapData = null;
 		
-		protected var tempx:Number, tempy:Number, temphp:Number;
+		public var tempx:Number, tempy:Number, temphp:Number;
+		public var animname:String;
+		public var oldFace:uint;
 		
 		public function ManagedFlxSprite(x:Number, y:Number, parent:Manager, managedID:int, maxHP:int, clientControlled:Boolean = false) {
 			super(x, y);
@@ -49,6 +51,7 @@ package
 			this.tempx = x;
 			this.tempy = y;
 			this.temphp = maxHP;
+			this.animname = "none";
 		}
 		
 		public function spawn():void {
@@ -61,7 +64,12 @@ package
 				this.tempx = this.x;
 				this.tempy = this.y;
 				this.temphp = this.hp;
-				
+				this.oldFace = this.facing;
+				if (this._curAnim != null)
+				{
+					this.animname = this._curAnim.name;
+				}
+					
 				updateTrackedQualities();
 				super.update();
 				
@@ -79,6 +87,9 @@ package
 				if (this.hp != temphp) {
 					parent.updateHealth(this);
 					parent.reportEvent( Manager.getDamageEvent(this,temphp-hp) );
+				}
+				if (this._curAnim != null && this.animname != this._curAnim.name || this.facing!=this.oldFace) {
+					parent.updateAnimation(this);
 				}
 			}
 		}
@@ -101,8 +112,8 @@ package
 		}
 		
 		override public function kill():void {
-			this.parent.kill(this);
 			if ( (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled) ){
+				this.parent.kill(this);
 				super.kill();
 			}
 		}

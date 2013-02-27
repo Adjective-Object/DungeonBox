@@ -13,7 +13,8 @@ package managedobjs
 		[Embed(source = "/../res/Enemy.png")] private var enemy:Class;
 		
 		public static var MSType:int = 1;
-		public static var movespeed:Number = 30;
+		public static var movespeed:Number = 10;
+		public static var sightRange:Number = 50;
 		
 		public function ExampleEnemy(x:Number, y:Number, parent:Manager, managedID:int) 
 		{
@@ -32,14 +33,35 @@ package managedobjs
 		
 		override public function update():void {
 			super.update();
-
+		}
+		
+		override public function updateTrackedQualities():void {
+			var play:ManagedFlxSprite = this.parent.getPlayer();//TODO this..
+			var hyp:Number = Math.sqrt( Math.pow(play.x - this.x, 2) + Math.pow(play.y - this.y, 2));
+			if (hyp<sightRange)
+			{
+				walkAt(new FlxPoint(play.x, play.y));
+			}
+			else {
+				 if (FlxG.random() < 0.01) {
+					 walkAt(new FlxPoint(this.parent.mapSize.x*FlxG.random(), this.parent.mapSize.y*FlxG.random()));
+				 }
+				else if (FlxG.random() < 0.001)
+				{
+					this.velocity.x = 0;
+					this.velocity.y = 0;
+				}
+			}
+			
+			super.updateTrackedQualities();
+			
 			if (this.velocity.x != 0 || this.velocity.y != 0)
 			{
-				play("walk");
+				this.play("walk");
 			}
 			else
 			{
-				play("stnd");
+				this.play("stnd");
 			}
 			
 			if (this.velocity.x < 0) {
@@ -51,17 +73,15 @@ package managedobjs
 			
 		}
 		
-		override public function updateTrackedQualities():void {
-			var p:ManagedFlxSprite = this.parent.getPlayer();//TODO this...
+		protected function walkAt( p:FlxPoint) {
 			var hyp:Number = Math.sqrt( Math.pow(p.x - this.x, 2) + Math.pow(p.y - this.y, 2));
-			if(hyp>1){
-				var cos = (p.x - this.x) / hyp, sin = (p.y - this.y) / hyp;
-				
-				this.velocity.x = cos * movespeed;
-				this.velocity.y = sin * movespeed;
-			}
-			super.updateTrackedQualities();
-			
+
+				if(hyp>1){
+					var cos = (p.x - this.x) / hyp, sin = (p.y - this.y) / hyp;
+					
+					this.velocity.x = cos * movespeed;
+					this.velocity.y = sin * movespeed;
+				}
 		}
 		
 	}

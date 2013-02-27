@@ -2,6 +2,7 @@ package
 {
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
+	import org.flixel.FlxGroup;
 	
 	import flash.utils.Dictionary;
 	
@@ -66,9 +67,9 @@ package
 			
 		}
 		
-		public function getAllSprites():Dictionary
+		public function getAllSprites():FlxGroup
 		{
-			return new Dictionary();
+			return new FlxGroup();
 		}
 		
 		/**
@@ -82,24 +83,29 @@ package
 		public function spawn( e:ManagedFlxSprite):void {}
 		public function updatePosition( e:ManagedFlxSprite):void {}
 		public function updateHealth( e:ManagedFlxSprite):void {}
+		public function updateAnimation( e:ManagedFlxSprite):void {}
 		public function kill( e:ManagedFlxSprite):void {}
 		public function damage( e:ManagedFlxSprite, damage:int ):void {}
 		
+		public static function getSpawnEvent(p:ManagedFlxSprite):Array {
+			return new Array( Manager.event_spawn, p.managedID, p.x, p.y, p.type );
+		}
 		public static function getDamageEvent(p:ManagedFlxSprite, damage:uint):Array {
 			return new Array( Manager.event_damage, p.managedID, damage)
 		}
-		public static function getSpawnEvent(p:ManagedFlxSprite):Array {
-			return new Array( Manager.event_spawn, p.managedID, p.x, p.y, p.type);
-		}
 		public static function getUpdatePosEvent(p:ManagedFlxSprite):Array {
-			return new Array( Manager.event_update_position, p.managedID, p.x, p.y);
+			return new Array( Manager.event_update_position, p.managedID, p.x, p.y );
 		}
 		public static function getUpdateHPEvent(p:ManagedFlxSprite):Array {
-			return new Array( Manager.event_update_health, p.managedID, p.health);
+			return new Array( Manager.event_update_health, p.managedID, p.health );
+		}
+		public static function getUpdateAnimEvent(p:ManagedFlxSprite):Array {
+			return new Array( Manager.event_update_animation, p.managedID, p.animname, p.facing);
 		}
 		public static function getKillEvent(p:ManagedFlxSprite):Array {
 			return new Array( Manager.event_kill, p.managedID);
 		}
+		
 		
 	}
 }

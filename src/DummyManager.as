@@ -16,7 +16,7 @@ package
 	{
 		
 		private var pipedManager:LocalManager;
-		protected var gameObjects:Dictionary = new Dictionary();//dictionary of manager-handled object
+		protected var gameObjects:FlxGroup = new FlxGroup();//dictionary of manager-handled object
 		private var child:PlayState;
 		
 		public function DummyManager(manager:LocalManager, child:PlayState) 
@@ -46,18 +46,22 @@ package
 			switch(type) 
 			{
 				case Manager.event_spawn:
-					this.gameObjects[args[0]] = makeGameSprite(args[0], args[1], args[2], args[3])
-					if (this.gameObjects[args[0]].type == Player.MSType) {
-						this.child.setPlayer(this.gameObjects[args[0]]);
+					this.gameObjects.members[args[0]] = makeGameSprite(args[0], args[1], args[2], args[3])
+					if (this.gameObjects.members[args[0]].type == Player.MSType) {
+						this.child.setPlayer(this.gameObjects.members[args[0]]);
 					}
-					this.child.managedSprites.add(this.gameObjects[args[0]]);
+					this.child.managedSprites.add(this.gameObjects.members[args[0]]);
 					break;
 				case Manager.event_update_position:
-					this.gameObjects[args[0]].x = args[1];
-					this.gameObjects[args[0]].y = args[2];
+					this.gameObjects.members[args[0]].x = args[1];
+					this.gameObjects.members[args[0]].y = args[2];
+					break;
+				case Manager.event_update_animation:
+					this.gameObjects.members[args[0]].play(args[1]);
+					this.gameObjects.members[args[0]].facing = args[2];
 					break;
 				case Manager.event_update_health:
-					this.gameObjects[args[0]].hp = args[1];
+					this.gameObjects.members[args[0]].hp = args[1];
 					break;
 				
 				default:
@@ -97,27 +101,37 @@ package
 		{
 			return this.pipedManager.getPlayer();
 		}
-		
 		public override function getEntity( id:uint):ManagedFlxSprite
 		{
 			return this.pipedManager.getEntity(id);
 		}
+		public override function getAllSprites():FlxGroup {
+			return this.gameObjects;
+		}
 		
 		public override function spawn( e:ManagedFlxSprite):void
 		{
-			pipedManager.reportEvent( Manager.getSpawnEvent(e) );
+			reportEvent(Manager.getSpawnEvent(e));
 		}
 		public override function updatePosition( e:ManagedFlxSprite):void
 		{
-			pipedManager.reportEvent( Manager.getUpdatePosEvent(e));
+			this.reportEvent(Manager.getUpdatePosEvent(e));
 		}
-		public override function updateHealth( e:ManagedFlxSprite):void 
+		public override function updateHealth( e:ManagedFlxSprite):void
 		{
-			pipedManager.reportEvent( Manager.getUpdateHPEvent(e));
+			this.reportEvent(Manager.getUpdateHPEvent(e));
 		}
-		public override function kill(e:ManagedFlxSprite):void
+		public override function updateAnimation( e:ManagedFlxSprite):void
 		{
-			pipedManager.reportEvent( Manager.getKillEvent(e));
+			this.reportEvent(Manager.getUpdateAnimEvent(e));
+		}
+		public override function kill( e:ManagedFlxSprite):void
+		{
+			this.reportEvent(Manager.getKillEvent(e));
+		}
+		public override function damage( e:ManagedFlxSprite, damage:int ):void
+		{
+			this.reportEvent(Manager.getDamageEvent(e,damage));
 		}
 	}
 

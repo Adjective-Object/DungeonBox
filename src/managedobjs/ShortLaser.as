@@ -4,6 +4,8 @@ package managedobjs
 	import org.flixel.FlxG;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxU;
+	import org.flixel.FlxGroup;
+	import org.flixel.FlxObject;
 	
 	
 	/**
@@ -16,20 +18,27 @@ package managedobjs
 		
 		protected var counter:Number = 0;
 		
+		protected var collidedWith:Array = new Array(), collisionRecord:Array = new Array();
+		
 		public function ShortLaser(x:Number, y:Number, parent:Manager, managedID:int)
 		{
 			super(x, y, parent, managedID, 100);
 			this.type = ShortLaser.MSType;
 			this.makeGraphic(1,1,FlxG.WHITE);
-			this.scale.x=30;
+			this.scale.x = 30;
+			this.scale.y = 0;
+			FlxG.overlap(this, parent.getAllSprites(), onCollide);
 		}
 		
 		override public function update():void
 		{
 			super.update();
-			counter+=FlxG.elapsed;
+			counter += FlxG.elapsed;
+			if (counter > 0.2 && counter < 0.5) {
+				this.scale.y = (this.counter-0.2)*(1/0.3);
+			}
 			if(counter>0.5 && counter<1.5){
-				this.scale.y=7.5-5*counter;
+				this.scale.y=5-5*(counter-0.5);
 			}
 			else if(counter>=1.5){
 				this.kill();
@@ -41,13 +50,18 @@ package managedobjs
 			this.makeGraphic(1,1,FlxG.RED);
 			for each( var gameObject:ManagedFlxSprite in parent.getAllSprites())
 			{
-				if(FlxG.collide(gameObject,this))
+				if(collidedWith[gameObject.managedID] && !collisionRecord[gameObject.managedID] )
 				{
-					//PlayState.consoleOutput.text = "COLL";
-					this.parent.damage(gameObject,1);
+					collisionRecord[gameObject.managedID] = true;
+					PlayState.consoleOutput.text = "COLL";
+					this.parent.damage(gameObject, 1);
 				}
 			}
 			super.updateTrackedQualities();
+		}
+		
+		public function onCollide(Object1:FlxObject,Object2:FlxObject):void {
+			collidedWith[Object2] = true;
 		}
 		
 		
