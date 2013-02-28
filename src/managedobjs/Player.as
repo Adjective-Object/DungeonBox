@@ -110,14 +110,18 @@ package managedobjs
 					play("shot");
 					this.channeling = true;
 					this.stopMotion = true;
+					var s:ShortLaser;
 					if(facing == 0){
-						this.parent.spawn( new ShortLaser(this.getMidpoint().x+19, this.getMidpoint().y-1, this.parent, 999) );
+						s = new ShortLaser(this.x+this.width+1, this.getMidpoint().y, this.parent, null);
+						s.facing = 0;
 					} else {
-						this.parent.spawn( new ShortLaser(this.getMidpoint().x-19, this.getMidpoint().y-1, this.parent, 999) );
+						s = new ShortLaser(this.x-ShortLaser.laserLength, this.getMidpoint().y, this.parent, null);
+						s.facing = 1;
 					}
+					this.parent.spawn(s);
 				}
 				
-				if (FlxG.keys.W)
+				else if (FlxG.keys.W)
 				{
 					play("roll");
 					this.stopMotion = false;
@@ -135,13 +139,13 @@ package managedobjs
 					}
 				}
 				
-				if (FlxG.keys.E)
+				else if (FlxG.keys.E)
 				{
 					play("cast");
 					this.channeling = true;
 				}
 				
-				if (FlxG.keys.R)
+				else if (FlxG.keys.R)
 				{
 					play("ulti");
 					this.channeling = true;

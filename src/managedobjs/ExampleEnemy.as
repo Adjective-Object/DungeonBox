@@ -13,7 +13,7 @@ package managedobjs
 		[Embed(source = "/../res/Enemy.png")] private var enemy:Class;
 		
 		public static var MSType:int = 1;
-		public static var movespeed:Number = 10;
+		public static var movespeed:Number = 20;
 		public static var sightRange:Number = 50;
 		public static var aggroRange:Number = 80;
 		
@@ -31,6 +31,8 @@ package managedobjs
 			play("stnd");
 			this.drag.x = movespeed / 10;
 			this.drag.y = movespeed / 10;
+			this.width = 11;
+			this.height=15;
 			
 		}
 		

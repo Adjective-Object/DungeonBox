@@ -79,7 +79,8 @@ package
 					FlxG.random() * this.mapSize.x,
 					FlxG.random() * this.mapSize.y,
 					this,
-					this.idCounter
+					this.idCounter,
+					(int)(Math.round(FlxG.random()))
 					));
 			}
 		}
@@ -125,7 +126,7 @@ package
 			{
 				case Manager.event_spawn:
 					trace("spawn_via_event");
-					spawn(makeGameSprite(args[1], args[2], args[3], args[4]));
+					spawn(makeGameSprite(args[1], args[2], args[3], args[4], args[5]));
 				break;
 				case Manager.event_update_position:
 					this.objectMap.members[args[1]].x = args[2];
@@ -147,8 +148,8 @@ package
 			}
 		}	
 		
-		protected function makeGameSprite(id:int, x:int, y:int, MSID:int ):ManagedFlxSprite {
-			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID, x, y, this, id)
+		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, facing:int):ManagedFlxSprite {
+			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID, x, y, this, id, facing);
 			return f
 		}
 		

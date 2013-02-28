@@ -87,10 +87,23 @@ package
 		override public function update():void
 		{
 			
-			manager.update();
 			this.manager.update();//should do nothing come networked time, but for now it updates game lojyxx
 			
 			//MOVEMENT, LOCAL STUFF
+			
+			for each( var gameObject in this.managedSprites.members){
+				if(!gameObject.alive){
+					PlayState.consoleOutput.text=gameObject.toString()+" died";
+					this.remove(gameObject,true);
+				}
+			}
+			
+			for each( var gameObject in this.members){
+				if(!gameObject.alive){
+					PlayState.consoleOutput.text=gameObject.toString()+" died";
+					this.remove(gameObject,true);
+				}
+			}
 			
 			super.update();
 		}

@@ -26,6 +26,9 @@ package
 		public override function update():void {
 			elapsed+=FlxG.elapsed;
 			this.alpha = (DamageText.lifetime-elapsed)/DamageText.lifetime;
+			if(elapsed>DamageText.lifetime){
+				this.kill();
+			}
 		}
 		
 	}

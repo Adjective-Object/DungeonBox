@@ -10,6 +10,8 @@ package
 		
 		public function Main()
 		{
+			FlxG.debug=true;
+			FlxG.visualDebug=true;
 			trace("=============START=============");
 			
 			MSLib.instanciateMSLib();

@@ -79,8 +79,8 @@ package
 					this.velocity.x=knockVelocity.x;
 					this.velocity.y=knockVelocity.y;
 					
-					knockVelocity.x=knockVelocity.x*0.5/FlxG.elapsed;
-					knockVelocity.y=knockVelocity.y*0.5/FlxG.elapsed;
+					knockVelocity.x-=knockVelocity.x*(FlxG.elapsed/0.5);
+					knockVelocity.y-=knockVelocity.y*(FlxG.elapsed/0.5);
 				}
 				
 				super.update();

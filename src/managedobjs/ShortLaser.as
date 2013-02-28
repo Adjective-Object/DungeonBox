@@ -15,6 +15,7 @@ package managedobjs
 	public class ShortLaser extends ManagedFlxSprite
 	{
 		public static var MSType = 2;
+		public static var laserLength = 60, waitTime = 0.2, chargeTime = 0.2, fireTime = 0.1;
 		
 		protected var counter:Number = 0;
 		
@@ -24,36 +25,45 @@ package managedobjs
 		{
 			super(x, y, parent, managedID, 100);
 			this.type = ShortLaser.MSType;
-			this.makeGraphic(1,1,FlxG.WHITE);
-			this.scale.x = 30;
-			this.scale.y = 0;
+			this.makeGraphic(laserLength,1,FlxG.WHITE);
+			this.scale.y = 1;
+			this.width = laserLength;
+			this.height = 5;
+			this.offset.y = -2.5;
 		}
 		
 		override public function update():void
 		{
 			super.update();
 			counter += FlxG.elapsed;
-			if (counter > 0.2 && counter < 0.5) {
-				this.scale.y = (this.counter-0.2)*(1/0.3);
+			if (counter > chargeTime && counter < chargeTime+waitTime) {
+				this.scale.y = (this.counter-waitTime)*(1/chargeTime);
 			}
-			if(counter>0.5 && counter<1.5){
-				this.scale.y=5-5*(counter-0.5);
+			else if(counter>chargeTime+waitTime && counter<chargeTime+waitTime+fireTime){
+				this.scale.y=5-5*(counter-(chargeTime+waitTime)) / fireTime ;
 			}
-			else if(counter>=1.5){
+			else if(counter>=chargeTime+waitTime+fireTime){
 				this.kill();
 			}
+			//updateTrackedQualities();
 		}
 		
 		override public function updateTrackedQualities():void
 		{
-			this.makeGraphic(1,1,FlxG.RED);
-			for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
-			{
-				if( FlxG.overlap(this, gameObject) && !collisionRecord[gameObject.managedID])
+			if(this.counter>waitTime+chargeTime){
+				for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
 				{
-					collisionRecord[gameObject.managedID] = true;
-					this.parent.damage(gameObject, 1);
-					this.parent.knockBack(gameObject,10,0);
+					if( FlxG.overlap(this, gameObject) && !collisionRecord[gameObject.managedID])
+					{
+						collisionRecord[gameObject.managedID] = true;
+						this.parent.damage(gameObject, 1);
+						if(this.facing==0){
+							this.parent.knockBack(gameObject,30,0);
+						}
+						else if (this.facing==1){
+							this.parent.knockBack(gameObject,-30,0);
+						}
+					}
 				}
 			}
 			super.updateTrackedQualities();
