@@ -30,6 +30,7 @@ package managedobjs
 		{
 			super(x, y, parent, managedID, 10);
 			this.clientControlled = true;
+			this.align=Manager.align_friend;
 			
 			this.type = Player.MSType;
 			this.makeGraphic(10, 12, 0xffaa1111);
@@ -118,6 +119,7 @@ package managedobjs
 						s = new ShortLaser(this.x-ShortLaser.laserLength, this.getMidpoint().y, this.parent, null);
 						s.facing = 1;
 					}
+					s.align=Manager.align_friend;
 					this.parent.spawn(s);
 				}
 				
@@ -149,6 +151,9 @@ package managedobjs
 				{
 					play("ulti");
 					this.channeling = true;
+					var g = new GravityWell(this.getMidpoint().x, this.getMidpoint().y, this.parent, null);
+					g.align=Manager.align_friend;
+					g.spawn();
 				}
 			}
 			

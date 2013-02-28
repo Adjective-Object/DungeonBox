@@ -24,6 +24,7 @@ package
 
 		public var managedID:int
 		public var type:int;
+		public var align:int;
 		
 		public var clientControlled = false;
 		

@@ -43,6 +43,9 @@ package
 		
 		public var clientSide:Boolean = false;
 		
+		public static var align_friend:int = 1
+		public static var align_enemy:int = 0
+		
 		public function Manager(){}
 		
 		/**
@@ -92,7 +95,7 @@ package
 		public function knockBack( e:ManagedFlxSprite, x:int, y:int ):void {}
 		
 		public static function getSpawnEvent(p:ManagedFlxSprite):Array {
-			return new Array( Manager.event_spawn, p.managedID, p.x, p.y, p.type, p.facing);
+			return new Array( Manager.event_spawn, p.managedID, p.x, p.y, p.type, p.align, p.facing);
 		}
 		public static function getDamageEvent(p:ManagedFlxSprite, damage:int):Array {
 			return new Array( Manager.event_damage, p.managedID, damage);

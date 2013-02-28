@@ -2,6 +2,8 @@ package managedobjs
 {
 	import flash.utils.Dictionary;
 	
+	import org.flixel.FlxObject
+	
 	/**
 	 * ...
 	 * @author Maxwell Huang-Hobbs
@@ -16,6 +18,7 @@ package managedobjs
 			MSLib.managedIDs[Player.MSType] = Player;
 			MSLib.managedIDs[ExampleEnemy.MSType] = ExampleEnemy;
 			MSLib.managedIDs[ShortLaser.MSType] = ShortLaser;
+			MSLib.managedIDs[GravityWell.MSType] = GravityWell;
 		}
 		
 		/**
@@ -27,21 +30,21 @@ package managedobjs
 		 * @param	parent the Manager which this managed sprite should report to
 		 * @param	managedID the ID in the manager
 		 */
-		public static function getMFlxSprite(type:int, x:int, y:int, parent:Manager, managedID:int, facing:int):ManagedFlxSprite {
+		public static function getMFlxSprite(type:int, x:int, y:int, parent:Manager, managedID:int):ManagedFlxSprite {
 			if (type != ManagedFlxSprite.TYPE_UNDECLARED) {
 				var clazz:Class = MSLib.managedIDs[type];
-				var f = new clazz(x, y, parent, managedID);
-				f.facing = facing;
-				return f;
+				return new clazz(x, y, parent, managedID);
 			}
 			else
 			{
-				var f:ManagedFlxSprite = new ManagedFlxSprite(x, y, parent, managedID, 10);
-				f.facing = facing;
-				
-				PlayState.consoleOutput.text = f.facing.toString();
-				return f;
+				return new ManagedFlxSprite(x, y, parent, managedID, 10);
 			}
+		}
+		
+		
+		//UTIL functions
+		public static function distance(a:FlxObject, b:FlxObject){
+			return Math.sqrt( Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 		}
 		
 	}

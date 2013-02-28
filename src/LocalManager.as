@@ -1,13 +1,13 @@
 package  
 {
-	import org.flixel.FlxPoint;
-	import org.flixel.FlxSprite;
-	import org.flixel.FlxG;
-	import org.flixel.FlxGroup;
+	import flash.utils.Dictionary;
 	
 	import managedobjs.*;
 	
-	import flash.utils.Dictionary;
+	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
+	import org.flixel.FlxPoint;
+	import org.flixel.FlxSprite;
 	
 	/**
 	 * ...
@@ -73,15 +73,16 @@ package
 			}
 			
 			//TODO game logic (enemy spawning, etcetera) goes here, instead of this random ass random
-			if (FlxG.random() < 0.001) {
-				this.spawn( MSLib.getMFlxSprite(
+			if (FlxG.random() < 0.001 || FlxG.keys.pressed("SPACE") ) {
+				var m:ManagedFlxSprite = MSLib.getMFlxSprite(
 					ExampleEnemy.MSType,
 					FlxG.random() * this.mapSize.x,
 					FlxG.random() * this.mapSize.y,
 					this,
-					this.idCounter,
-					(int)(Math.round(FlxG.random()))
-					));
+					this.idCounter);
+				m.facing = (int)(Math.round(FlxG.random()));//cosmetic
+				m.align = Manager.align_enemy;	
+				this.spawn(m);
 			}
 		}
 		
@@ -126,7 +127,7 @@ package
 			{
 				case Manager.event_spawn:
 					trace("spawn_via_event");
-					spawn(makeGameSprite(args[1], args[2], args[3], args[4], args[5]));
+					spawn(makeGameSprite(args[1], args[2], args[3], args[4], args[5], args[6]));
 				break;
 				case Manager.event_update_position:
 					this.objectMap.members[args[1]].x = args[2];
@@ -148,8 +149,10 @@ package
 			}
 		}	
 		
-		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, facing:int):ManagedFlxSprite {
-			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID, x, y, this, id, facing);
+		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, align:int, facing:int):ManagedFlxSprite {
+			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID, x, y, this, id);
+			f.facing = facing;
+			f.align = align;
 			return f
 		}
 		

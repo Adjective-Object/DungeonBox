@@ -46,11 +46,14 @@ package
 			switch(type) 
 			{
 				case Manager.event_spawn:
-					this.gameObjects.members[args[0]] = makeGameSprite(args[0], args[1], args[2], args[3], args[4])
+					this.gameObjects.members[args[0]] = makeGameSprite(args[0], args[1], args[2], args[3], args[4], args[5])
 					if (this.gameObjects.members[args[0]].type == Player.MSType) {
 						this.child.setPlayer(this.gameObjects.members[args[0]]);
+						this.child.add(this.gameObjects.members[args[0]]);
+					} else{
+						this.child.managedSprites.add(this.gameObjects.members[args[0]]);
 					}
-					this.child.managedSprites.add(this.gameObjects.members[args[0]]);
+					
 					break;
 				case Manager.event_update_position:
 					this.gameObjects.members[args[0]].x = args[1];
@@ -71,8 +74,10 @@ package
 			}
 		}	
 		
-		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, facing:int ):FlxSprite {
-			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID,x,y,this,id,facing);
+		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, align:int, facing:int ):FlxSprite {
+			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID,x,y,this,id);
+			f.facing = facing;
+			f.align=align;
 			return f
 		}
 		/**

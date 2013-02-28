@@ -42,7 +42,7 @@ package managedobjs
 		
 		override public function updateTrackedQualities():void {
 			var play:ManagedFlxSprite = this.parent.getPlayer();//TODO this..
-			var hyp:Number = Math.sqrt( Math.pow(play.x - this.x, 2) + Math.pow(play.y - this.y, 2));
+			var hyp:Number = MSLib.distance(this,play);
 			if(hyp>aggroRange){
 				this.aggro=false;
 			}
