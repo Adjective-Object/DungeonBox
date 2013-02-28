@@ -27,7 +27,6 @@ package managedobjs
 			this.makeGraphic(1,1,FlxG.WHITE);
 			this.scale.x = 30;
 			this.scale.y = 0;
-			FlxG.overlap(this, parent.getAllSprites(), onCollide);
 		}
 		
 		override public function update():void
@@ -48,20 +47,16 @@ package managedobjs
 		override public function updateTrackedQualities():void
 		{
 			this.makeGraphic(1,1,FlxG.RED);
-			for each( var gameObject:ManagedFlxSprite in parent.getAllSprites())
+			for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
 			{
-				if(collidedWith[gameObject.managedID] && !collisionRecord[gameObject.managedID] )
+				if( FlxG.overlap(this, gameObject) && !collisionRecord[gameObject.managedID])
 				{
 					collisionRecord[gameObject.managedID] = true;
-					PlayState.consoleOutput.text = "COLL";
 					this.parent.damage(gameObject, 1);
+					this.parent.knockBack(gameObject,10,0);
 				}
 			}
 			super.updateTrackedQualities();
-		}
-		
-		public function onCollide(Object1:FlxObject,Object2:FlxObject):void {
-			collidedWith[Object2] = true;
 		}
 		
 		

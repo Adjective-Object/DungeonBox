@@ -15,6 +15,9 @@ package managedobjs
 		public static var MSType:int = 1;
 		public static var movespeed:Number = 10;
 		public static var sightRange:Number = 50;
+		public static var aggroRange:Number = 80;
+		
+		protected var aggro:Boolean = false;
 		
 		public function ExampleEnemy(x:Number, y:Number, parent:Manager, managedID:int) 
 		{
@@ -38,7 +41,15 @@ package managedobjs
 		override public function updateTrackedQualities():void {
 			var play:ManagedFlxSprite = this.parent.getPlayer();//TODO this..
 			var hyp:Number = Math.sqrt( Math.pow(play.x - this.x, 2) + Math.pow(play.y - this.y, 2));
-			if (hyp<sightRange)
+			if(hyp>aggroRange){
+				this.aggro=false;
+			}
+			if(hyp<sightRange){
+				this.aggro=true;
+			}
+			
+			
+			if (this.aggro)
 			{
 				walkAt(new FlxPoint(play.x, play.y));
 			}

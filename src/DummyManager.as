@@ -64,7 +64,7 @@ package
 					this.gameObjects.members[args[0]].hp = args[1];
 					break;
 				case Manager.event_damage:
-					this.child.add(new DamageText(gameObjects[args[0]].x, gameObjects[args[0]].y, args[1] ))
+					this.child.add(new DamageText(gameObjects.members[args[0]].x, gameObjects.members[args[0]].y, args[1] ))
 					break;
 				default:
 					break;

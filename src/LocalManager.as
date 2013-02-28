@@ -55,8 +55,6 @@ package
 		{
 			super.update();
 			
-			PlayState.consoleOutput.text = (int)(this.playerOne.x) + ", " + (int)(this.playerOne.y) + ", " + this.playerOne.toString();
-			
 			while (this.gameEvents.length > 0) {//implementing incoming events on entities
 				var temp:Array = gameEvents.splice(0, 1)[0];
 				parseEvent(temp);
@@ -140,6 +138,9 @@ package
 					trace("kill_via_event "+this.objectMap.members[args[1]]);
 					delete this.objectMap.members[args[1]];
 				break;
+				case Manager.event_knockback:
+					this.objectMap.members[args[1]].knockBack(args[2], args[3]);
+				break;
 				
 				default:
 				break;
@@ -178,12 +179,15 @@ package
 		}
 		public override function damage( e:ManagedFlxSprite, damage:int ):void
 		{
-			this.pushEvent( new Array( Manager.event_damage, damage) );
+			this.pushEvent( Manager.getDamageEvent(e,damage) );
 		}
 		public override function kill( e:ManagedFlxSprite):void
 		{
 			this.pushEvent( Manager.getKillEvent(e) );
 			delete this.objectMap.members[e.managedID];
+		}
+		public override function knockBack(e:ManagedFlxSprite, x:int, y:int):void{
+			this.reportEvent( Manager.getKnockbackEvent(e,x,y) );
 		}
 		
 		

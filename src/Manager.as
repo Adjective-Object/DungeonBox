@@ -1,10 +1,10 @@
 package  
 {
+	import flash.utils.Dictionary;
+	
+	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
-	import org.flixel.FlxGroup;
-	
-	import flash.utils.Dictionary;
 	
 	/**
 	 * An Essentially abstract class that manages nonplayer sprites
@@ -37,6 +37,9 @@ package
 		public static var event_kill:int = 3
 		//tells client that nonplayer sprite has died
 		//args (ID)
+		public static var event_knockback:int = 6
+		//knocks back a thing
+		//args (ID targeted, ID attacker, knockbackval)
 		
 		public var clientSide:Boolean = false;
 		
@@ -86,12 +89,13 @@ package
 		public function updateAnimation( e:ManagedFlxSprite):void {}
 		public function kill( e:ManagedFlxSprite):void {}
 		public function damage( e:ManagedFlxSprite, damage:int ):void {}
+		public function knockBack( e:ManagedFlxSprite, x:int, y:int ):void {}
 		
 		public static function getSpawnEvent(p:ManagedFlxSprite):Array {
 			return new Array( Manager.event_spawn, p.managedID, p.x, p.y, p.type );
 		}
-		public static function getDamageEvent(p:ManagedFlxSprite, damage:uint):Array {
-			return new Array( Manager.event_damage, p.managedID, damage)
+		public static function getDamageEvent(p:ManagedFlxSprite, damage:int):Array {
+			return new Array( Manager.event_damage, p.managedID, damage);
 		}
 		public static function getUpdatePosEvent(p:ManagedFlxSprite):Array {
 			return new Array( Manager.event_update_position, p.managedID, p.x, p.y );
@@ -104,6 +108,9 @@ package
 		}
 		public static function getKillEvent(p:ManagedFlxSprite):Array {
 			return new Array( Manager.event_kill, p.managedID);
+		}
+		public static function getKnockbackEvent(target:ManagedFlxSprite, x:int, y:int ):Array {
+			return new Array( Manager.event_knockback, target.managedID, x, y);
 		}
 		
 		

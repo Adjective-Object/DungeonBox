@@ -7,7 +7,7 @@ package
 	{
 		
 		protected var elapsed:Number = 0;
-		protected static var lifetime:Number = 0.25;
+		protected static var lifetime:Number = 0.55;
 		
 		public function DamageText(x:Number, y:Number, value:int)
 		{

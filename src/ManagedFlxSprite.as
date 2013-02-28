@@ -5,6 +5,7 @@ package
 	import flash.geom.Rectangle;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
+	import org.flixel.FlxPoint;
 
 	/**
 	 * FlxSprite subclasses that will report events to Manager when certain things change
@@ -19,6 +20,7 @@ package
 		
 		protected var parent:Manager;
 		protected var hp:int, maxHP:int;
+		protected var knockVelocity:FlxPoint = new FlxPoint(0,0);
 
 		public var managedID:int
 		public var type:int;
@@ -71,6 +73,16 @@ package
 				}
 					
 				updateTrackedQualities();
+				
+				if(Math.abs(knockVelocity.x)>0.5 || Math.abs(knockVelocity.y)>0.5){
+					PlayState.consoleOutput.text = "ff";
+					this.velocity.x=knockVelocity.x;
+					this.velocity.y=knockVelocity.y;
+					
+					knockVelocity.x=knockVelocity.x*0.5/FlxG.elapsed;
+					knockVelocity.y=knockVelocity.y*0.5/FlxG.elapsed;
+				}
+				
 				super.update();
 				
 			} else {
@@ -116,6 +128,11 @@ package
 				this.parent.kill(this);
 				super.kill();
 			}
+		}
+		
+		public function knockBack(x:int, y:int):void{
+			this.knockVelocity.x = x;
+			this.knockVelocity.y = y;
 		}
 			
 	}
