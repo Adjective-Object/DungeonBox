@@ -2,7 +2,7 @@ package managedobjs
 {
 	import flash.utils.Dictionary;
 	
-	import org.flixel.FlxObject
+	import org.flixel.FlxObject;
 	
 	/**
 	 * ...
@@ -12,6 +12,7 @@ package managedobjs
 	{
 		
 		public static var managedIDs:Dictionary = new Dictionary();
+		
 		
 		public static function instanciateMSLib():void 
 		{

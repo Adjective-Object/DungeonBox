@@ -113,10 +113,10 @@ package managedobjs
 					this.stopMotion = true;
 					var s:ShortLaser;
 					if(facing == 0){
-						s = new ShortLaser(this.x+this.width+1, this.getMidpoint().y, this.parent, null);
+						s = new ShortLaser(this.x+this.width+1, this.getMidpoint().y-3, this.parent, null);
 						s.facing = 0;
 					} else {
-						s = new ShortLaser(this.x-ShortLaser.laserLength, this.getMidpoint().y, this.parent, null);
+						s = new ShortLaser(this.x-ShortLaser.laserLength, this.getMidpoint().y-3, this.parent, null);
 						s.facing = 1;
 					}
 					s.align=Manager.align_friend;

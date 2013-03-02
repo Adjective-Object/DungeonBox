@@ -6,7 +6,9 @@ package
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
-
+	import managedobjs.MSLib;
+	import managedobjs.DebuffHandler;
+	
 	/**
 	 * FlxSprite subclasses that will report events to Manager when certain things change
 	 * 
@@ -17,6 +19,7 @@ package
 	 */
 	public class ManagedFlxSprite extends FlxSprite 
 	{
+		protected var debuffs:Array = new Array();//array of Array(int1,int2) saying current status afflictions. int1 = ID, int2 = remaining duration.
 		
 		protected var parent:Manager;
 		protected var hp:int, maxHP:int;
@@ -37,6 +40,7 @@ package
 		public var tempx:Number, tempy:Number, temphp:Number;
 		public var animname:String;
 		public var oldFace:uint;
+		public var stunned:Boolean = false;
 		
 		public function ManagedFlxSprite(x:Number, y:Number, parent:Manager, managedID:int, maxHP:int, clientControlled:Boolean = false) {
 			super(x, y);
@@ -112,6 +116,15 @@ package
 		 */
 		public function updateTrackedQualities():void
 		{
+			this.stunned=false;
+			for(var i:int=0; i<this.debuffs.length; i++){
+				this.debuffs[i][1]-=FlxG.elapsed;
+				var el = FlxG.elapsed;
+				if(this.debuffs[i][1]<0){
+					el-=this.debuffs[i][1];
+				}
+				DebuffHandler.handleDebuff(this, this.debuffs[i][0], el);
+			}
 		}
 		
 		public override function draw():void {
