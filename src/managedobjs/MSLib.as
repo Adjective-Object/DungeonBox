@@ -20,6 +20,7 @@ package managedobjs
 			MSLib.managedIDs[ExampleEnemy.MSType] = ExampleEnemy;
 			MSLib.managedIDs[ShortLaser.MSType] = ShortLaser;
 			MSLib.managedIDs[GravityWell.MSType] = GravityWell;
+			MSLib.managedIDs[BurnAOE.MSType] = BurnAOE;
 		}
 		
 		/**

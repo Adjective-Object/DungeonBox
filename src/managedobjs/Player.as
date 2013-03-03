@@ -145,10 +145,22 @@ package managedobjs
 				{
 					play("cast");
 					this.channeling = true;
+					this.stopMotion = true;
+					var b:BurnAOE;
+					if(facing == 0){
+						b = new BurnAOE(this.x+this.width+1+BurnAOE.distancePlaced, this.getMidpoint().y-3, this.parent, null);
+						b.facing = 0;
+					} else {
+						b = new BurnAOE(this.x-BurnAOE.distancePlaced, this.getMidpoint().y-3, this.parent, null);
+						b.facing = 1;
+					}
+					b.align = Manager.align_friend;
+					this.parent.spawn(b);
 				}
 				
 				else if (FlxG.keys.R)
 				{
+					trace(this.parent);
 					play("ulti");
 					this.channeling = true;
 					var g = new GravityWell(this.getMidpoint().x, this.getMidpoint().y, this.parent, null);

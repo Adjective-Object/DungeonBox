@@ -6,6 +6,7 @@ package
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
+	import org.flixel.FlxCamera;
 	import managedobjs.MSLib;
 	import managedobjs.DebuffHandler;
 	
@@ -35,12 +36,21 @@ package
 		
 		public static function getMSType() { return TYPE_UNDECLARED; }
 		
-		public static var bar:BitmapData = null;
-		
 		public var tempx:Number, tempy:Number, temphp:Number;
 		public var animname:String;
 		public var oldFace:uint;
-		public var stunned:Boolean = false;
+		
+		[Embed(source = "/../res/StunIcon.png")] private var stunIcon:Class;
+		[Embed(source = "/../res/GravityWellIcon.png")] private var wellIcon:Class;
+		[Embed(source = "/../res/BurnIcon.png")] private var burnIcon:Class;
+		
+		public var stunned:Boolean = false
+		public var displayDebuffIcons:Array = new Array();
+		public var debuffDecals:Array = new Array();
+		public function displayDebuffIcon(id:int, val:Boolean) {
+			this.displayDebuffIcons[id] = val;
+		}
+		
 		
 		public function ManagedFlxSprite(x:Number, y:Number, parent:Manager, managedID:int, maxHP:int, clientControlled:Boolean = false) {
 			super(x, y);
@@ -52,17 +62,40 @@ package
 			this.maxHP = maxHP;
 			this.drag.x = 10;
 			this.clientControlled = clientControlled;
-			if(bar==null){			
-				bar = FlxG.createBitmap(6,15, 0x11aaaa);
-			}
+			
 			this.tempx = x;
 			this.tempy = y;
 			this.temphp = maxHP;
 			this.animname = "none";
+			
+			displayDebuffIcons[DebuffHandler.STUN] = false;
+			debuffDecals[DebuffHandler.STUN] = new FlxSprite(0,0,stunIcon);
+			displayDebuffIcons[DebuffHandler.GRAVITY_WELL] = false;
+			debuffDecals[DebuffHandler.GRAVITY_WELL] = new FlxSprite(0, 0, wellIcon);
+			displayDebuffIcons[DebuffHandler.BURN] = false;
+			debuffDecals[DebuffHandler.BURN] = new FlxSprite(0, 0, burnIcon);
+			
+			for (var i:int = 0; i < debuffDecals.length; i++ ) {
+				debuffDecals[i].replaceColor(0xffff00ff, 0x00ffffff);
+			}
+			
 		}
 		
 		public function spawn():void {
 			parent.spawn(this);
+		}
+		
+		public function applyDebuff(debuffID:int) {
+			parent.applyDebuff(this, debuffID);
+		}
+		
+		public function removeDebuff(debuffID:int) {
+			parent.removeDebuff(this, debuffID);
+		}
+		
+		public function damage(damage:int) {
+			this.parent.damage(this, 1);
+			this.hp -= damage;
 		}
 		
 		override public function update():void {
@@ -128,8 +161,21 @@ package
 		}
 		
 		public override function draw():void {
-			FlxG.camera.buffer.copyPixels(bar,new Rectangle(0,0),new Point(this.x+FlxG.camera.x-3,this.y+FlxG.camera.x-6),null,null,true)
 			super.draw();
+			drawDecals();
+		}
+		
+		public function drawDecals():void {
+			var dispedIcons:int =0;
+			for(var i:int = 0; i<this.displayDebuffIcons.length; i++){
+				if(displayDebuffIcons[i]){
+					this.debuffDecals[i].x=this.x +dispedIcons*6;
+					this.debuffDecals[i].y=this.y+this.height+1;
+					this.debuffDecals[i].visible = true;
+					this.debuffDecals[i].draw();
+					dispedIcons++;
+				}
+			}
 		}
 		
 		public function xor(lhs:Boolean, rhs:Boolean):Boolean

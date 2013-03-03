@@ -126,7 +126,7 @@ package
 			switch(type) 
 			{
 				case Manager.event_spawn:
-					trace("spawn_via_event");
+					trace("spawn_via_event "+args);
 					spawn(makeGameSprite(args[1], args[2], args[3], args[4], args[5], args[6]));
 				break;
 				case Manager.event_update_position:
@@ -142,6 +142,13 @@ package
 				break;
 				case Manager.event_knockback:
 					this.objectMap.members[args[1]].knockBack(args[2], args[3]);
+					break;
+				case Manager.event_debuff:
+					if (args[3] == 0) {
+						DebuffHandler.removeDebuff(this.objectMap.members[args[1]], args[2]);
+					}else {
+						DebuffHandler.applyDebuff(this.objectMap.members[args[1]], args[2]);
+					}
 				break;
 				
 				default:
@@ -193,6 +200,15 @@ package
 		public override function knockBack(e:ManagedFlxSprite, x:int, y:int):void{
 			this.reportEvent( Manager.getKnockbackEvent(e,x,y) );
 		}
+		public override function applyDebuff( e:ManagedFlxSprite, debuffID:int ):void {
+			this.reportEvent( Manager.getDebuffEvent(e,debuffID) );
+			this.pushEvent(  Manager.getDebuffEvent(e,debuffID) );
+		}
+		public override function removeDebuff( e:ManagedFlxSprite, debuffID:int ):void {
+			this.reportEvent( Manager.getDebuffClearEvent(e,debuffID) );
+			this.pushEvent(  Manager.getDebuffClearEvent(e,debuffID) );
+		}
+
 		
 		
 		public static function countKeys(myDictionary:FlxGroup):int 

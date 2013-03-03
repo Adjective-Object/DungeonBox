@@ -1,5 +1,7 @@
 package managedobjs
 {
+	import managedobjs.DebuffHandler;
+	
 	import org.flixel.*;
 	
 	public class GravityWell extends ManagedFlxSprite
@@ -28,20 +30,27 @@ package managedobjs
 			elapsed+=FlxG.elapsed;
 			
 			if(elapsed<chargeTime){
-				this.alpha = elapsed/chargeTime;
-			}else if(this.elapsed<chargeTime+drawTime){
-				
+				this.alpha = elapsed / chargeTime;
 				if(captured==null)
 				{
-					this.alpha = 1;
 					this.captured=new Array();
-					this.capturedCoords=new Array();
 					for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
 					{
 						if(gameObject.align!=this.align && MSLib.distance(this,gameObject)<=GravityWell.drawDist){
 							this.captured.push(gameObject.managedID);
-							this.capturedCoords.push(new FlxPoint(gameObject.x, gameObject.y));
+							gameObject.applyDebuff(DebuffHandler.GRAVITY_WELL);
 						}
+					}
+				}
+			}else if (this.elapsed < chargeTime + drawTime) {
+				if(capturedCoords==null)
+				{
+					this.alpha = 1;
+					this.capturedCoords=new Array();
+					for (var cap:int = 0; cap < captured.length; cap++ )
+					{
+						var gameObject:ManagedFlxSprite = this.parent.getEntity(captured[cap]);
+						this.capturedCoords.push(new FlxPoint(gameObject.x, gameObject.y));
 					}
 				}
 				
@@ -57,7 +66,14 @@ package managedobjs
 				
 				this.scale.x = 1- fracComplete;
 				this.scale.y = 1- fracComplete;
-			}else{
+			}else {
+				if(this.alive && this.visible){
+					if(captured!=null){
+						for each( var cap:int in captured){
+							parent.getEntity(cap).removeDebuff(DebuffHandler.GRAVITY_WELL);
+						}
+					}
+				}
 				this.visible=false;
 				this.kill();
 			}

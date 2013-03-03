@@ -5,6 +5,8 @@ package
 	
 	import managedobjs.MSLib;
 	import managedobjs.Player;
+	import managedobjs.DebuffHandler;
+	
 	
 	import org.flixel.*;
 	
@@ -55,6 +57,10 @@ package
 					}
 					
 					break;
+				case Manager.event_kill:
+					this.child.remove(this.gameObjects.members[args[0]]);
+					delete this.gameObjects.members[args[0]];
+					break;
 				case Manager.event_update_position:
 					this.gameObjects.members[args[0]].x = args[1];
 					this.gameObjects.members[args[0]].y = args[2];
@@ -69,6 +75,13 @@ package
 				case Manager.event_damage:
 					this.child.add(new DamageText(gameObjects.members[args[0]].x, gameObjects.members[args[0]].y, args[1] ))
 					break;
+				case Manager.event_debuff:
+					if (args[2] == 0) {
+						DebuffHandler.removeDebuff(this.gameObjects.members[args[0]], args[1]);
+					}else {
+						DebuffHandler.applyDebuff(this.gameObjects.members[args[0]], args[1]);
+					}
+				break;
 				default:
 					break;
 			}
@@ -139,6 +152,10 @@ package
 		public override function damage( e:ManagedFlxSprite, damage:int ):void
 		{
 			this.reportEvent(Manager.getDamageEvent(e,damage));
+		}
+		public override function applyDebuff( e:ManagedFlxSprite, debuffID:int ):void
+		{
+			this.reportEvent( Manager.getDebuffEvent(e,debuffID) );
 		}
 	}
 

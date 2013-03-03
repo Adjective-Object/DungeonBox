@@ -44,6 +44,7 @@ package managedobjs
 			}
 			else if(counter>=chargeTime+waitTime+fireTime){
 				this.kill();
+				this.visible = false;
 			}
 			//updateTrackedQualities();
 		}
@@ -56,7 +57,7 @@ package managedobjs
 					if( gameObject.align != this.align && FlxG.overlap(this, gameObject) && !collisionRecord[gameObject.managedID])
 					{
 						collisionRecord[gameObject.managedID] = true;
-						this.parent.damage(gameObject, 1);
+						gameObject.damage(1);
 						if(this.facing==0){
 							this.parent.knockBack(gameObject,30,0);
 						}

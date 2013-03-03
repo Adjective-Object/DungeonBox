@@ -40,6 +40,9 @@ package
 		public static var event_knockback:int = 6
 		//knocks back a thing
 		//args (ID targeted, ID attacker, knockbackval)
+		public static var event_debuff:int = 7
+		//debuffs a thing
+		//args (ID targeted, ID debuff)
 		
 		public var clientSide:Boolean = false;
 		
@@ -93,6 +96,8 @@ package
 		public function kill( e:ManagedFlxSprite):void {}
 		public function damage( e:ManagedFlxSprite, damage:int ):void {}
 		public function knockBack( e:ManagedFlxSprite, x:int, y:int ):void {}
+		public function applyDebuff( e:ManagedFlxSprite, debuffID:int ):void {}
+		public function removeDebuff( e:ManagedFlxSprite, debuffID:int ):void {}
 		
 		public static function getSpawnEvent(p:ManagedFlxSprite):Array {
 			return new Array( Manager.event_spawn, p.managedID, p.x, p.y, p.type, p.align, p.facing);
@@ -114,6 +119,12 @@ package
 		}
 		public static function getKnockbackEvent(target:ManagedFlxSprite, x:int, y:int ):Array {
 			return new Array( Manager.event_knockback, target.managedID, x, y);
+		}
+		public static function getDebuffEvent(target:ManagedFlxSprite, debuffID:int ):Array {
+			return new Array( Manager.event_debuff, target.managedID, debuffID, 1);
+		}
+		public static function getDebuffClearEvent(target:ManagedFlxSprite, debuffID:int ):Array {
+			return new Array( Manager.event_debuff, target.managedID, debuffID, 0);
 		}
 		
 		
