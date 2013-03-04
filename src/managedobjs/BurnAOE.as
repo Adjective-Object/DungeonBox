@@ -11,9 +11,11 @@ package managedobjs
 	{
 		public static var MSType = 4;
 		public static var duration = 5, fadeDuration=0.5;
-		public static var distancePlaced = 10;
+		public static var distancePlaced = 20;
+		public static var nullWidth = 8;
 		
 		protected var counter:Number = 0;
+		protected var applyBuffs:Boolean = false;
 		
 		[Embed(source="/../res/BurnAOE.png")] private var burnImage:Class;
 		
@@ -24,6 +26,8 @@ package managedobjs
 			
 			this.loadGraphic(burnImage);
 			this.replaceColor(0xffff00ff, 0x00ffffff);
+			nullWidth = this.width;
+			applyBuffs = false;
 		}
 		
 		override public function update():void
@@ -32,12 +36,18 @@ package managedobjs
 			this.counter += FlxG.elapsed;
 			if (this.counter < fadeDuration) {
 				this.alpha = counter / fadeDuration;
+				this.scale.x = 2 - this.alpha;
+				this.scale.y = 2 - this.alpha;
 			}
 			else if (this.counter < fadeDuration+duration) {
 				this.alpha = 1;
+				applyBuffs = true;
 			}
 			else if (this.counter > fadeDuration + duration) {
-				this.alpha = (counter-fadeDuration-duration) / fadeDuration;
+				applyBuffs = false;
+				this.alpha = 1- (counter-fadeDuration-duration) / fadeDuration;
+				this.scale.x = 3 - 2*this.alpha;
+				this.scale.y = 3 - 2*this.alpha;
 			}
 			else{
 				this.kill();
@@ -47,14 +57,16 @@ package managedobjs
 		
 		override public function updateTrackedQualities():void
 		{
-			for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
-			{
-				if( gameObject.align != this.align && FlxG.overlap(this, gameObject))
+			if(this.applyBuffs){
+				for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
 				{
-					gameObject.applyDebuff(DebuffHandler.BURN);
+					if( gameObject.align != this.align && FlxG.overlap(this, gameObject))
+					{
+						gameObject.applyDebuff(DebuffHandler.BURN);
+					}
 				}
+				super.updateTrackedQualities();
 			}
-			super.updateTrackedQualities();
 		}
 		
 		

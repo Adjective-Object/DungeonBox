@@ -113,7 +113,7 @@ package managedobjs
 					this.stopMotion = true;
 					var s:ShortLaser;
 					if(facing == 0){
-						s = new ShortLaser(this.x+this.width+1, this.getMidpoint().y-3, this.parent, null);
+						s = new ShortLaser(this.x+this.width, this.getMidpoint().y-3, this.parent, null);
 						s.facing = 0;
 					} else {
 						s = new ShortLaser(this.x-ShortLaser.laserLength, this.getMidpoint().y-3, this.parent, null);
@@ -148,10 +148,10 @@ package managedobjs
 					this.stopMotion = true;
 					var b:BurnAOE;
 					if(facing == 0){
-						b = new BurnAOE(this.x+this.width+1+BurnAOE.distancePlaced, this.getMidpoint().y-3, this.parent, null);
+						b = new BurnAOE(this.getMidpoint().x + BurnAOE.distancePlaced - BurnAOE.nullWidth/2, this.getMidpoint().y-3, this.parent, null);
 						b.facing = 0;
 					} else {
-						b = new BurnAOE(this.x-BurnAOE.distancePlaced, this.getMidpoint().y-3, this.parent, null);
+						b = new BurnAOE(this.getMidpoint().x - BurnAOE.distancePlaced - BurnAOE.nullWidth/2 , this.getMidpoint().y - 3, this.parent, null);
 						b.facing = 1;
 					}
 					b.align = Manager.align_friend;

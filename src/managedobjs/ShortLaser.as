@@ -59,7 +59,7 @@ package managedobjs
 						collisionRecord[gameObject.managedID] = true;
 						gameObject.damage(1);
 						if(this.facing==0){
-							this.parent.knockBack(gameObject,30,0);
+							this.parent.knockBack(gameObject, 30, 0);
 						}
 						else if (this.facing==1){
 							this.parent.knockBack(gameObject,-30,0);

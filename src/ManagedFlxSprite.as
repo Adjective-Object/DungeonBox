@@ -20,7 +20,6 @@ package
 	 */
 	public class ManagedFlxSprite extends FlxSprite 
 	{
-		protected var debuffs:Array = new Array();//array of Array(int1,int2) saying current status afflictions. int1 = ID, int2 = remaining duration.
 		
 		protected var parent:Manager;
 		protected var hp:int, maxHP:int;
@@ -43,6 +42,7 @@ package
 		[Embed(source = "/../res/StunIcon.png")] private var stunIcon:Class;
 		[Embed(source = "/../res/GravityWellIcon.png")] private var wellIcon:Class;
 		[Embed(source = "/../res/BurnIcon.png")] private var burnIcon:Class;
+		[Embed(source = "/../res/SparkIcon.png")] private var sparkIcon:Class;
 		
 		public var stunned:Boolean = false
 		public var displayDebuffIcons:Array = new Array();
@@ -74,6 +74,8 @@ package
 			debuffDecals[DebuffHandler.GRAVITY_WELL] = new FlxSprite(0, 0, wellIcon);
 			displayDebuffIcons[DebuffHandler.BURN] = false;
 			debuffDecals[DebuffHandler.BURN] = new FlxSprite(0, 0, burnIcon);
+			displayDebuffIcons[DebuffHandler.SPARK] = false;
+			debuffDecals[DebuffHandler.SPARK] = new FlxSprite(0, 0, sparkIcon);
 			
 			for (var i:int = 0; i < debuffDecals.length; i++ ) {
 				debuffDecals[i].replaceColor(0xffff00ff, 0x00ffffff);
@@ -150,13 +152,10 @@ package
 		public function updateTrackedQualities():void
 		{
 			this.stunned=false;
-			for(var i:int=0; i<this.debuffs.length; i++){
-				this.debuffs[i][1]-=FlxG.elapsed;
-				var el = FlxG.elapsed;
-				if(this.debuffs[i][1]<0){
-					el-=this.debuffs[i][1];
+			for (var i:int = 0; i < this.displayDebuffIcons.length; i++) {
+				if(displayDebuffIcons[i]){
+					DebuffHandler.handleDebuff(this, i);
 				}
-				DebuffHandler.handleDebuff(this, this.debuffs[i][0], el);
 			}
 		}
 		

@@ -8,6 +8,7 @@ package managedobjs
 		public static var STUN:int = 0;
 		public static var GRAVITY_WELL:int = 1;
 		public static var BURN:int = 2;
+		public static var SPARK:int = 3;
 		
 		//need on assign and on remove functions too;
 		
@@ -24,19 +25,19 @@ package managedobjs
 			}
 		}
 		
-		public static function handleDebuff(parent:ManagedFlxSprite, debuffID:int, elapsed:int):void
+		public static function handleDebuff(parent:ManagedFlxSprite, debuffID:int):void
 		{
 			switch(debuffID){
 				case STUN://stunned
 					parent.stunned=true;
 					break;
 				case BURN://cosmetic, marked to be sucked in by mage R
-					if(FlxG.random()<FlxG.elapsed){ parent.damage(1); }
-					if(FlxG.random()<FlxG.elapsed){ removeDebuff(parent, BURN); }
+					if (FlxG.random() * 1.0< FlxG.elapsed) { parent.damage(1); }
+					if (FlxG.random() * 3.0< FlxG.elapsed) { parent.removeDebuff(BURN); }
 					break;
 				default:
 					
-				break;
+					break;
 			}
 		}
 		
