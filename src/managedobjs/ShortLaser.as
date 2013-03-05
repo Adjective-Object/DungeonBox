@@ -44,7 +44,7 @@ package managedobjs
 			}
 			else if(counter>=chargeTime+waitTime+fireTime){
 				this.kill();
-				this.visible = false;
+				//this.visible = false;
 			}
 			//updateTrackedQualities();
 		}

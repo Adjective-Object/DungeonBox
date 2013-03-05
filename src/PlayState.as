@@ -93,15 +93,15 @@ package
 			
 			//MOVEMENT, LOCAL STUFF
 			
-			for each( var gameObject in this.managedSprites.members){
-				if(!gameObject.alive){
+			for each( var gameObject:FlxBasic in this.managedSprites.members){
+				if(gameObject!=null && !gameObject.alive){
 					PlayState.consoleOutput.text=gameObject.toString()+" died";
 					this.remove(gameObject,true);
 				}
 			}
 			
-			for each( var gameObject in this.members){
-				if(!gameObject.alive){
+			for each( var gameObject:FlxBasic in this.members){
+				if(gameObject!=null && !gameObject.alive){
 					PlayState.consoleOutput.text=gameObject.toString()+" died";
 					this.remove(gameObject,true);
 				}
