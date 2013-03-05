@@ -9,6 +9,7 @@ package managedobjs
 		public static var GRAVITY_WELL:int = 1;
 		public static var BURN:int = 2;
 		public static var SPARK:int = 3;
+		public static var INVULN:int = 4;
 		
 		//need on assign and on remove functions too;
 		

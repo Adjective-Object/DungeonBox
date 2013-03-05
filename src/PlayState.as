@@ -4,6 +4,8 @@ package
 	import flash.utils.Dictionary;
 	
 	import managedobjs.*;
+	import managers.LocalManager
+	import managers.DummyManager;
 	
 	import org.flixel.*;
 	
@@ -29,7 +31,7 @@ package
 		[Embed(source = "/../res/T_8.png")] private var T8:Class;
 		var images:Array = new Array( T0, T1, T2, T3, T4, T5, T6, T7, T8);
 		
-		static var data:Array = new Array(
+		public static var data:Array = new Array(
 			new Array(0,1,1,1,1,1,2),
 			new Array(3,4,4,4,4,4,5),
 			new Array(3,4,4,4,4,4,5),

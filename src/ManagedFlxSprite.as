@@ -43,6 +43,7 @@ package
 		[Embed(source = "/../res/GravityWellIcon.png")] private var wellIcon:Class;
 		[Embed(source = "/../res/BurnIcon.png")] private var burnIcon:Class;
 		[Embed(source = "/../res/SparkIcon.png")] private var sparkIcon:Class;
+		[Embed(source = "/../res/InvulnIcon.png")] private var invulnIcon:Class;
 		
 		public var stunned:Boolean = false
 		public var displayDebuffIcons:Array = new Array();
@@ -69,13 +70,16 @@ package
 			this.animname = "none";
 			
 			displayDebuffIcons[DebuffHandler.STUN] = false;
-			debuffDecals[DebuffHandler.STUN] = new FlxSprite(0,0,stunIcon);
 			displayDebuffIcons[DebuffHandler.GRAVITY_WELL] = false;
-			debuffDecals[DebuffHandler.GRAVITY_WELL] = new FlxSprite(0, 0, wellIcon);
 			displayDebuffIcons[DebuffHandler.BURN] = false;
-			debuffDecals[DebuffHandler.BURN] = new FlxSprite(0, 0, burnIcon);
 			displayDebuffIcons[DebuffHandler.SPARK] = false;
+			displayDebuffIcons[DebuffHandler.INVULN] = false;
+			
+			debuffDecals[DebuffHandler.STUN] = new FlxSprite(0,0,stunIcon);
+			debuffDecals[DebuffHandler.GRAVITY_WELL] = new FlxSprite(0, 0, wellIcon);
+			debuffDecals[DebuffHandler.BURN] = new FlxSprite(0, 0, burnIcon);
 			debuffDecals[DebuffHandler.SPARK] = new FlxSprite(0, 0, sparkIcon);
+			debuffDecals[DebuffHandler.INVULN] = new FlxSprite(0, 0, invulnIcon);
 			
 			for (var i:int = 0; i < debuffDecals.length; i++ ) {
 				debuffDecals[i].replaceColor(0xffff00ff, 0x00ffffff);
@@ -96,7 +100,10 @@ package
 		}
 		
 		public function damage(damage:int) {
-			this.parent.damage(this, 1);
+			if (this.displayDebuffIcons[DebuffHandler.INVULN]) {
+				damage = 0;
+			}
+			this.parent.damage(this, damage);
 			this.hp -= damage;
 		}
 		

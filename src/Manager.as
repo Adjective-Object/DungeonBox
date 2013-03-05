@@ -24,6 +24,12 @@ package
 		public static var event_update_position:int = 1;
 		//update nomplayer sprite.
 		//args (ID, X, Y)
+		public static var event_damage:int = 2
+		//tells client that nonplayer sprite has died
+		//args (ID, damage)
+		public static var event_kill:int = 3
+		//tells client that nonplayer sprite has died
+		//args (ID)
 		public static var event_update_health:int = 4;
 		//update nomplayer sprite.
 		//args (ID, HP)
@@ -31,12 +37,6 @@ package
 		//update nomplayer sprite.
 		//args (ID, ANIMATION)
 		//ANIMATION is a 4 character string that denotes the animation.
-		public static var event_damage:int = 2
-		//tells client that nonplayer sprite has died
-		//args (ID, damage)
-		public static var event_kill:int = 3
-		//tells client that nonplayer sprite has died
-		//args (ID)
 		public static var event_knockback:int = 6
 		//knocks back a thing
 		//args (ID targeted, ID attacker, knockbackval)
@@ -44,10 +44,12 @@ package
 		//debuffs a thing
 		//args (ID targeted, ID debuff)
 		
+		static var msgConfigs = ["iiii", "iii", "ii", "i", "ii", "is", "iii", "ii"];
+		
 		public var clientSide:Boolean = false;
 		
-		public static var align_friend:int = 1
-		public static var align_enemy:int = 0
+		public static var align_friend:int = 1;
+		public static var align_enemy:int = 0;
 		
 		public function Manager(){}
 		
@@ -81,12 +83,7 @@ package
 			return new FlxGroup();
 		}
 		
-		/**
-		 * tells the PlayState the sprite it is in control of.
-		 * 
-		 * @return the player FlxSprite
-		 */
-		public function getPlayer():ManagedFlxSprite{return null}
+		public function getPlayers():Array { return new Array(); }
 		public function getEntity( id:uint):ManagedFlxSprite{return null;}
 		
 		public function spawn( e:ManagedFlxSprite):void {}

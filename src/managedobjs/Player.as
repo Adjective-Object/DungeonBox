@@ -21,7 +21,6 @@ package managedobjs
 		
 		protected var channeling:Boolean = false;
 		protected var stopMotion:Boolean = false;
-		protected var invulnerable:Boolean = false;
 		
 		[Embed(source = "/../res/Mage.png")] private var playerSprite:Class;
 		[Embed(source="/../res/laser_fire.mp3")] private var laserSound:Class;
@@ -55,8 +54,11 @@ package managedobjs
 			if (this._curAnim.name == "walk" || this._curAnim.name == "stnd" || 
 				(!this._curAnim.looped && this._curFrame==this._curAnim.frames.length-1) ){
 				this.channeling = false;
+				
 				if (this._curAnim.name == "roll") {
-					this.invulnerable = false;
+					if (this.displayDebuffIcons[DebuffHandler.INVULN]) {
+						this.removeDebuff(DebuffHandler.INVULN)
+					}
 				}
 				
 				if (this.velocity.x != 0 || this.velocity.y != 0) {
@@ -69,7 +71,7 @@ package managedobjs
 		}
 		
 		override public function updateTrackedQualities():void {
-			
+				
 			if (!channeling) {
 				this.stopMotion = true;
 			}
@@ -87,6 +89,7 @@ package managedobjs
 			if (!this.channeling) {//only if is taking actions right now
 				//movement;
 				
+			
 				if (FlxG.keys.LEFT)
 				{
 					this.velocity.x = -moveSpeed
@@ -128,7 +131,9 @@ package managedobjs
 					play("roll");
 					this.stopMotion = false;
 					this.channeling = true;
-					this.invulnerable = true;
+					if (!this.displayDebuffIcons[DebuffHandler.INVULN]) {
+						this.applyDebuff(DebuffHandler.INVULN);
+					}
 					
 						if (FlxG.keys.LEFT || FlxG.keys.RIGHT || FlxG.keys.UP || FlxG.keys.DOWN) {
 						this.velocity.x = this.velocity.x * dashSpeed;

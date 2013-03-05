@@ -9,11 +9,16 @@ package
 		protected var elapsed:Number = 0;
 		protected static var lifetime:Number = 0.55;
 		
-		public function DamageText(x:Number, y:Number, value:int)
+		public function DamageText(x:Number, y:Number, value:int, allign:int)
 		{
 			super(x,y,100,value.toString());
-			if(value>0){
-				this.color = 0xffff0000;
+			if (value > 0) {
+				if(allign == Manager.align_friend){
+					this.color = 0xffff0000;
+				}
+				else {//enemy
+					this.color = 0xffdd11dd;
+				}
 			} else if(value==0){
 				this.color = 0xffffffff;
 				this.text = "miss";

@@ -1,4 +1,4 @@
-package  
+package managers  
 {
 	import flash.utils.Dictionary;
 	
@@ -110,11 +110,22 @@ package
 			return null;
 		}
 		
-		override public function getPlayer():ManagedFlxSprite
+		public override function getPlayers():Array
 		{
-			return this.playerOne;
+			var a:Array = new Array();
+			if (playerOne != null) {
+				a.push(playerOne);
+			}
+			if (playerTwo != null) {
+				a.push(playerTwo);
+			}
+			return a;
 		}
 		
+		public override function getEntity( id:uint):ManagedFlxSprite
+		{
+			return this.objectMap.members[id];
+		}
 		override public function getAllSprites():FlxGroup
 		{
 			return this.objectMap;
@@ -149,6 +160,7 @@ package
 					}else {
 						DebuffHandler.applyDebuff(this.objectMap.members[args[1]], args[2]);
 					}
+					this.pushEvent(args);
 				break;
 				
 				default:
@@ -161,11 +173,6 @@ package
 			f.facing = facing;
 			f.align = align;
 			return f
-		}
-		
-		public override function getEntity( id:uint):ManagedFlxSprite
-		{
-			return this.objectMap.members[id];
 		}
 		
 		public override function spawn( e:ManagedFlxSprite ):void
@@ -202,11 +209,9 @@ package
 		}
 		public override function applyDebuff( e:ManagedFlxSprite, debuffID:int ):void {
 			this.reportEvent( Manager.getDebuffEvent(e,debuffID) );
-			this.pushEvent(  Manager.getDebuffEvent(e,debuffID) );
 		}
 		public override function removeDebuff( e:ManagedFlxSprite, debuffID:int ):void {
 			this.reportEvent( Manager.getDebuffClearEvent(e,debuffID) );
-			this.pushEvent(  Manager.getDebuffClearEvent(e,debuffID) );
 		}
 
 		

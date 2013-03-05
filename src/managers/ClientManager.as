@@ -1,4 +1,4 @@
-package  
+package managers  
 {
 	
 	import flash.utils.Dictionary;
@@ -14,31 +14,27 @@ package
 	 * Simulates Client-server connection
 	 * @author Maxwell Huang-Hobbs
 	 */
-	public class DummyManager extends Manager
+	public class ClientManager extends Manager
 	{
 		
-		private var pipedManager:LocalManager;
 		protected var gameObjects:FlxGroup = new FlxGroup();//dictionary of manager-handled object
 		private var child:PlayState;
 		
-		public function DummyManager(manager:LocalManager, child:PlayState) 
+		public function ClientManager(child:PlayState) 
 		{	
 			super();
-			this.pipedManager = manager;
 			this.clientSide = true;
 			this.child = child;
 		}
 		
 		override public function update():void
-		{
-			this.pipedManager.update();
-			
+		{	
 			//PARSE EVENTS FROM MANAGER
 			
-			var event:Array = this.pipedManager.getGameEvent();
+			var event:Array = this.getGameEvent();
 			while (event != null){
 				parseEvent(event.splice(0,1)[0],event);
-				event = this.pipedManager.getGameEvent();
+				event = this.getGameEvent();
 			}
 		}
 
@@ -73,7 +69,7 @@ package
 					this.gameObjects.members[args[0]].hp = args[1];
 					break;
 				case Manager.event_damage:
-					this.child.add(new DamageText(gameObjects.members[args[0]].x, gameObjects.members[args[0]].y, args[1] ))
+					this.child.add(new DamageText(gameObjects.members[args[0]].x, gameObjects.members[args[0]].y, args[1], gameObjects.members[args[0]].align));
 					break;
 				case Manager.event_debuff:
 					if (args[2] == 0) {
@@ -93,41 +89,16 @@ package
 			f.align=align;
 			return f
 		}
-		/**
-		 * returns game event
-		 * if there is a game event to report, returns Array( type,  args )
-		 * 
-		 * if there is not a game event to report, returns null
-		 */
-		override public function getGameEvent():Array
-		{
-			return this.pipedManager.getGameEvent();
-		}
 		
-		/**
-		 * tells the manager of stuff happening in the PlayState.
-		 */
-		override public function reportEvent( event:Array ):void
-		{
-			this.pipedManager.reportEvent(event);
-		}
-		
-		/**
-		 * tells the PlayState the sprite it is in control of.
-		 * 
-		 * @return the player FlxSprite
-		 */
-		override public function getPlayer():ManagedFlxSprite
-		{
-			return this.pipedManager.getPlayer();
-		}
 		public override function getEntity( id:uint):ManagedFlxSprite
 		{
-			return this.pipedManager.getEntity(id);
+			return this.gameObjects.members[id];
 		}
 		public override function getAllSprites():FlxGroup {
 			return this.gameObjects;
 		}
+		
+		//#####################ohgfuck
 		
 		public override function spawn( e:ManagedFlxSprite):void
 		{
@@ -157,6 +128,11 @@ package
 		{
 			this.reportEvent( Manager.getDebuffEvent(e,debuffID) );
 		}
+		public override function removeDebuff( e:ManagedFlxSprite, debuffID:int ):void
+		{
+			this.reportEvent( Manager.getDebuffClearEvent(e,debuffID) );
+		}
+		
 	}
 
 }
