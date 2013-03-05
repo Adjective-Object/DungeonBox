@@ -3,6 +3,7 @@ package managedobjs
 	import flash.utils.Dictionary;
 	
 	import org.flixel.FlxObject;
+	import org.flixel.FlxG;
 	
 	/**
 	 * ...
@@ -47,6 +48,14 @@ package managedobjs
 		//UTIL functions
 		public static function distance(a:FlxObject, b:FlxObject){
 			return Math.sqrt( Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+		}
+		
+		public static function overlap(a:ManagedFlxSprite, b:ManagedFlxSprite) {
+			if(FlxG.overlap(a,b)){
+				var xx = Math.abs(a.x - b.x);
+				var yy = Math.abs(a.y - b.y);
+				return (xx < a.width || xx < b.width) && (yy < a.height || yy < b.height);
+			} return false;
 		}
 		
 	}

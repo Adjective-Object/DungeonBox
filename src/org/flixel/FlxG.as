@@ -1139,7 +1139,7 @@ package org.flixel
 			FlxG.elapsed = 0;
 			FlxG.globalSeed = Math.random();
 			FlxG.worldBounds = new FlxRect(-10,-10,FlxG.width+20,FlxG.height+20);
-			FlxG.worldDivisions = 6;
+			FlxG.worldDivisions = 6;//Flixel World Divisions: accuracy of collision detection
 			var debugPathDisplay:DebugPathDisplay = FlxG.getPlugin(DebugPathDisplay) as DebugPathDisplay;
 			if(debugPathDisplay != null)
 				debugPathDisplay.clear();

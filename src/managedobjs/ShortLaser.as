@@ -7,6 +7,8 @@ package managedobjs
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	
+	import managedobjs.MSLib;
+	
 	
 	/**
 	 * I RUV ME SOME OBJECTS
@@ -54,7 +56,7 @@ package managedobjs
 			if(this.counter>waitTime+chargeTime){
 				for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
 				{
-					if( gameObject.align != this.align && FlxG.overlap(this, gameObject) && !collisionRecord[gameObject.managedID])
+					if( gameObject.align != this.align && MSLib.overlap(this, gameObject) && !collisionRecord[gameObject.managedID])
 					{
 						collisionRecord[gameObject.managedID] = true;
 						gameObject.damage(1);

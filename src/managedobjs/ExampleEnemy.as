@@ -74,7 +74,7 @@ package managedobjs
 				}
 			}
 			
-			if (FlxG.overlap(this, play) && lastDamage > damageRefreshTime) {
+			if (MSLib.overlap(this, play) && lastDamage > damageRefreshTime) {
 				lastDamage = 0;
 				play.damage(1);
 			}

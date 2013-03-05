@@ -1,7 +1,8 @@
 package managedobjs 
 {
 	import org.flixel.*;
-
+	
+	import managedobjs.MSLib;
 	
 	/**
 	 * ...
@@ -43,15 +44,15 @@ package managedobjs
 				this.alpha = 1;
 				applyBuffs = true;
 			}
-			else if (this.counter > fadeDuration + duration) {
+			else if (this.counter < fadeDuration*2 + duration) {
 				applyBuffs = false;
 				this.alpha = 1- (counter-fadeDuration-duration) / fadeDuration;
 				this.scale.x = 3 - 2*this.alpha;
 				this.scale.y = 3 - 2*this.alpha;
 			}
 			else{
-				this.kill();
 				this.visible = false;
+				this.kill();
 			}
 		}
 		
@@ -60,7 +61,7 @@ package managedobjs
 			if(this.applyBuffs){
 				for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
 				{
-					if( gameObject.align != this.align && FlxG.overlap(this, gameObject))
+					if( !this.displayDebuffIcons[DebuffHandler.BURN] && gameObject.align != this.align && MSLib.overlap(this, gameObject))
 					{
 						gameObject.applyDebuff(DebuffHandler.BURN);
 					}
