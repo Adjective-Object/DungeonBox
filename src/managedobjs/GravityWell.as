@@ -3,6 +3,7 @@ package managedobjs
 	import managedobjs.DebuffHandler;
 	
 	import org.flixel.*;
+	import managers.Manager;
 	
 	public class GravityWell extends ManagedFlxSprite
 	{

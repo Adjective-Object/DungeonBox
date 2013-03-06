@@ -70,7 +70,8 @@ package managers
 					this.gameObjects.members[args[0]].hp = args[1];
 					break;
 				case Manager.event_damage:
-					this.child.add(new DamageText(gameObjects.members[args[0]].x, gameObjects.members[args[0]].y, args[1], gameObjects.members[args[0]].align));
+					var s = gameObjects.members[args[0]];
+					this.child.add(new DamageText(s.x+FlxG.random()*s.width, s.y+FlxG.random()*s.height, args[1], s.align));
 					break;
 				case Manager.event_debuff:
 					if (args[2] == 0) {

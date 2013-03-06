@@ -2,6 +2,7 @@ package
 {
 	import org.flixel.FlxText;
 	import org.flixel.FlxG;
+	import managers.Manager;
 	
 	public class DamageText extends FlxText
 	{
@@ -26,6 +27,9 @@ package
 				this.color = 0xf00fff00;
 				this.text = (-value).toString();
 			}
+			this.y-=this.height/2;
+			this.velocity.y=-3;
+			this.acceleration.y=0.25;
 		}
 		
 		public override function update():void {

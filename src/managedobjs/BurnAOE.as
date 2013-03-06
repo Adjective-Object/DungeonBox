@@ -3,6 +3,7 @@ package managedobjs
 	import org.flixel.*;
 	
 	import managedobjs.MSLib;
+	import managers.Manager;
 	
 	/**
 	 * ...

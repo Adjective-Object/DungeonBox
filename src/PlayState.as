@@ -4,8 +4,8 @@ package
 	import flash.utils.Dictionary;
 	
 	import managedobjs.*;
-	import managers.LocalManager
-	import managers.DummyManager;
+	
+	import managers.*;
 	
 	import org.flixel.*;
 	
@@ -43,6 +43,7 @@ package
 			 
 		
 		public var manager:Manager;//manager that simulates server connectio
+		public var serverManager:Manager //manager that runs fake server (threading doesn't work in as3) 
 		
 		public var player:FlxSprite;
 		
@@ -58,7 +59,8 @@ package
 			FlxG.worldBounds = new FlxRect(0, 0,  data[0].length * 32, data.length * 32);
 			FlxG.mouse.show(cursor);
 			
-			this.manager = new DummyManager(new LocalManager(),this);
+			this.serverManager = new NetServerManager();
+			this.manager = new NetClientManager(this);
 			
 			FlxG.camera.zoom = 2;
 			for (var y:int = 0; y < data.length; y++ ) {
@@ -89,7 +91,8 @@ package
 		override public function update():void
 		{
 			
-			this.manager.update();//should do nothing come networked time, but for now it updates game lojyxx
+			this.manager.update();
+			this.serverManager.update();//bullshit
 			
 			//MOVEMENT, LOCAL STUFF
 			

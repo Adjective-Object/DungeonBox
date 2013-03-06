@@ -3,6 +3,7 @@ package managedobjs
 	import org.flixel.FlxG;
 	import org.flixel.FlxU;
 	import org.flixel.FlxSprite;
+	import managers.Manager;
 	
 	
 	/**
@@ -21,6 +22,9 @@ package managedobjs
 		
 		protected var channeling:Boolean = false;
 		protected var stopMotion:Boolean = false;
+		
+		protected var lastDamage = 0;
+		protected static var damageRefreshTime = 0.25;
 		
 		[Embed(source = "/../res/Mage.png")] private var playerSprite:Class;
 		[Embed(source="/../res/laser_fire.mp3")] private var laserSound:Class;
@@ -50,6 +54,7 @@ package managedobjs
 		
 		override public function update():void {
 			super.update();
+			lastDamage += FlxG.elapsed;
 			
 			if (this._curAnim.name == "walk" || this._curAnim.name == "stnd" || 
 				(!this._curAnim.looped && this._curFrame==this._curAnim.frames.length-1) ){
@@ -71,7 +76,7 @@ package managedobjs
 		}
 		
 		override public function updateTrackedQualities():void {
-				
+
 			if (!channeling) {
 				this.stopMotion = true;
 			}
@@ -175,6 +180,13 @@ package managedobjs
 			}
 			
 			super.updateTrackedQualities();
+		}
+		
+		override public function damage( dmg:int ){
+			if(this.lastDamage>Player.damageRefreshTime){
+				this.lastDamage=0;
+				super.damage(dmg);
+			}
 		}
 		
 		override public function postUpdate():void {

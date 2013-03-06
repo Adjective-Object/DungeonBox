@@ -8,6 +8,7 @@ package managedobjs
 	import org.flixel.FlxObject;
 	
 	import managedobjs.MSLib;
+	import managers.Manager;
 	
 	
 	/**

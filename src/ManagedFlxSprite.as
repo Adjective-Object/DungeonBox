@@ -9,6 +9,7 @@ package
 	import org.flixel.FlxCamera;
 	import managedobjs.MSLib;
 	import managedobjs.DebuffHandler;
+	import managers.Manager;
 	
 	/**
 	 * FlxSprite subclasses that will report events to Manager when certain things change

@@ -1,4 +1,4 @@
-package  
+package managers  
 {
 	import flash.utils.Dictionary;
 	
@@ -44,7 +44,7 @@ package
 		//debuffs a thing
 		//args (ID targeted, ID debuff)
 		
-		static var msgConfigs = ["iiii", "iii", "ii", "i", "ii", "is", "iii", "ii"];
+		public static var msgConfigs = ["iiii", "iii", "ii", "i", "ii", "is", "iii", "ii"];
 		
 		public var clientSide:Boolean = false;
 		

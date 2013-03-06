@@ -1,43 +1,47 @@
 package managers 
 {
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.net.Socket;
+	
 	/**
 	 * ...
 	 * @author Maxwell Huang-Hobbs
 	 */
-	public class NetClientManager extends Manager
+	public class NetClientManager extends ClientManager
 	{
 		
 		protected var server:Socket;
 		
-		public function NetClientManager() 
+		public function NetClientManager(child:PlayState) 
 		{
 			this.server = new Socket();
-			configureListeners();
-			this.server.connect( "localhost", 13756 );
+			configureListeners(this.server);
+			this.server.connect( "128.0.0.1", 13756 );
+			super(child);
 		}
 		
-		private function configureListeners():void {
-			addEventListener(Event.CLOSE, closeHandler);
-			addEventListener(Event.CONNECT, connectHandler);
-			addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-			addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
-			addEventListener(ProgressEvent.SOCKET_DATA, socketDataHandler);
+		private function configureListeners( s:Socket ):void {
+			s.addEventListener(Event.CLOSE, closeHandler);
+			s.addEventListener(Event.CONNECT, connectHandler);
+			s.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+			s.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+			s.addEventListener(ProgressEvent.SOCKET_DATA, socketDataHandler);
 		}
 		
 		private function socketDataHandler(event:ProgressEvent):void {
-			NetServerManager.handleMessage(this.server);
+			NetServerManager.handleMessage(this,this.server);
 		}
 		
 		//unexpected things happen:
 		private function closeHandler(event:Event):void {
 			trace("closeHandler: " + event);
-			trace(response.toString());
 		}
 
 		private function connectHandler(event:Event):void {
 			trace("connectHandler: " + event);
-			sendRequest();
 		}
 
 		private function ioErrorHandler(event:IOErrorEvent):void {

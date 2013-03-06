@@ -2,6 +2,7 @@ package managedobjs
 {
 	
 	import org.flixel.*;
+	import managers.Manager;
 	
 	/**
 	 * ...
@@ -18,8 +19,6 @@ package managedobjs
 		public static var aggroRange:Number = 80;
 		
 		protected var aggro:Boolean = false;
-		protected var lastDamage = 0;
-		protected static var damageRefreshTime = 0.25;
 		
 		public function ExampleEnemy(x:Number, y:Number, parent:Manager, managedID:int) 
 		{
@@ -43,7 +42,6 @@ package managedobjs
 		}
 		
 		override public function updateTrackedQualities():void {
-			lastDamage += FlxG.elapsed;
 			var players:Array = this.parent.getPlayers();
 			var play:ManagedFlxSprite = players[0];
 			for (var i:int = 1; i < players.length; i++ ) {
@@ -74,8 +72,7 @@ package managedobjs
 				}
 			}
 			
-			if (MSLib.overlap(this, play) && lastDamage > damageRefreshTime) {
-				lastDamage = 0;
+			if ( MSLib.overlap(this, play) ) {
 				play.damage(1);
 			}
 			

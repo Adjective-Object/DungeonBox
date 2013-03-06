@@ -4,6 +4,7 @@ package managedobjs
 	
 	import org.flixel.FlxObject;
 	import org.flixel.FlxG;
+	import managers.Manager;
 	
 	/**
 	 * ...
