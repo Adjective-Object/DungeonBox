@@ -19,7 +19,7 @@ package managers
 		{
 			this.server = new Socket();
 			configureListeners(this.server);
-			this.server.connect( "128.0.0.1", 13756 );
+			this.server.connect( "127.0.0.1", 13756 );
 			super(child);
 		}
 		
@@ -32,24 +32,24 @@ package managers
 		}
 		
 		private function socketDataHandler(event:ProgressEvent):void {
-			NetServerManager.handleMessage(this,this.server);
+			trace(NetServerManager.handleMessage(this,this.server));
 		}
 		
 		//unexpected things happen:
 		private function closeHandler(event:Event):void {
-			trace("closeHandler: " + event);
+			trace("client close event: " + event);
 		}
 
 		private function connectHandler(event:Event):void {
-			trace("connectHandler: " + event);
+			trace("client connect event: " + event);
 		}
 
 		private function ioErrorHandler(event:IOErrorEvent):void {
-			trace("ioErrorHandler: " + event);
+			trace("client ioerror: " + event);
 		}
 
 		private function securityErrorHandler(event:SecurityErrorEvent):void {
-			trace("securityErrorHandler: " + event);
+			trace("client security error: " + event);
 		}		
 	}
 

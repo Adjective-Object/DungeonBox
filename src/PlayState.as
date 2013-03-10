@@ -91,8 +91,8 @@ package
 		override public function update():void
 		{
 			
-			this.manager.update();
 			this.serverManager.update();//bullshit
+			this.manager.update();
 			
 			//MOVEMENT, LOCAL STUFF
 			

@@ -43,8 +43,12 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default">
-      <airSettings airCertificatePath="" airTimestamp="true" anePathSet="false" version="1">
-        <airExcludes/>
+      <airSettings airCertificatePath="" airTimestamp="true" anePathSet="true" version="1">
+        <airExcludes>
+          <pathEntry path="DungeonBox.swf"/>
+          <pathEntry path=".DS_Store"/>
+          <pathEntry path="DungeonBox-app.xml"/>
+        </airExcludes>
         <anePaths/>
       </airSettings>
       <actionScriptSettings version="1"/>

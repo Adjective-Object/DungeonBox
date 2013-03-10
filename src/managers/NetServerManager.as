@@ -12,25 +12,28 @@ package managers
 	public class NetServerManager extends LocalManager
 	{
 		protected var hostSocket:ServerSocket;
-		protected var clients:Array;
+		protected var clients:Array = new Array();
 		
 		protected var pushMessages:Array = new Array();//messages to push to clients
 		
 		public function NetServerManager() 
 		{
 			this.hostSocket = new ServerSocket();
-			trace(ServerSocket.isSupported);
+			trace("Serversocket.isSupported "+ServerSocket.isSupported);
             this.hostSocket.addEventListener( ServerSocketConnectEvent.CONNECT, onConnect );
-			this.hostSocket.bind( 13756, "128.0.0.1" );
+			this.hostSocket.bind( 13756 );
 			this.hostSocket.listen();
+			trace("Serversocket bound "+this.hostSocket.bound);
+			trace("Serversocket listening "+this.hostSocket.listening);
+			super();
 		}
 		
 		private function onConnect( event:ServerSocketConnectEvent ):void
         {
 			if(clients.length<2){
 				var clientSocket = event.socket;
+				this.pushMessages.push( new Array() );
 				clients.push(clientSocket);
-				this.pushMessages[clients.length]= new Array();
 				trace( "Connection from " + clientSocket.remoteAddress + ":" + clientSocket.remotePort );
 				if (clients.length == 1) {
 					clientSocket.addEventListener( ProgressEvent.SOCKET_DATA, onClientData0 );
@@ -41,19 +44,48 @@ package managers
 			}
         }
 		
+		public override function update():void{
+			super.update();
+			var msg = getGameEvent();
+			while (msg!=null){
+				for (var x:int = 0; x<this.clients.length; x++){
+					sendEventMessage(this.clients[x],msg);
+				}
+				msg = getGameEvent();
+			}
+
+		}
+		
 		public function onClientData0( event:ProgressEvent) {
-			this.pushMessages[1].push(handleMessage(this,clients[0]));
+			var msg = handleMessage(this,clients[0]);
+			this.pushMessages[0].push(msg);
+			this.parseEvent(msg);
 		}
 		
 		public function onClientData1( event:ProgressEvent) {
-			this.pushMessages[0].push(handleMessage(this,clients[1]));
+			var msg = handleMessage(this,clients[0]);
+			this.pushMessages[1].push(msg);
+			this.parseEvent(msg);
 		}
-		
+		public static function sendEventMessage( client:Socket, message:Array ):void {
+			var msgTyping:String = Manager.msgConfigs[message[0]];
+			for(var i:int = 0; i<message.length; i++){
+				if(msgTyping.charAt(i)=='i'){
+					client.writeInt(message[i]);
+				} else if(msgTyping.charAt(i)=='s'){
+					client.writeUTF(message[i]);
+				}
+			}
+		}
+			
 		public static function handleMessage( m:Manager, client:Socket):Array {
 			var evtType:int = client.readInt();
 			var argsConfig:String = Manager.msgConfigs[evtType];
 			
 			var args:Array = new Array();
+			
+			trace(Manager.msgConfigs, evtType);
+			trace(argsConfig);
 			
 			for (var i:int = 0; i < argsConfig.length; i++ ) {
 				if (argsConfig.charAt(i) == 'i') {
@@ -63,7 +95,7 @@ package managers
 				}
 			}
 			
-			trace("Server got Message " + evtType + " " + argsConfig + " " + args);
+			trace(m+" got Message " + evtType + " " + argsConfig + " " + args);
 			
 			m.reportEvent(args);
 			return args;
