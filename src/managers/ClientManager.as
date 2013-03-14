@@ -3,10 +3,9 @@ package managers
 	
 	import flash.utils.Dictionary;
 	
+	import managedobjs.DebuffHandler;
 	import managedobjs.MSLib;
 	import managedobjs.Player;
-	import managedobjs.DebuffHandler;
-	
 	
 	import org.flixel.*;
 	
@@ -19,6 +18,7 @@ package managers
 		
 		protected var gameObjects:FlxGroup = new FlxGroup();//dictionary of manager-handled object
 		private var child:PlayState;
+		protected var gameEvents:Array = new Array();
 		
 		public function ClientManager(child:PlayState) 
 		{	
@@ -84,6 +84,15 @@ package managers
 					break;
 			}
 		}	
+		
+		public override function getGameEvent():Array{
+			if(this.gameEvents.length>0){
+				return this.gameEvents.splice(0,1);
+			}
+			else{
+				return null;
+			}
+		}
 		
 		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, align:int, facing:int ):FlxSprite {
 			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID,x,y,this,id);

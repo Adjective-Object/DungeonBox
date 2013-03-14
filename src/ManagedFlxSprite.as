@@ -36,7 +36,7 @@ package
 		
 		public static function getMSType() { return TYPE_UNDECLARED; }
 		
-		public var tempx:Number, tempy:Number, temphp:Number;
+		public var tempx:int, tempy:int, temphp:int;
 		public var animname:String;
 		public var oldFace:uint;
 		
@@ -141,7 +141,7 @@ package
 		override public function postUpdate():void {
 			super.postUpdate();
 			if( (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled) ){
-				if (this.x != tempx || this.y != tempy) {
+				if ((int)(this.x) != tempx || (int)(this.y) != tempy) {
 					parent.updatePosition(this);
 				}
 				if (this.hp != temphp) {

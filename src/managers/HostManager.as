@@ -13,7 +13,7 @@ package managers
 	 * ...
 	 * @author Maxwell Huang-Hobbs
 	 */
-	public class LocalManager extends Manager
+	public class HostManager extends Manager
 	{	
 		protected var objectMap:FlxGroup = new FlxGroup();//dictionary of server-handled object
 		protected var playerOne:ManagedFlxSprite;
@@ -25,7 +25,7 @@ package managers
 		protected var parsedEvents:Array = new Array();
 		protected var idCounter:int;
 
-		public function LocalManager( clientSide:Boolean = false) 
+		public function HostManager( clientSide:Boolean = false) 
 		{
 			this.clientSide = clientSide;
 			

@@ -17,9 +17,9 @@ package managers
 	public class DummyManager extends ClientManager
 	{
 		
-		private var pipedManager:LocalManager;
+		private var pipedManager:HostManager;
 		
-		public function DummyManager(manager:LocalManager, child:PlayState) 
+		public function DummyManager( child:PlayState, manager:HostManager ) 
 		{	
 			super(child);
 			this.pipedManager = manager;

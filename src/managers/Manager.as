@@ -20,7 +20,7 @@ package managers
 		//What are more or less networking constants
 		public static var event_spawn:int = 0;
 		//spawn a nonplayer sprite.
-		//args (ID, X, Y, TYPE)
+		//args (ID, X, Y, TYPE, align, facing)
 		public static var event_update_position:int = 1;
 		//update nomplayer sprite.
 		//args (ID, X, Y)
@@ -35,16 +35,16 @@ package managers
 		//args (ID, HP)
 		public static var event_update_animation:int = 5;
 		//update nomplayer sprite.
-		//args (ID, ANIMATION)
+		//args (ID, ANIMATION, facing)
 		//ANIMATION is a 4 character string that denotes the animation.
 		public static var event_knockback:int = 6
 		//knocks back a thing
 		//args (ID targeted, ID attacker, knockbackval)
 		public static var event_debuff:int = 7
 		//debuffs a thing
-		//args (ID targeted, ID debuff)
+		//args (ID targeted, ID debuff, on/off)
 		
-		public static var msgConfigs = ["iiii", "iii", "ii", "i", "ii", "is", "iii", "ii"];
+		public static var msgConfigs = ["iiiiii", "iii", "ii", "i", "ii", "isi", "iii", "iii"];
 		
 		public var clientSide:Boolean = false;
 		
@@ -97,13 +97,13 @@ package managers
 		public function removeDebuff( e:ManagedFlxSprite, debuffID:int ):void {}
 		
 		public static function getSpawnEvent(p:ManagedFlxSprite):Array {
-			return new Array( Manager.event_spawn, p.managedID, p.x, p.y, p.type, p.align, p.facing);
+			return new Array( Manager.event_spawn, p.managedID, (int)(p.x), (int)(p.y), p.type, p.align, p.facing);
 		}
 		public static function getDamageEvent(p:ManagedFlxSprite, damage:int):Array {
 			return new Array( Manager.event_damage, p.managedID, damage);
 		}
 		public static function getUpdatePosEvent(p:ManagedFlxSprite):Array {
-			return new Array( Manager.event_update_position, p.managedID, p.x, p.y );
+			return new Array( Manager.event_update_position, p.managedID, (int)(p.x), (int)(p.y) );
 		}
 		public static function getUpdateHPEvent(p:ManagedFlxSprite):Array {
 			return new Array( Manager.event_update_health, p.managedID, p.health );

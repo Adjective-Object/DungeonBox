@@ -31,8 +31,22 @@ package managers
 			s.addEventListener(ProgressEvent.SOCKET_DATA, socketDataHandler);
 		}
 		
+		/**
+		 * tells the manager of stuff happening in the PlayState.
+		 */
+		override public function reportEvent( event:Array ):void
+		{
+			//trace("client reporting event "+event);
+			NetServerManager.sendEventMessage( this.server, event );
+			trace(this,"sends Message",event);
+		}
+		
 		private function socketDataHandler(event:ProgressEvent):void {
-			trace(NetServerManager.handleMessage(this,this.server));
+			while (this.server.bytesAvailable>0){
+				trace(this.server.bytesAvailable);
+				this.gameEvents.push( NetServerManager.handleMessage(this,this.server) );
+			}
+			trace(this+" done Handling Messages");
 		}
 		
 		//unexpected things happen:
