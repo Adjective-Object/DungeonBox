@@ -17,10 +17,10 @@ package managers
 	{
 		
 		protected var gameObjects:FlxGroup = new FlxGroup();//dictionary of manager-handled object
-		private var child:PlayState;
+		private var child:PlayStateNetworked;
 		protected var gameEvents:Array = new Array();
 		
-		public function ClientManager(child:PlayState) 
+		public function ClientManager(child:PlayStateNetworked) 
 		{	
 			super();
 			this.clientSide = true;
@@ -29,55 +29,57 @@ package managers
 		
 		override public function update():void
 		{	
-			//PARSE EVENTS FROM MANAGER
+			//PARSE EVENTS
 			
 			var event:Array = this.getGameEvent();
 			while (event != null){
-				parseEvent(event.splice(0,1)[0],event);
+				parseEvent(event);
 				event = this.getGameEvent();
 			}
 		}
-
+		
 		//TODO can you spell duplicate code?
-		protected function parseEvent(type:int, args:Array):void
+		protected function parseEvent(event:Array):void
 		{
-			switch(type) 
+			trace("crient",event[0]);
+			switch(event[0])
 			{
 				case Manager.event_spawn:
-					this.gameObjects.members[args[0]] = makeGameSprite(args[0], args[1], args[2], args[3], args[4], args[5])
-					if (this.gameObjects.members[args[0]].type == Player.MSType) {
-						this.child.setPlayer(this.gameObjects.members[args[0]]);
-						this.child.add(this.gameObjects.members[args[0]]);
+					trace("spawnin");
+					this.gameObjects.members[event[1]] = makeGameSprite(event[1], event[2], event[3], event[4], event[5], event[6])
+					if (this.gameObjects.members[event[1]].type == Player.MSType) {
+						this.child.setPlayer(this.gameObjects.members[event[1]]);
+						this.child.add(this.gameObjects.members[event[1]]);
 					} else{
-						this.child.managedSprites.add(this.gameObjects.members[args[0]]);
+						this.child.managedSprites.add(this.gameObjects.members[event[1]]);
 					}
 					
 					break;
 				case Manager.event_kill:
-					delete this.child.managedSprites.remove(this.gameObjects.members[args[0]]);
-					delete this.gameObjects.remove(this.gameObjects.members[args[0]]);
-					trace("killing "+args[0]);
+					delete this.child.managedSprites.remove(this.gameObjects.members[event[1]]);
+					delete this.gameObjects.remove(this.gameObjects.members[event[1]]);
+					trace("killing "+event[1]);
 					break;
 				case Manager.event_update_position:
-					this.gameObjects.members[args[0]].x = args[1];
-					this.gameObjects.members[args[0]].y = args[2];
+					this.gameObjects.members[event[1]].x = event[2];
+					this.gameObjects.members[event[1]].y = event[3];
 					break;
 				case Manager.event_update_animation:
-					this.gameObjects.members[args[0]].play(args[1]);
-					this.gameObjects.members[args[0]].facing = args[2];
+					this.gameObjects.members[event[1]].play(event[2]);
+					this.gameObjects.members[event[1]].facing = event[3];
 					break;
 				case Manager.event_update_health:
-					this.gameObjects.members[args[0]].hp = args[1];
+					this.gameObjects.members[event[1]].hp = event[2];
 					break;
 				case Manager.event_damage:
-					var s = gameObjects.members[args[0]];
-					this.child.add(new DamageText(s.x+FlxG.random()*s.width, s.y+FlxG.random()*s.height, args[1], s.align));
+					var s = gameObjects.members[event[1]];
+					this.child.add(new DamageText(s.x+FlxG.random()*s.width, s.y+FlxG.random()*s.height, event[2], s.align));
 					break;
 				case Manager.event_debuff:
-					if (args[2] == 0) {
-						DebuffHandler.removeDebuff(this.gameObjects.members[args[0]], args[1]);
+					if (event[3] == 1) {
+						DebuffHandler.removeDebuff(this.gameObjects.members[event[1]], event[2]);
 					}else {
-						DebuffHandler.applyDebuff(this.gameObjects.members[args[0]], args[1]);
+						DebuffHandler.applyDebuff(this.gameObjects.members[event[1]], event[2]);
 					}
 				break;
 				default:
@@ -87,7 +89,7 @@ package managers
 		
 		public override function getGameEvent():Array{
 			if(this.gameEvents.length>0){
-				return this.gameEvents.splice(0,1);
+				return this.gameEvents.splice(0,1)[0];
 			}
 			else{
 				return null;

@@ -109,7 +109,7 @@ package managers
 			return new Array( Manager.event_update_health, p.managedID, p.health );
 		}
 		public static function getUpdateAnimEvent(p:ManagedFlxSprite):Array {
-			return new Array( Manager.event_update_animation, p.managedID, p.animname, p.facing);
+			return new Array( Manager.event_update_animation, p.managedID, p.oldanimname, p.facing);
 		}
 		public static function getKillEvent(p:ManagedFlxSprite):Array {
 			return new Array( Manager.event_kill, p.managedID);

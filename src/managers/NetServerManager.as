@@ -38,7 +38,7 @@ package managers
 				for (var x:int = 0; x<this.clients.length; x++){
 					sendEventMessage(this.clients[x],msg);
 					
-					trace(this, "sends Message");
+					trace(this, "sends Message", msg);
 				}
 				msg = getGameEvent();
 			}
@@ -55,8 +55,8 @@ package managers
 			
 			for each( var gameObject:ManagedFlxSprite in objectMap.members){
 				var p = Manager.getSpawnEvent(gameObject);
-				sendEventMessage( clientSocket,  p);
 				trace(this, "sends Message",p);
+				sendEventMessage( clientSocket,  p);
 			}
 		}
 		
@@ -64,7 +64,7 @@ package managers
 			trace(this,"got message!!!!!!!!");
 			var clientNumber = referenceNumbers[event.target];
 			while(clients[clientNumber].bytesAvailable>0){
-				var msg = handleMessage(this,clients[clientNumber]);
+				var msg = handleMessage(this,clients[clientNumber],true);
 				this.pushMessages[clientNumber].push(msg);
 				this.parseEvent(msg);
 			}
@@ -85,13 +85,13 @@ package managers
 			}
 		}
 			
-		public static function handleMessage( m:Manager, client:Socket):Array {
+		public static function handleMessage( m:Manager, client:Socket, verbose:Boolean=false):Array {
 			var evtType:int = client.readInt();
 			var argsConfig:String = Manager.msgConfigs[evtType];
 			
-			trace(m+" got Message " + evtType + " " + argsConfig);
 			
 			var args:Array = new Array();
+			args.push(evtType);
 			
 			//trace(Manager.msgConfigs, evtType);
 			//trace(argsConfig);
@@ -100,11 +100,14 @@ package managers
 				if (argsConfig.charAt(i) == 'i') {
 					args.push(client.readInt());
 				} else if (argsConfig.charAt(i) == 's'){
-					args.push(client.readUTFBytes(4));
+					args.push(client.readUTF());
+				} else if (verbose){
+					trace("Server doesn't know how to handle",argsConfig.charAt(i));
 				}
 			}
-			
-			trace(args);
+			if(verbose){
+				trace(m, "got Message", argsConfig, args);
+			}
 			
 			return args;
 		}

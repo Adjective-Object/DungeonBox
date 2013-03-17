@@ -14,7 +14,7 @@ package
 	 * @author Maxwell Huang-Hobbs
 	 */
 	
-	public class PlayState extends FlxState
+	public class PlayStateNetworked extends FlxState
 	{
 		[Embed(source = "/../res/cursor.png")] private var cursor:Class;
 		
@@ -53,7 +53,7 @@ package
 		
 		override public function create():void
 		{
-			PlayState.consoleOutput = new FlxText(0,0,100,"START");
+			PlayStateNetworked.consoleOutput = new FlxText(0,0,100,"START");
 			
 			FlxG.bgColor = 0xff000000;
 			FlxG.worldBounds = new FlxRect(0, 0,  data[0].length * 32, data.length * 32);
@@ -78,7 +78,7 @@ package
 				FlxG.worldBounds.y+FlxG.worldBounds.height);*/
 			this.add(managedSprites);
 			
-			this.add(PlayState.consoleOutput);
+			this.add(PlayStateNetworked.consoleOutput);
 		}
 		
 		public function setPlayer(p:Player):void
@@ -98,14 +98,14 @@ package
 			
 			for each( var gameObject:FlxBasic in this.managedSprites.members){
 				if(gameObject!=null && !gameObject.alive){
-					PlayState.consoleOutput.text=gameObject.toString()+" died";
+					PlayStateNetworked.consoleOutput.text=gameObject.toString()+" died";
 					this.remove(gameObject,true);
 				}
 			}
 			
 			for each( var gameObject:FlxBasic in this.members){
 				if(gameObject!=null && !gameObject.alive){
-					PlayState.consoleOutput.text=gameObject.toString()+" died";
+					PlayStateNetworked.consoleOutput.text=gameObject.toString()+" died";
 					this.remove(gameObject,true);
 				}
 			}

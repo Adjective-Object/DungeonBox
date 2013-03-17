@@ -1,15 +1,18 @@
 package  
 {
-	import flash.geom.Point;
 	import flash.display.BitmapData;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import org.flixel.FlxSprite;
+	
+	import managedobjs.DebuffHandler;
+	import managedobjs.MSLib;
+	
+	import managers.Manager;
+	
+	import org.flixel.FlxCamera;
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
-	import org.flixel.FlxCamera;
-	import managedobjs.MSLib;
-	import managedobjs.DebuffHandler;
-	import managers.Manager;
+	import org.flixel.FlxSprite;
 	
 	/**
 	 * FlxSprite subclasses that will report events to Manager when certain things change
@@ -25,6 +28,7 @@ package
 		protected var parent:Manager;
 		protected var hp:int, maxHP:int;
 		protected var knockVelocity:FlxPoint = new FlxPoint(0,0);
+		protected var postUpdated:Boolean = false;
 
 		public var managedID:int
 		public var type:int;
@@ -37,7 +41,7 @@ package
 		public static function getMSType() { return TYPE_UNDECLARED; }
 		
 		public var tempx:int, tempy:int, temphp:int;
-		public var animname:String;
+		public var oldanimname:String;
 		public var oldFace:uint;
 		
 		[Embed(source = "/../res/StunIcon.png")] private var stunIcon:Class;
@@ -68,7 +72,7 @@ package
 			this.tempx = x;
 			this.tempy = y;
 			this.temphp = maxHP;
-			this.animname = "none";
+			this.oldanimname = "none";
 			
 			displayDebuffIcons[DebuffHandler.STUN] = false;
 			displayDebuffIcons[DebuffHandler.GRAVITY_WELL] = false;
@@ -113,17 +117,19 @@ package
 			if((parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled)){
 				this.tempx = this.x;
 				this.tempy = this.y;
+				this.postUpdated=false;
+				
 				this.temphp = this.hp;
 				this.oldFace = this.facing;
 				if (this._curAnim != null)
 				{
-					this.animname = this._curAnim.name;
+					this.oldanimname = this._curAnim.name;
 				}
 					
 				updateTrackedQualities();
 				
 				if(Math.abs(knockVelocity.x)>0.5 || Math.abs(knockVelocity.y)>0.5){
-					PlayState.consoleOutput.text = "ff";
+					PlayStateNetworked.consoleOutput.text = "ff";
 					this.velocity.x=knockVelocity.x;
 					this.velocity.y=knockVelocity.y;
 					
@@ -140,16 +146,21 @@ package
 		
 		override public function postUpdate():void {
 			super.postUpdate();
-			if( (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled) ){
-				if ((int)(this.x) != tempx || (int)(this.y) != tempy) {
-					parent.updatePosition(this);
-				}
-				if (this.hp != temphp) {
-					parent.updateHealth(this);
-					parent.reportEvent( Manager.getDamageEvent(this,temphp-hp) );
-				}
-				if (this._curAnim != null && this.animname != this._curAnim.name || this.facing!=this.oldFace) {
-					parent.updateAnimation(this);
+			if(!postUpdated){
+				postUpdated=true;
+				if( (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled) ){
+					if ((int)(this.x) != tempx || (int)(this.y) != tempy) {
+						parent.updatePosition(this);
+						trace(parent, this, "deltaposition",tempx, tempy,"->",(int)(this.x), (int)(this.y), FlxG.elapsed);
+					}
+					if (this.hp != temphp) {
+						parent.updateHealth(this);
+						parent.reportEvent( Manager.getDamageEvent(this,temphp-hp) );
+					}
+					if (this._curAnim != null && this.oldanimname != this._curAnim.name || this.facing!=this.oldFace) {
+						parent.updateAnimation(this);
+						trace(parent, this, "deltaAnim",FlxG.elapsed);
+					}
 				}
 			}
 		}

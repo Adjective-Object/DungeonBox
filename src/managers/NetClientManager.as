@@ -15,7 +15,7 @@ package managers
 		
 		protected var server:Socket;
 		
-		public function NetClientManager(child:PlayState) 
+		public function NetClientManager(child:PlayStateNetworked) 
 		{
 			this.server = new Socket();
 			configureListeners(this.server);
@@ -31,6 +31,19 @@ package managers
 			s.addEventListener(ProgressEvent.SOCKET_DATA, socketDataHandler);
 		}
 		
+		override public function update():void
+		{	
+			//PARSE EVENTS
+			
+			var event:Array = this.getGameEvent();
+			while (event != null){
+				trace("implementing event",event,event.length);
+				parseEvent(event);
+				event = this.getGameEvent();
+			}
+		}
+
+		
 		/**
 		 * tells the manager of stuff happening in the PlayState.
 		 */
@@ -43,10 +56,11 @@ package managers
 		
 		private function socketDataHandler(event:ProgressEvent):void {
 			while (this.server.bytesAvailable>0){
-				trace(this.server.bytesAvailable);
 				this.gameEvents.push( NetServerManager.handleMessage(this,this.server) );
 			}
-			trace(this+" done Handling Messages");
+			for(var i:int=0; i<gameEvents.length; i++){
+				trace(i, ":", this.gameEvents[i]);
+			}
 		}
 		
 		//unexpected things happen:

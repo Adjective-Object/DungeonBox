@@ -31,12 +31,12 @@ package managers
 			
 			this.idCounter = 0;
 			
-			this.mapSize = new FlxPoint(PlayState.data[0].length * 32, PlayState.data.length * 32);
+			this.mapSize = new FlxPoint(PlayStateNetworked.data[0].length * 32, PlayStateNetworked.data.length * 32);
 			
 			this.playerOne = new Player(mapSize.x / 2 - 50, mapSize.y / 2, this, idCounter);
 			this.playerOne.spawn();
 			
-			var f:ExampleEnemy = new ExampleEnemy((mapSize.x-11) * FlxG.random(), (mapSize.y-15) * FlxG.random(), this, idCounter);
+			var f:ExampleEnemy = new ExampleEnemy(10,10, this, idCounter);
 			f.spawn();
 			
 			/* TODO spawning player 2, reporting players as diff. entity types to diff clients
