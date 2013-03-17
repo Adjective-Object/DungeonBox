@@ -31,7 +31,7 @@ package managers
 			
 			this.idCounter = 0;
 			
-			this.mapSize = new FlxPoint(PlayStateNetworked.data[0].length * 32, PlayStateNetworked.data.length * 32);
+			this.mapSize = new FlxPoint(PlayState.data[0].length * 32, PlayState.data.length * 32);
 			
 			this.playerOne = new Player(mapSize.x / 2 - 50, mapSize.y / 2, this, idCounter);
 			this.playerOne.spawn();

@@ -19,7 +19,7 @@ package managers
 		
 		private var pipedManager:HostManager;
 		
-		public function DummyManager( child:PlayStateNetworked, manager:HostManager ) 
+		public function DummyManager( child:PlayState, manager:HostManager ) 
 		{	
 			super(child);
 			this.pipedManager = manager;

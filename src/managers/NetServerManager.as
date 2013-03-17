@@ -61,7 +61,6 @@ package managers
 		}
 		
 		public function onClientData( event:ProgressEvent ):void {
-			trace(this,"got message!!!!!!!!");
 			var clientNumber = referenceNumbers[event.target];
 			while(clients[clientNumber].bytesAvailable>0){
 				var msg = handleMessage(this,clients[clientNumber],true);

@@ -14,7 +14,7 @@ package
 	 * @author Maxwell Huang-Hobbs
 	 */
 	
-	public class PlayStateNetworked extends FlxState
+	public class PlayState extends FlxState
 	{
 		[Embed(source = "/../res/cursor.png")] private var cursor:Class;
 		
@@ -40,6 +40,8 @@ package
 			new Array(3,4,4,4,4,4,5),
 			new Array(6,7,7,7,7,7,8)
 			 );
+		
+		public static var simulateNetworkPlay:Boolean = false;
 			 
 		
 		public var manager:Manager;//manager that simulates server connectio
@@ -53,14 +55,19 @@ package
 		
 		override public function create():void
 		{
-			PlayStateNetworked.consoleOutput = new FlxText(0,0,100,"START");
+			PlayState.consoleOutput = new FlxText(0,0,100,"START");
 			
 			FlxG.bgColor = 0xff000000;
 			FlxG.worldBounds = new FlxRect(0, 0,  data[0].length * 32, data.length * 32);
 			FlxG.mouse.show(cursor);
 			
-			this.serverManager = new NetServerManager();
-			this.manager = new NetClientManager(this);
+			if(PlayState.simulateNetworkPlay){
+				this.serverManager = new NetServerManager();
+				this.manager = new NetClientManager(this);
+			}else{
+				this.serverManager = new HostManager();
+				this.manager = new DummyManager(this, (HostManager)(this.serverManager));
+			}
 			
 			FlxG.camera.zoom = 2;
 			for (var y:int = 0; y < data.length; y++ ) {
@@ -78,7 +85,7 @@ package
 				FlxG.worldBounds.y+FlxG.worldBounds.height);*/
 			this.add(managedSprites);
 			
-			this.add(PlayStateNetworked.consoleOutput);
+			this.add(PlayState.consoleOutput);
 		}
 		
 		public function setPlayer(p:Player):void
@@ -90,22 +97,23 @@ package
 		
 		override public function update():void
 		{
-			
-			this.serverManager.update();//bullshit
+			if(PlayState.simulateNetworkPlay){
+				this.serverManager.update();//bullshit
+			}
 			this.manager.update();
 			
 			//MOVEMENT, LOCAL STUFF
 			
 			for each( var gameObject:FlxBasic in this.managedSprites.members){
 				if(gameObject!=null && !gameObject.alive){
-					PlayStateNetworked.consoleOutput.text=gameObject.toString()+" died";
+					PlayState.consoleOutput.text=gameObject.toString()+" died";
 					this.remove(gameObject,true);
 				}
 			}
 			
 			for each( var gameObject:FlxBasic in this.members){
 				if(gameObject!=null && !gameObject.alive){
-					PlayStateNetworked.consoleOutput.text=gameObject.toString()+" died";
+					PlayState.consoleOutput.text=gameObject.toString()+" died";
 					this.remove(gameObject,true);
 				}
 			}

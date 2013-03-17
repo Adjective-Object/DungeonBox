@@ -129,7 +129,7 @@ package
 				updateTrackedQualities();
 				
 				if(Math.abs(knockVelocity.x)>0.5 || Math.abs(knockVelocity.y)>0.5){
-					PlayStateNetworked.consoleOutput.text = "ff";
+					PlayState.consoleOutput.text = "ff";
 					this.velocity.x=knockVelocity.x;
 					this.velocity.y=knockVelocity.y;
 					

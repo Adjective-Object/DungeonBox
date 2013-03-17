@@ -17,10 +17,10 @@ package managers
 	{
 		
 		protected var gameObjects:FlxGroup = new FlxGroup();//dictionary of manager-handled object
-		private var child:PlayStateNetworked;
+		private var child:PlayState;
 		protected var gameEvents:Array = new Array();
 		
-		public function ClientManager(child:PlayStateNetworked) 
+		public function ClientManager(child:PlayState) 
 		{	
 			super();
 			this.clientSide = true;
@@ -41,7 +41,6 @@ package managers
 		//TODO can you spell duplicate code?
 		protected function parseEvent(event:Array):void
 		{
-			trace("crient",event[0]);
 			switch(event[0])
 			{
 				case Manager.event_spawn:
@@ -76,10 +75,11 @@ package managers
 					this.child.add(new DamageText(s.x+FlxG.random()*s.width, s.y+FlxG.random()*s.height, event[2], s.align));
 					break;
 				case Manager.event_debuff:
+					trace("CLIENT DEBUFF",event,event[3]);
 					if (event[3] == 1) {
-						DebuffHandler.removeDebuff(this.gameObjects.members[event[1]], event[2]);
-					}else {
 						DebuffHandler.applyDebuff(this.gameObjects.members[event[1]], event[2]);
+					}else {
+						DebuffHandler.removeDebuff(this.gameObjects.members[event[1]], event[2]);
 					}
 				break;
 				default:

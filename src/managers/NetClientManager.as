@@ -15,7 +15,7 @@ package managers
 		
 		protected var server:Socket;
 		
-		public function NetClientManager(child:PlayStateNetworked) 
+		public function NetClientManager(child:PlayState) 
 		{
 			this.server = new Socket();
 			configureListeners(this.server);
@@ -37,7 +37,6 @@ package managers
 			
 			var event:Array = this.getGameEvent();
 			while (event != null){
-				trace("implementing event",event,event.length);
 				parseEvent(event);
 				event = this.getGameEvent();
 			}
@@ -50,13 +49,12 @@ package managers
 		override public function reportEvent( event:Array ):void
 		{
 			//trace("client reporting event "+event);
-			NetServerManager.sendEventMessage( this.server, event );
-			trace(this,"sends Message",event);
+			NetServerManager.sendEventMessage( this.server, event);
 		}
 		
 		private function socketDataHandler(event:ProgressEvent):void {
 			while (this.server.bytesAvailable>0){
-				this.gameEvents.push( NetServerManager.handleMessage(this,this.server) );
+				this.gameEvents.push( NetServerManager.handleMessage(this,this.server, true) );
 			}
 			for(var i:int=0; i<gameEvents.length; i++){
 				trace(i, ":", this.gameEvents[i]);
