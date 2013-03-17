@@ -28,7 +28,6 @@ package
 		protected var parent:Manager;
 		protected var hp:int, maxHP:int;
 		protected var knockVelocity:FlxPoint = new FlxPoint(0,0);
-		protected var postUpdated:Boolean = false;
 
 		public var managedID:int
 		public var type:int;
@@ -117,7 +116,6 @@ package
 			if((parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled)){
 				this.tempx = this.x;
 				this.tempy = this.y;
-				this.postUpdated=false;
 				
 				this.temphp = this.hp;
 				this.oldFace = this.facing;
@@ -146,21 +144,16 @@ package
 		
 		override public function postUpdate():void {
 			super.postUpdate();
-			if(!postUpdated){
-				postUpdated=true;
-				if( (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled) ){
-					if ((int)(this.x) != tempx || (int)(this.y) != tempy) {
-						parent.updatePosition(this);
-						trace(parent, this, "deltaposition",tempx, tempy,"->",(int)(this.x), (int)(this.y), FlxG.elapsed);
-					}
-					if (this.hp != temphp) {
-						parent.updateHealth(this);
-						parent.reportEvent( Manager.getDamageEvent(this,temphp-hp) );
-					}
-					if (this._curAnim != null && this.oldanimname != this._curAnim.name || this.facing!=this.oldFace) {
-						parent.updateAnimation(this);
-						trace(parent, this, "deltaAnim",FlxG.elapsed);
-					}
+			if( (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled) ){
+				if ((int)(this.x) != tempx || (int)(this.y) != tempy) {
+					parent.updatePosition(this);
+				}
+				if (this.hp != temphp) {
+					parent.updateHealth(this);
+					parent.reportEvent( Manager.getDamageEvent(this,temphp-hp) );
+				}
+				if (this._curAnim != null && this.oldanimname != this._curAnim.name || this.facing!=this.oldFace) {
+					parent.updateAnimation(this);
 				}
 			}
 		}

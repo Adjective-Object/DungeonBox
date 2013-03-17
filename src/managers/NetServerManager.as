@@ -37,8 +37,6 @@ package managers
 			while (msg!=null){
 				for (var x:int = 0; x<this.clients.length; x++){
 					sendEventMessage(this.clients[x],msg);
-					
-					trace(this, "sends Message", msg);
 				}
 				msg = getGameEvent();
 			}
@@ -55,7 +53,6 @@ package managers
 			
 			for each( var gameObject:ManagedFlxSprite in objectMap.members){
 				var p = Manager.getSpawnEvent(gameObject);
-				trace(this, "sends Message",p);
 				sendEventMessage( clientSocket,  p);
 			}
 		}
@@ -63,13 +60,13 @@ package managers
 		public function onClientData( event:ProgressEvent ):void {
 			var clientNumber = referenceNumbers[event.target];
 			while(clients[clientNumber].bytesAvailable>0){
-				var msg = handleMessage(this,clients[clientNumber],true);
+				var msg = handleMessage(this,clients[clientNumber],false);
 				this.pushMessages[clientNumber].push(msg);
 				this.parseEvent(msg);
 			}
 		}
 		
-		public static function sendEventMessage( client:Socket, message:Array ):void {
+		public static function sendEventMessage( client:Socket, message:Array, verbose:Boolean=false):void {
 			var msgTyping:String = Manager.msgConfigs[message[0]];
 			//trace(message);
 			client.writeInt(message[0]);
@@ -78,7 +75,7 @@ package managers
 					client.writeInt(message[i]);
 				} else if(msgTyping.charAt(i-1)=='s'){
 					client.writeUTF(message[i]);
-				} else{
+				} else if (verbose){
 					trace(message[0],msgTyping,"i dunno how to '",msgTyping.charAt(i),"'");
 				}
 			}

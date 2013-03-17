@@ -18,8 +18,6 @@ package
 	{
 		[Embed(source = "/../res/cursor.png")] private var cursor:Class;
 		
-		
-		
 		[Embed(source = "/../res/T_0.png")] private var T0:Class;
 		[Embed(source = "/../res/T_1.png")] private var T1:Class;
 		[Embed(source = "/../res/T_2.png")] private var T2:Class;
@@ -41,7 +39,7 @@ package
 			new Array(6,7,7,7,7,7,8)
 			 );
 		
-		public static var simulateNetworkPlay:Boolean = false;
+		public static var simulateNetworkPlay:Boolean = true;
 			 
 		
 		public var manager:Manager;//manager that simulates server connectio

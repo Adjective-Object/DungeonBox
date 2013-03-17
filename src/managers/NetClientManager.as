@@ -54,11 +54,11 @@ package managers
 		
 		private function socketDataHandler(event:ProgressEvent):void {
 			while (this.server.bytesAvailable>0){
-				this.gameEvents.push( NetServerManager.handleMessage(this,this.server, true) );
+				this.gameEvents.push( NetServerManager.handleMessage(this,this.server, false) );
 			}
-			for(var i:int=0; i<gameEvents.length; i++){
-				trace(i, ":", this.gameEvents[i]);
-			}
+			//for(var i:int=0; i<gameEvents.length; i++){
+			//	trace(i, ":", this.gameEvents[i]);
+			//}
 		}
 		
 		//unexpected things happen:

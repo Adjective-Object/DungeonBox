@@ -75,7 +75,6 @@ package managers
 					this.child.add(new DamageText(s.x+FlxG.random()*s.width, s.y+FlxG.random()*s.height, event[2], s.align));
 					break;
 				case Manager.event_debuff:
-					trace("CLIENT DEBUFF",event,event[3]);
 					if (event[3] == 1) {
 						DebuffHandler.applyDebuff(this.gameObjects.members[event[1]], event[2]);
 					}else {
