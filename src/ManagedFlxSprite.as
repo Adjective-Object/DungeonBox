@@ -13,6 +13,7 @@ package
 	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
+	import org.flixel.system.FlxAnim;
 	
 	/**
 	 * FlxSprite subclasses that will report events to Manager when certain things change
@@ -25,8 +26,8 @@ package
 	public class ManagedFlxSprite extends FlxSprite 
 	{
 		
-		protected var parent:Manager;
-		protected var hp:int, maxHP:int;
+		public var parent:Manager;
+		public var hp:int, maxHP:int;
 		protected var knockVelocity:FlxPoint = new FlxPoint(0,0);
 
 		public var managedID:int
@@ -109,6 +110,14 @@ package
 			}
 			this.parent.damage(this, damage);
 			this.hp -= damage;
+		}
+		
+		public function getCurAnim():FlxAnim{
+			return this._curAnim;
+		}
+		
+		public function getCurFrame():uint{
+			return this._curFrame;
 		}
 		
 		override public function update():void {
