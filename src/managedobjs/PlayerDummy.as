@@ -19,7 +19,7 @@ package managedobjs
 		public var lastDamage = 0;
 		public static var damageRefreshTime = 0.25;
 		
-		protected var archetype:Archetype;
+		protected var archetype:Archetype = new ArchetypeMage();
 		
 		public function PlayerDummy(x:Number, y:Number, parent:Manager, managedID:int) 
 		{
@@ -31,7 +31,6 @@ package managedobjs
 			this.makeGraphic(10, 12, 0xffaa1111);
 			
 			//ARCHETYPE USE
-			this.archetype=new ArchetypeMage();
 			this.maxVelocity.x = archetype.moveSpeed*2;
 			this.maxVelocity.y = archetype.moveSpeed * 2;
 			this.archetype.defineAnimations(this)

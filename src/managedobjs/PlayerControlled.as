@@ -2,7 +2,11 @@ package managedobjs
 {
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxG;
+	
 	import managers.Manager;
+	
+	import archetypes.ArchetypeMage;
+	import archetypes.ArchetypeWarrior;
 	
 	public class PlayerControlled extends PlayerDummy
 	{
@@ -12,6 +16,13 @@ package managedobjs
 		{
 			super(x, y, parent, managedID);
 			this.type=PlayerControlled.MSType;
+			if (this.managedID==0) {
+				this.archetype = new ArchetypeMage();
+			} else if (this.managedID==1) {
+				this.archetype = new ArchetypeWarrior();
+			} else {
+				this.archetype = new ArchetypeMage();
+			}
 		}
 		
 		override public function updateTrackedQualities():void {
