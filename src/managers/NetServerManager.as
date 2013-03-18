@@ -71,7 +71,6 @@ package managers
 			var clientNumber = referenceNumbers[event.target];
 			while(clients[clientNumber].bytesAvailable>0){
 				var msg = handleMessage(this,clients[clientNumber],false);
-				this.pushMessages[clientNumber].push(msg);
 				this.parseEvent(msg);
 			}
 		}

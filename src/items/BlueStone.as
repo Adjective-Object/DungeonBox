@@ -31,6 +31,7 @@ package items
 				while(elapsed>healDelay+healCharge ){
 					elapsed-=healDelay;
 					owner.damage(-healValue);
+					trace(elapsed, "triggered");
 				}
 			}
 			

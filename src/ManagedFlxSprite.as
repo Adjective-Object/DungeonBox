@@ -159,7 +159,6 @@ package
 				}
 				if (this.hp != temphp) {
 					parent.updateHealth(this);
-					parent.reportEvent( Manager.getDamageEvent(this,temphp-hp) );
 				}
 				if (this._curAnim != null && this.oldanimname != this._curAnim.name || this.facing!=this.oldFace) {
 					parent.updateAnimation(this);

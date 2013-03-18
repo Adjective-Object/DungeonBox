@@ -166,12 +166,12 @@ package managers
 						DebuffHandler.applyDebuff(this.objectMap.members[args[1]], args[2]);
 					}
 					this.pushEvent(args);
-				break;
+					break;
 				case Manager.event_damage:
 					this.pushEvent(args);
 					break;
 				default:
-				break;
+					break;
 			}
 		}	
 		
