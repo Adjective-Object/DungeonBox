@@ -5,7 +5,7 @@ package managers
 	
 	import managedobjs.DebuffHandler;
 	import managedobjs.MSLib;
-	import managedobjs.Player;
+	import managedobjs.PlayerControlled;
 	
 	import org.flixel.*;
 	
@@ -44,9 +44,9 @@ package managers
 			switch(event[0])
 			{
 				case Manager.event_spawn:
-					trace("spawnin");
+					trace("spawnin",event);
 					this.gameObjects.members[event[1]] = makeGameSprite(event[1], event[2], event[3], event[4], event[5], event[6])
-					if (this.gameObjects.members[event[1]].type == Player.MSType) {
+					if (this.gameObjects.members[event[1]].type == PlayerControlled.MSType) {
 						this.child.setPlayer(this.gameObjects.members[event[1]]);
 						this.child.add(this.gameObjects.members[event[1]]);
 					} else{

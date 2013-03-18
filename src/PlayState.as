@@ -86,7 +86,7 @@ package
 			this.add(PlayState.consoleOutput);
 		}
 		
-		public function setPlayer(p:Player):void
+		public function setPlayer(p:PlayerDummy):void
 		{
 			this.player = p;
 			//p.clientControlled = true;

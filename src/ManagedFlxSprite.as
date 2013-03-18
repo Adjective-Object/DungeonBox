@@ -17,7 +17,7 @@ package
 	/**
 	 * FlxSprite subclasses that will report events to Manager when certain things change
 	 * 
-	 * subclasses should call updateTrackedQualities() instead of update() for game logic loops.
+	 * subclasses should call updateTrackedQualities() instead of update() for game logic loops, but call update() for cosmetic functions
 	 * 
 	 * 
 	 * @author Maxwell Huang-Hobbs

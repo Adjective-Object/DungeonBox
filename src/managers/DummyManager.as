@@ -3,10 +3,7 @@ package managers
 	
 	import flash.utils.Dictionary;
 	
-	import managedobjs.MSLib;
-	import managedobjs.Player;
-	import managedobjs.DebuffHandler;
-	
+	import managedobjs.*;
 	
 	import org.flixel.*;
 	
@@ -39,7 +36,11 @@ package managers
 		 */
 		override public function getGameEvent():Array
 		{
-			return this.pipedManager.getGameEvent();
+			var p:Array =  this.pipedManager.getGameEvent();
+			if (p[0]=Manager.event_spawn && p[1] == 0){
+				p[4]=PlayerControlled.MSType;
+			}
+			return p
 		}
 		
 		/**

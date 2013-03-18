@@ -124,6 +124,5 @@ package managers
 			return new Array( Manager.event_debuff, target.managedID, debuffID, 0);
 		}
 		
-		
 	}
 }

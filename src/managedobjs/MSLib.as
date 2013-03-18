@@ -18,11 +18,12 @@ package managedobjs
 		
 		public static function instanciateMSLib():void 
 		{
-			MSLib.managedIDs[Player.MSType] = Player;
+			MSLib.managedIDs[PlayerControlled.MSType] = PlayerControlled;
 			MSLib.managedIDs[ExampleEnemy.MSType] = ExampleEnemy;
 			MSLib.managedIDs[ShortLaser.MSType] = ShortLaser;
 			MSLib.managedIDs[GravityWell.MSType] = GravityWell;
 			MSLib.managedIDs[BurnAOE.MSType] = BurnAOE;
+			MSLib.managedIDs[PlayerDummy.MSType] = PlayerDummy;
 		}
 		
 		/**

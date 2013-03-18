@@ -33,8 +33,13 @@ package managers
 			
 			this.mapSize = new FlxPoint(PlayState.data[0].length * 32, PlayState.data.length * 32);
 			
-			this.playerOne = new Player(mapSize.x / 2 - 50, mapSize.y / 2, this, idCounter);
+			
+			this.playerOne = new PlayerDummy(mapSize.x / 2 - 50, mapSize.y / 2, this, idCounter);
 			this.playerOne.spawn();
+			
+			this.playerTwo = new PlayerDummy(mapSize.x / 2 + 50, mapSize.y / 2, this, idCounter);
+			this.playerTwo.spawn();
+			
 			
 			var f:ExampleEnemy = new ExampleEnemy(10,10, this, idCounter);
 			f.spawn();

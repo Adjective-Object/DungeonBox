@@ -5,6 +5,8 @@ package managers
 	import flash.net.ServerSocket;
 	import flash.net.Socket;
 	import flash.utils.Dictionary;
+	
+	import managedobjs.PlayerControlled
 
 	/**
 	 * ...
@@ -48,13 +50,21 @@ package managers
 			this.pushMessages.push( new Array() );
 			referenceNumbers[clientSocket] = clients.length;
 			clientSocket.addEventListener( ProgressEvent.SOCKET_DATA, onClientData );
-			clients.push(clientSocket);
+			
 			trace( "Connection from " + clientSocket.remoteAddress + ":" + clientSocket.remotePort );
 			
 			for each( var gameObject:ManagedFlxSprite in objectMap.members){
-				var p = Manager.getSpawnEvent(gameObject);
-				sendEventMessage( clientSocket,  p);
+				if(gameObject.managedID==clients.length){
+					trace(gameObject.managedID);
+					var p = Manager.getSpawnEvent(gameObject);
+					p[4]=PlayerControlled.MSType//changes type to controlled variety
+					sendEventMessage( clientSocket,  p);
+				}else{
+					var p = Manager.getSpawnEvent(gameObject);
+					sendEventMessage( clientSocket,  p);
+				}
 			}
+					clients.push(clientSocket);
 		}
 		
 		public function onClientData( event:ProgressEvent ):void {
