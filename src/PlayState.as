@@ -45,7 +45,7 @@ package
 		public var manager:Manager;//manager that simulates server connectio
 		public var serverManager:Manager //manager that runs fake server (threading doesn't work in as3) 
 		
-		public var player:FlxSprite;
+		public var player:PlayerControlled;
 		
 		public var managedSprites:FlxGroup = new FlxGroup();
 		
@@ -86,7 +86,7 @@ package
 			this.add(PlayState.consoleOutput);
 		}
 		
-		public function setPlayer(p:PlayerDummy):void
+		public function setPlayer(p:PlayerControlled):void
 		{
 			this.player = p;
 			//p.clientControlled = true;

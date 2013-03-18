@@ -41,6 +41,9 @@ package managers
 		//TODO can you spell duplicate code?
 		protected function parseEvent(event:Array):void
 		{
+			if(child.player!=null){//TODO there's probably a better way to handle this
+				child.player.updateItems(event);
+			}
 			switch(event[0])
 			{
 				case Manager.event_spawn:

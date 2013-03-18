@@ -167,7 +167,9 @@ package managers
 					}
 					this.pushEvent(args);
 				break;
-				
+				case Manager.event_damage:
+					this.pushEvent(args);
+					break;
 				default:
 				break;
 			}

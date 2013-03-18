@@ -45,8 +45,10 @@ package managedobjs
 		}
 		
 		override public function damage( dmg:int ){
-			if(this.lastDamage>PlayerDummy.damageRefreshTime){
+			if(dmg>=0 && this.lastDamage>PlayerDummy.damageRefreshTime){
 				this.lastDamage=0;
+				super.damage(dmg);
+			} else if (dmg<0){
 				super.damage(dmg);
 			}
 		}
