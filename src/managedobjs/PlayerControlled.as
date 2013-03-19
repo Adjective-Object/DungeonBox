@@ -14,8 +14,11 @@ package managedobjs
 	public class PlayerControlled extends PlayerDummy
 	{
 		var inventory:Array = new Array();
-
+		public var inventorySprites:Array = new Array();
+		
 		public static var MSType = 0;
+		
+		public var pstate:PlayState;
 		
 		public function PlayerControlled(x:Number, y:Number, parent:Manager, managedID:int)
 		{
@@ -25,8 +28,6 @@ package managedobjs
 
 			if (this.managedID==0) {
 				this.archetype = new ArchetypeMage();
-				var p:BlueStone = new BlueStone();
-				this.addItem(p);
 			} else if (this.managedID==1) {
 				this.archetype = new ArchetypeWarrior();
 			} else {
@@ -51,7 +52,14 @@ package managedobjs
 		
 		public function addItem(p:Item){
 			p.setOwner(this);
+			var d:FlxSprite = new FlxSprite(FlxG.width/2/FlxG.camera.zoom+10, FlxG.height/2/FlxG.camera.zoom+10 + 32*inventory.length ,p.image);
+			d.alpha=0.7;
+			d.scrollFactor.x = d.scrollFactor.y = 0;
+			
+			this.pstate.add(d);
 			inventory.push(p);
+			inventorySprites.push(d);
+			
 		}
 		
 		override public function postUpdate():void {
@@ -61,6 +69,5 @@ package managedobjs
 			if (this.x+this.width  > FlxG.worldBounds.right) 	{ this.x = FlxG.worldBounds.right-this.width; }
 			if (this.y+this.height > FlxG.worldBounds.bottom) 	{ this.y = FlxG.worldBounds.bottom-this.height;}
 		}
-
 	}
 }

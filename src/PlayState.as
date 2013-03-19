@@ -1,5 +1,6 @@
 package  
 {
+	import flash.display.StageDisplayState;
 	import flash.net.GroupSpecifier;
 	import flash.utils.Dictionary;
 	
@@ -39,7 +40,7 @@ package
 			new Array(6,7,7,7,7,7,8)
 			 );
 		
-		public static var simulateNetworkPlay:Boolean = true;
+		public static var simulateNetworkPlay:Boolean = false;
 			 
 		
 		public var manager:Manager;//manager that simulates server connectio
@@ -54,6 +55,7 @@ package
 		override public function create():void
 		{
 			PlayState.consoleOutput = new FlxText(0,0,100,"START");
+			//FlxG.stage.displayState = StageDisplayState.FULL_SCREEN;
 			
 			FlxG.bgColor = 0xff000000;
 			FlxG.worldBounds = new FlxRect(0, 0,  data[0].length * 32, data.length * 32);
@@ -89,8 +91,7 @@ package
 		public function setPlayer(p:PlayerControlled):void
 		{
 			this.player = p;
-			//p.clientControlled = true;
-			FlxG.camera.follow(player, FlxCamera.STYLE_LOCKON);
+			//FlxG.camera.follow(player, FlxCamera.STYLE_LOCKON);
 		}
 		
 		override public function update():void
@@ -101,6 +102,11 @@ package
 			this.manager.update();
 			
 			//MOVEMENT, LOCAL STUFF
+			
+			if(this.player!=null){
+				FlxG.camera.scroll.x = player.getMidpoint().x-FlxG.width/2;
+				FlxG.camera.scroll.y = player.getMidpoint().y-FlxG.height/2;
+			}
 			
 			for each( var gameObject:FlxBasic in this.managedSprites.members){
 				if(gameObject!=null && !gameObject.alive){
@@ -118,6 +124,8 @@ package
 			
 			super.update();
 		}
+		
+		public static var invOffset:FlxPoint = new FlxPoint(0,0);
 		
 	}
 }

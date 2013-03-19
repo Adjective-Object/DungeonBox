@@ -9,6 +9,9 @@ package items
 		public var isUseItem:Boolean;
 		public var type:int;
 				
+		[Embed(source = "/../res/NoItem.png")] private var noItem:Class;
+		public var image = noItem;
+		
 		public function setOwner(player:PlayerControlled)
 		{
 			this.owner = player;

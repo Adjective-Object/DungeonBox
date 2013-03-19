@@ -105,7 +105,7 @@ package
 		}
 		
 		public function damage(damage:int) {
-			if (this.displayDebuffIcons[DebuffHandler.INVULN]) {
+			if ( damage>0 && this.displayDebuffIcons[DebuffHandler.INVULN] ) {
 				damage = 0;
 			}
 			this.parent.damage(this, damage);

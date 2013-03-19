@@ -3,6 +3,8 @@ package managers
 	
 	import flash.utils.Dictionary;
 	
+	import items.*;
+	
 	import managedobjs.DebuffHandler;
 	import managedobjs.MSLib;
 	import managedobjs.PlayerControlled;
@@ -50,7 +52,11 @@ package managers
 					trace("spawnin",event);
 					this.gameObjects.members[event[1]] = makeGameSprite(event[1], event[2], event[3], event[4], event[5], event[6])
 					if (this.gameObjects.members[event[1]].type == PlayerControlled.MSType) {
-						this.child.setPlayer(this.gameObjects.members[event[1]]);
+						var p:PlayerControlled = (PlayerControlled)(this.gameObjects.members[event[1]]);
+						this.child.setPlayer(p);
+						p.pstate = this.child;
+						p.addItem(new BlueStone());
+						
 						this.child.add(this.gameObjects.members[event[1]]);
 					} else{
 						this.child.managedSprites.add(this.gameObjects.members[event[1]]);

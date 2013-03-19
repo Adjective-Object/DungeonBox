@@ -37,7 +37,7 @@ package managers
 		override public function getGameEvent():Array
 		{
 			var p:Array =  this.pipedManager.getGameEvent();
-			if (p[0]=Manager.event_spawn && p[1] == 0){
+			if ( p!=null && p[0]==Manager.event_spawn && p[1] == 0){
 				p[4]=PlayerControlled.MSType;
 			}
 			return p

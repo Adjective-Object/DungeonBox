@@ -12,9 +12,12 @@ package items
 		
 		protected var elapsed=0;
 		
+		[Embed(source = "/../res/BlueRock.png")] private var blueStoneImage:Class;
+		
 		public function BlueStone()
 		{
 			this.type = BlueStone.IMType;
+			this.image=blueStoneImage;
 		}
 		
 		public override function onEvent(event:Array)
@@ -31,7 +34,6 @@ package items
 				while(elapsed>healDelay+healCharge ){
 					elapsed-=healDelay;
 					owner.damage(-healValue);
-					trace(elapsed, "triggered");
 				}
 			}
 			
