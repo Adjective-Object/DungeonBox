@@ -81,8 +81,8 @@ package
 				}
 			}
 			
-			for(var i:int =0; i<6; i++){
-				var text:HUDText = new HUDText(40,10+i*20,30,"0");
+			for(var i:int =0; i<5; i++){
+				var text:HUDText = new HUDText(60,10+i*20,30,"0");
 				cooldownText.push(text);
 				this.add(text);
 			}

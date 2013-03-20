@@ -9,7 +9,7 @@ package managers
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	
-	import items.BlueStone;
+	import items.*;
 	
 	/**
 	 * ...
@@ -43,6 +43,7 @@ package managers
 			this.playerTwo.spawn();
 			
 			new ItemOnGround(10, 10, this, idCounter, BlueStone.IMType).spawn();
+			new ItemOnGround(100, 200, this, idCounter, RedStone.IMType).spawn();
 			
 			
 			var f:ExampleEnemy = new ExampleEnemy(10,10, this, idCounter);

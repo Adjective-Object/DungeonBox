@@ -9,6 +9,7 @@ package items
 		public static function instanciateIMLib():void 
 		{
 			IMLib.managedIDs[BlueStone.IMType]=BlueStone;
+			IMLib.managedIDs[RedStone.IMType]=RedStone;
 		}
 		
 		/**
