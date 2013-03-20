@@ -66,6 +66,11 @@ package archetypes
 		
 		public override function updateTracked(player:PlayerControlled):void{
 			this.elapsedSinceCast+=FlxG.elapsed;
+			if(elapsedSinceCast>castResetTime && chainedCasts>0){
+				trace(chainedCasts);
+				chainedCasts=0;
+				player.cooldowns[0]=5;
+			}
 			if (!channeling) {
 				this.stopMotion = true;
 			}
@@ -103,7 +108,7 @@ package archetypes
 					player.velocity.y=moveSpeed
 				}
 				
-				if (FlxG.keys.Q)
+				if (FlxG.keys.Q && player.cooldowns[0]==0)
 				{
 					if(elapsedSinceCast>castResetTime){
 						this.chainedCasts=0;

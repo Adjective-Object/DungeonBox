@@ -1,5 +1,7 @@
 package  
 {
+	import HUDItems.*;
+	
 	import flash.display.StageDisplayState;
 	import flash.net.GroupSpecifier;
 	import flash.utils.Dictionary;
@@ -52,6 +54,8 @@ package
 		
 		public static var consoleOutput:FlxText;
 		
+		var cooldownText:Array = new Array();
+		
 		override public function create():void
 		{
 			PlayState.consoleOutput = new FlxText(0,0,100,"START");
@@ -75,6 +79,12 @@ package
 					var b:FlxSprite = new FlxSprite( x * 32, y * 32, images[data[y][x]] );
 					this.add(b);
 				}
+			}
+			
+			for(var i:int =0; i<6; i++){
+				var text:HUDText = new HUDText(40,10+i*20,30,"0");
+				cooldownText.push(text);
+				this.add(text);
 			}
 			
 			/*
@@ -108,6 +118,15 @@ package
 				FlxG.camera.scroll.y = player.getMidpoint().y-FlxG.height/2;
 			}
 			
+			//updating HUD text
+			if(this.player!=null){
+				for(var i:int =0; i<cooldownText.length; i++){
+					cooldownText[i].text = Math.ceil(this.player.cooldowns[i]);
+				}
+			}
+
+			
+			//removing dead entities
 			for each( var gameObject:FlxBasic in this.managedSprites.members){
 				if(gameObject!=null && !gameObject.alive){
 					PlayState.consoleOutput.text=gameObject.toString()+" died";

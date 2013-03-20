@@ -11,6 +11,8 @@ package managedobjs
 	import org.flixel.FlxG;
 	import org.flixel.FlxSprite;
 	
+	import HUDItems.HUDImage;
+	
 	public class PlayerControlled extends PlayerDummy
 	{
 		var inventory:Array = new Array();
@@ -27,14 +29,12 @@ package managedobjs
 			super(x, y, parent, managedID);
 			this.type=PlayerControlled.MSType;
 			//defining archetype of player
-			for(var i:int =0; i<6; i++){
-				cooldowns[i]=0; //Q, W , E, R, use item (D), and consume item (F).
-			}
+			cooldowns = new Array(0,0,0,0,0,0);//Q, W , E, R, use item (D), and consume item (F).
 		}
 		
 		override public function updateTrackedQualities():void {
-			cooldowns[i]-=FlxG.elapsed;
 			for(var i:int =0; i<cooldowns.length; i++){
+				cooldowns[i]-=FlxG.elapsed;
 				if(cooldowns[i]<0){
 					cooldowns[i]=0;
 				}
@@ -56,9 +56,8 @@ package managedobjs
 		
 		public function addItem(p:Item){
 			p.setOwner(this);
-			var d:FlxSprite = new FlxSprite(FlxG.width/2/FlxG.camera.zoom+10, FlxG.height/2/FlxG.camera.zoom+10 + 32*inventory.length ,p.image);
+			var d:HUDImage = new HUDImage(10,10+35*inventory.length,p.image);
 			d.alpha=0.7;
-			d.scrollFactor.x = d.scrollFactor.y = 0;
 			
 			this.pstate.add(d);
 			inventory.push(p);
