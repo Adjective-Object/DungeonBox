@@ -55,7 +55,7 @@ package managers
 						var p:PlayerControlled = (PlayerControlled)(this.gameObjects.members[event[1]]);
 						this.child.setPlayer(p);
 						p.pstate = this.child;
-						p.addItem(new BlueStone());
+						//p.addItem(new BlueStone());
 						
 						this.child.add(this.gameObjects.members[event[1]]);
 					} else{
@@ -77,7 +77,6 @@ package managers
 					this.gameObjects.members[event[1]].facing = event[3];
 					break;
 				case Manager.event_update_health:
-					trace("uguu", event);
 					this.gameObjects.members[event[1]].health = event[2];
 					break;
 				case Manager.event_damage:
@@ -92,6 +91,16 @@ package managers
 						DebuffHandler.removeDebuff(this.gameObjects.members[event[1]], event[2]);
 					}
 				break;
+				case Manager.event_give_item:
+					var p = gameObjects.members[event[1]];
+					if(p.type==PlayerControlled.MSType){
+						(PlayerControlled)(p).addItem( IMLib.getIMItem(event[2]) );
+					}
+					break
+				case Manager.event_set_state:
+					var d = gameObjects.members[event[1]];
+					d.setState( event[2] );
+					break;
 				default:
 					break;
 			}
@@ -154,6 +163,14 @@ package managers
 		public override function removeDebuff( e:ManagedFlxSprite, debuffID:int ):void
 		{
 			this.reportEvent( Manager.getDebuffClearEvent(e,debuffID) );
+		}
+		public override function giveItem( e:ManagedFlxSprite, item:int ):void
+		{
+			this.reportEvent( Manager.getGiveItemEvent( e, item ) );
+		}
+		public override function updateState( e:ManagedFlxSprite ):void
+		{
+			this.reportEvent( Manager.getStateChangeEvent(e) );
 		}
 		
 	}

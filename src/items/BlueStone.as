@@ -4,7 +4,7 @@ package items
 	import managers.Manager;
 	public class BlueStone extends Item
 	{
-		public static var IMType = 0;
+		public static var IMType = 1;
 		
 		protected static var healCharge = 1;
 		protected static var healDelay = 0.5;

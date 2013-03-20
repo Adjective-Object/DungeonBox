@@ -8,7 +8,7 @@ package items
 		
 		public static function instanciateIMLib():void 
 		{
-			managedIDs[BlueStone.IMType]=BlueStone;
+			IMLib.managedIDs[BlueStone.IMType]=BlueStone;
 		}
 		
 		/**
@@ -16,14 +16,15 @@ package items
 		 * 
 		 * @param	type the ID by which the class is registered in MSLib.managedIDs
 		 */
-		public static function getIMItem(type:int):ManagedFlxSprite {
-			if (type != ManagedFlxSprite.TYPE_UNDECLARED) {
+		public static function getIMItem(type:int):Item {
+			if ( IMLib.managedIDs[type]!=null ) {
 				var clazz:Class = IMLib.managedIDs[type];
 				return new clazz();
 			}
 			else
 			{
-				return new BlueStone();
+				trace("cannot load item of type",type);
+				return new Item();
 			}
 		}
 	}

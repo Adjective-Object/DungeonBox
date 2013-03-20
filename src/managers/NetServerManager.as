@@ -7,6 +7,8 @@ package managers
 	import flash.utils.Dictionary;
 	
 	import managedobjs.PlayerControlled
+		
+	import items.BlueStone
 
 	/**
 	 * ...
@@ -59,12 +61,13 @@ package managers
 					var p = Manager.getSpawnEvent(gameObject);
 					p[4]=PlayerControlled.MSType//changes type to controlled variety
 					sendEventMessage( clientSocket,  p);
+					//sendEventMessage( clientSocket,  Manager.getGiveItemEvent( gameObject , BlueStone.IMType) );
 				}else{
 					var p = Manager.getSpawnEvent(gameObject);
 					sendEventMessage( clientSocket,  p);
 				}
 			}
-					clients.push(clientSocket);
+			clients.push(clientSocket);
 		}
 		
 		public function onClientData( event:ProgressEvent ):void {

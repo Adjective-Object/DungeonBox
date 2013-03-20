@@ -43,13 +43,19 @@ package managers
 		public static var event_debuff:int = 7
 		//debuffs a thing
 		//args (ID targeted, ID debuff, on/off)
+		public static var event_give_item:int = 8
+			//args (ID of player, item ID)
+		public static var event_set_state:int = 9
+			//args (ID of entity, state value)
 		
-		public static var msgConfigs = ["iiiiii", "iii", "ii", "i", "ii", "isi", "iii", "iii"];
+		public static var msgConfigs = ["iiiiii", "iii", "ii", "i", "ii", "isi", "iii", "iii", "ii", "ii"];
 		
 		public var clientSide:Boolean = false;
 		
-		public static var align_friend:int = 1;
-		public static var align_enemy:int = 0;
+		public static var align_none:int = -1;	//environmental stuff, not to be hit with attacks
+		public static var align_enemy:int = 0;	//enemies
+		public static var align_friend:int = 1; //friends
+		public static var align_gaia:int = 2;	//neutral creatures that you can hit with attacks
 		
 		public function Manager(){}
 		
@@ -95,6 +101,8 @@ package managers
 		public function knockBack( e:ManagedFlxSprite, x:int, y:int ):void {}
 		public function applyDebuff( e:ManagedFlxSprite, debuffID:int ):void {}
 		public function removeDebuff( e:ManagedFlxSprite, debuffID:int ):void {}
+		public function giveItem( e:ManagedFlxSprite, itemID:int ):void {}
+		public function updateState( e:ManagedFlxSprite ):void {}
 		
 		public static function getSpawnEvent(p:ManagedFlxSprite):Array {
 			return new Array( Manager.event_spawn, p.managedID, (int)(p.x), (int)(p.y), p.type, p.align, p.facing);
@@ -123,6 +131,11 @@ package managers
 		public static function getDebuffClearEvent(target:ManagedFlxSprite, debuffID:int ):Array {
 			return new Array( Manager.event_debuff, target.managedID, debuffID, 0);
 		}
-		
+		public static function getGiveItemEvent(target:ManagedFlxSprite, itemID:int ):Array {
+			return new Array( Manager.event_give_item, target.managedID, itemID);
+		}
+		public static function getStateChangeEvent(target:ManagedFlxSprite ):Array {
+			return new Array( Manager.event_set_state, target.managedID, target.getState());
+		}
 	}
 }

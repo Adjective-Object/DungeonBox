@@ -24,6 +24,7 @@ package managedobjs
 			MSLib.managedIDs[GravityWell.MSType] = GravityWell;
 			MSLib.managedIDs[BurnAOE.MSType] = BurnAOE;
 			MSLib.managedIDs[PlayerDummy.MSType] = PlayerDummy;
+			MSLib.managedIDs[ItemOnGround.MSType] = ItemOnGround;
 		}
 		
 		/**
@@ -42,6 +43,7 @@ package managedobjs
 			}
 			else
 			{
+				trace("cannot load MSID of",type)
 				return new ManagedFlxSprite(x, y, parent, managedID, 10);
 			}
 		}

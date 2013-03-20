@@ -26,6 +26,8 @@ package
 	public class ManagedFlxSprite extends FlxSprite 
 	{
 		
+		protected var state:int=0;
+		
 		public var parent:Manager;
 		public var maxHP:int;
 		protected var knockVelocity:FlxPoint = new FlxPoint(0,0);
@@ -60,7 +62,7 @@ package
 		}
 		
 		
-		public function ManagedFlxSprite(x:Number, y:Number, parent:Manager, managedID:int, maxHP:int, clientControlled:Boolean = false) {
+		public function ManagedFlxSprite(x:Number, y:Number, parent:Manager, managedID:int, maxHP:int=10, clientControlled:Boolean = false) {
 			super(x, y);
 			this.parent = parent;
 			this.managedID = managedID;
@@ -177,7 +179,13 @@ package
 				if (this._curAnim != null && this.oldanimname != this._curAnim.name || this.facing!=this.oldFace) {
 					parent.updateAnimation(this);
 				}
+
 			}
+		}
+		
+		public function changeState(state:int){
+			this.setState(state);
+			parent.updateState(this);
 		}
 		
 		/**
@@ -240,6 +248,11 @@ package
 			this.knockVelocity.x = x;
 			this.knockVelocity.y = y;
 		}
+		
+		public function setState(state:int):void{
+			this.state = state;
+		}
+		public function getState():int{return this.state;}
 			
 	}
 

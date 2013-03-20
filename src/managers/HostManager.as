@@ -9,6 +9,8 @@ package managers
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	
+	import items.BlueStone;
+	
 	/**
 	 * ...
 	 * @author Maxwell Huang-Hobbs
@@ -39,6 +41,8 @@ package managers
 			
 			this.playerTwo = new PlayerDummy(mapSize.x / 2 + 50, mapSize.y / 2, this, idCounter);
 			this.playerTwo.spawn();
+			
+			new ItemOnGround(10, 10, this, idCounter, BlueStone.IMType).spawn();
 			
 			
 			var f:ExampleEnemy = new ExampleEnemy(10,10, this, idCounter);
@@ -170,6 +174,14 @@ package managers
 				case Manager.event_damage:
 					this.pushEvent(args);
 					break;
+				case Manager.event_give_item:
+					this.pushEvent(args);
+					break;
+				case Manager.event_set_state:
+					var p = objectMap.members[args[1]]
+					p.setState( args[2] );
+					this.pushEvent(args);
+					break;
 				default:
 					break;
 			}
@@ -220,8 +232,14 @@ package managers
 		public override function removeDebuff( e:ManagedFlxSprite, debuffID:int ):void {
 			this.reportEvent( Manager.getDebuffClearEvent(e,debuffID) );
 		}
-
-		
+		public override function giveItem( e:ManagedFlxSprite, item:int ):void
+		{
+			this.reportEvent( Manager.getGiveItemEvent( e, item ) );
+		}
+		public override function updateState( e:ManagedFlxSprite ):void
+		{
+			this.reportEvent( Manager.getStateChangeEvent(e) );
+		}
 		
 		public static function countKeys(myDictionary:FlxGroup):int 
 		{		
