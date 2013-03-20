@@ -71,9 +71,9 @@ package managedobjs
 				inventory.push(p);
 				inventorySprites.push(d)
 			}
-			else if (p.isUseItem){ //mutual exlcusivity of use items
-				if(this.useItem!=null){
-					new ItemOnGround(this.x,this.y,this.parent,this.useItem.type).spawn();
+			else if (p.isUseItem){ 
+				if(this.useItem!=null){//mutual exlcusivity of use items
+					new ItemOnGround(this.x,this.y,this.parent,null,this.useItem.type).spawn();
 				}
 				this.useItem=p;
 				this.useItem.setOwner(this);

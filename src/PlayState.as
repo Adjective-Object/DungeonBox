@@ -92,7 +92,8 @@ package
 				FlxG.worldBounds.x,
 				FlxG.worldBounds.y,
 				FlxG.worldBounds.x+FlxG.worldBounds.width,
-				FlxG.worldBounds.y+FlxG.worldBounds.height);*/
+				FlxG.worldBounds.y+FlxG.worldBounds.height);
+			*/
 			this.add(managedSprites);
 			
 			this.add(PlayState.consoleOutput);

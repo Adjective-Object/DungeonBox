@@ -10,6 +10,7 @@ package items
 		{
 			IMLib.managedIDs[BlueStone.IMType]=BlueStone;
 			IMLib.managedIDs[RedStone.IMType]=RedStone;
+			IMLib.managedIDs[GreenStone.IMType]=GreenStone;
 		}
 		
 		/**

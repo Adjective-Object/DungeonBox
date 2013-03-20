@@ -21,6 +21,7 @@ package managedobjs
 			
 			this.state = itemid;
 			this.align=Manager.align_none;
+			trace(this, this.parent);
 		}
 		
 		public override function changeState(state:int){

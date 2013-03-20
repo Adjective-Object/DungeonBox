@@ -100,6 +100,7 @@ package managers
 				case Manager.event_set_state:
 					var d = gameObjects.members[event[1]];
 					d.setState( event[2] );
+					trace("se state evt",event);
 					break;
 				default:
 					break;

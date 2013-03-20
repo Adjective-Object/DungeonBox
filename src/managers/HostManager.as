@@ -44,6 +44,7 @@ package managers
 			
 			new ItemOnGround(10, 10, this, idCounter, BlueStone.IMType).spawn();
 			new ItemOnGround(100, 200, this, idCounter, RedStone.IMType).spawn();
+			new ItemOnGround(50, 200, this, idCounter, GreenStone.IMType).spawn();
 			
 			
 			var f:ExampleEnemy = new ExampleEnemy(10,10, this, idCounter);
