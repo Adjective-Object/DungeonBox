@@ -139,10 +139,14 @@ package
 			return this._curFrame;
 		}
 		
+		protected function isControlled():Boolean{
+			return (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled);
+		}
+		
 		override public function update():void {
 			//updates game stats only if this is running on the server, or if it is client controlled
 			lastDamageTaken+=FlxG.elapsed;
-			if((parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled)){
+			if(isControlled){
 				this.tempx = this.x;
 				this.tempy = this.y;
 				
@@ -172,7 +176,7 @@ package
 		
 		override public function postUpdate():void {
 			super.postUpdate();
-			if( (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled) ){
+			if( isControlled() && this.alive ){
 				if ((int)(this.x) != tempx || (int)(this.y) != tempy) {
 					parent.updatePosition(this);
 				}
@@ -238,7 +242,7 @@ package
 		}
 		
 		override public function kill():void {
-			if ( (parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled) ){
+			if ( isControlled() ){
 				this.parent.kill(this);
 				super.kill();
 			}

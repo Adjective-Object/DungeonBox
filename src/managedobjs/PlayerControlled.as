@@ -73,7 +73,7 @@ package managedobjs
 			}
 			else if (p.isUseItem){ 
 				if(this.useItem!=null){//mutual exlcusivity of use items
-					new ItemOnGround(this.x,this.y,this.parent,null,this.useItem.type).spawn();
+					new ItemOnGround(this.getMidpoint().x-8,this.getMidpoint().y-8,this.parent,null,this.useItem.type).spawn();
 				}
 				this.useItem=p;
 				this.useItem.setOwner(this);

@@ -62,7 +62,7 @@ package managedobjs
 			if(this.applyBuffs){
 				for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
 				{
-					if( !this.displayDebuffIcons[DebuffHandler.BURN] && gameObject.align != this.align && gameObject.align!=Manager.align_none && MSLib.overlap(this, gameObject))
+					if( gameObject!=null && !this.displayDebuffIcons[DebuffHandler.BURN] && gameObject.align != this.align && gameObject.align!=Manager.align_none && MSLib.overlap(this, gameObject))
 					{
 						gameObject.applyDebuff(DebuffHandler.BURN);
 					}

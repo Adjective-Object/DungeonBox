@@ -58,7 +58,6 @@ package managedobjs
 				var fracComplete:Number = (elapsed-chargeTime)/drawTime;
 				
 				for(var i:int=0; i<captured.length; i++){
-					PlayState.consoleOutput.text = "CAP";
 					this.parent.getEntity(captured[i]).x=
 						this.capturedCoords[i].x+(this.x-this.capturedCoords[i].x)*fracComplete;
 					this.parent.getEntity(captured[i]).y=
