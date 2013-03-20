@@ -50,7 +50,7 @@ package managers
 			{
 				case Manager.event_spawn:
 					trace("spawnin",event);
-					this.gameObjects.members[event[1]] = makeGameSprite(event[1], event[2], event[3], event[4], event[5], event[6])
+					this.gameObjects.members[event[1]] = makeGameSprite(event[1], event[2], event[3], event[4], event[5], event[6], event[7])
 					if (this.gameObjects.members[event[1]].type == PlayerControlled.MSType) {
 						var p:PlayerControlled = (PlayerControlled)(this.gameObjects.members[event[1]]);
 						this.child.setPlayer(p);
@@ -116,10 +116,11 @@ package managers
 			}
 		}
 		
-		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, align:int, facing:int ):FlxSprite {
+		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, align:int, facing:int , state:int):FlxSprite {
 			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID,x,y,this,id);
 			f.facing = facing;
 			f.align=align;
+			f.setState(state);
 			return f
 		}
 		

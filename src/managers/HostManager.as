@@ -149,7 +149,7 @@ package managers
 			{
 				case Manager.event_spawn:
 					trace("spawn_via_event "+args);
-					spawn(makeGameSprite(args[1], args[2], args[3], args[4], args[5], args[6]));
+					spawn(makeGameSprite(args[1], args[2], args[3], args[4], args[5], args[6], args[7]));
 				break;
 				case Manager.event_update_position:
 					this.objectMap.members[args[1]].x = args[2];
@@ -189,10 +189,11 @@ package managers
 			}
 		}	
 		
-		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, align:int, facing:int):ManagedFlxSprite {
+		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, align:int, facing:int, state:int):ManagedFlxSprite {
 			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID, x, y, this, id);
 			f.facing = facing;
 			f.align = align;
+			f.setState(state);
 			return f
 		}
 		

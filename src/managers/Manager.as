@@ -20,7 +20,7 @@ package managers
 		//What are more or less networking constants
 		public static var event_spawn:int = 0;
 		//spawn a nonplayer sprite.
-		//args (ID, X, Y, TYPE, align, facing)
+		//args (ID, X, Y, TYPE, align, facing, state)
 		public static var event_update_position:int = 1;
 		//update nomplayer sprite.
 		//args (ID, X, Y)
@@ -48,7 +48,7 @@ package managers
 		public static var event_set_state:int = 9
 			//args (ID of entity, state value)
 		
-		public static var msgConfigs = ["iiiiii", "iii", "ii", "i", "ii", "isi", "iii", "iii", "ii", "ii"];
+		public static var msgConfigs = ["iiiiiii", "iii", "ii", "i", "ii", "isi", "iii", "iii", "ii", "ii"];
 		
 		public var clientSide:Boolean = false;
 		
@@ -105,7 +105,7 @@ package managers
 		public function updateState( e:ManagedFlxSprite ):void {}
 		
 		public static function getSpawnEvent(p:ManagedFlxSprite):Array {
-			return new Array( Manager.event_spawn, p.managedID, (int)(p.x), (int)(p.y), p.type, p.align, p.facing);
+			return new Array( Manager.event_spawn, p.managedID, (int)(p.x), (int)(p.y), p.type, p.align, p.facing, p.getState());
 		}
 		public static function getDamageEvent(p:ManagedFlxSprite, damage:int):Array {
 			return new Array( Manager.event_damage, p.managedID, damage);

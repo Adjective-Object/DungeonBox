@@ -19,7 +19,7 @@ package managedobjs
 			super(x,y,parent,managedID);
 			this.type=ItemOnGround.MSType;
 			
-			this.state = itemid;
+			this.setState(itemid);
 			this.align=Manager.align_none;
 			trace(this, this.parent);
 		}
@@ -36,6 +36,7 @@ package managedobjs
 		
 		public override function updateTrackedQualities():void{
 			if(firstUpdate || !this.canBeCollided){//TODO this *should* work for preventing picking up items you just dropped, but it is untested
+				this.canBeCollided=true;
 				for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members){
 					if( (gameObject.type == PlayerDummy.MSType || gameObject.type == PlayerControlled.MSType) && MSLib.overlap(gameObject,this)){
 						this.canBeCollided=false;
@@ -52,11 +53,6 @@ package managedobjs
 			}
 			
 			super.updateTrackedQualities();
-		}
-		
-		public override function spawn():void{
-			super.spawn();
-			this.changeState(this.state);
 		}
 	}
 }
