@@ -77,10 +77,12 @@ package managers
 					this.gameObjects.members[event[1]].facing = event[3];
 					break;
 				case Manager.event_update_health:
-					this.gameObjects.members[event[1]].hp = event[2];
+					trace("uguu", event);
+					this.gameObjects.members[event[1]].health = event[2];
 					break;
 				case Manager.event_damage:
 					var s = gameObjects.members[event[1]];
+					s.lastDamageTaken=0;
 					this.child.add(new DamageText(s.x+FlxG.random()*s.width, s.y+FlxG.random()*s.height, event[2], s.align));
 					break;
 				case Manager.event_debuff:

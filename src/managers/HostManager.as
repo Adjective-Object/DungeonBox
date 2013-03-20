@@ -150,7 +150,7 @@ package managers
 					this.objectMap.members[args[1]].y = args[3];
 				break;
 				case Manager.event_update_health:
-					this.objectMap.members[args[1]].hp = args[2];
+					this.objectMap.members[args[1]].health = args[2];
 				break;
 				case Manager.event_kill:
 					trace("kill_via_event "+this.objectMap.members[args[1]]);
@@ -196,7 +196,7 @@ package managers
 		}
 		public override function updateHealth( e:ManagedFlxSprite):void
 		{
-			this.pushEvent( Manager.getUpdateAnimEvent(e) );
+			this.pushEvent( Manager.getUpdateHPEvent(e) );
 		}
 		public override function updateAnimation( e:ManagedFlxSprite):void
 		{

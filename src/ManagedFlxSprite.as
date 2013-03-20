@@ -27,7 +27,7 @@ package
 	{
 		
 		public var parent:Manager;
-		public var hp:int, maxHP:int;
+		public var maxHP:int;
 		protected var knockVelocity:FlxPoint = new FlxPoint(0,0);
 
 		public var managedID:int
@@ -40,7 +40,7 @@ package
 		
 		public static function getMSType() { return TYPE_UNDECLARED; }
 		
-		public var tempx:int, tempy:int, temphp:int;
+		public var tempx:int, tempy:int;
 		public var oldanimname:String;
 		public var oldFace:uint;
 		
@@ -53,6 +53,8 @@ package
 		public var stunned:Boolean = false
 		public var displayDebuffIcons:Array = new Array();
 		public var debuffDecals:Array = new Array();
+		protected var hpBar:FlxSprite;
+		
 		public function displayDebuffIcon(id:int, val:Boolean) {
 			this.displayDebuffIcons[id] = val;
 		}
@@ -64,15 +66,17 @@ package
 			this.managedID = managedID;
 			this.type = ManagedFlxSprite.TYPE_UNDECLARED;//no specifically declared type.
 			this.makeGraphic(10, 12, 0xff11aa11);
-			this.hp = maxHP;
+			this.health = maxHP;
 			this.maxHP = maxHP;
 			this.drag.x = 10;
 			this.clientControlled = clientControlled;
 			
 			this.tempx = x;
 			this.tempy = y;
-			this.temphp = maxHP;
 			this.oldanimname = "none";
+			
+			hpBar = new FlxSprite(0,0);
+			hpBar.makeGraphic(16,2,0xffdd0000);
 			
 			displayDebuffIcons[DebuffHandler.STUN] = false;
 			displayDebuffIcons[DebuffHandler.GRAVITY_WELL] = false;
@@ -108,8 +112,21 @@ package
 			if ( damage>0 && this.displayDebuffIcons[DebuffHandler.INVULN] ) {
 				damage = 0;
 			}
-			this.parent.damage(this, damage);
-			this.hp -= damage;
+			var old = this.health;
+			
+			this.health -= damage;
+			
+			if(this.health>this.maxHP){
+				this.health = this.maxHP;
+			} else if (this.health<0){
+				this.health=0;//TODO death handling?
+			}
+			
+			if(old!=this.health){
+				this.lastDamageTaken=0;
+				this.parent.damage(this, damage);
+			}
+			this.parent.updateHealth(this);
 		}
 		
 		public function getCurAnim():FlxAnim{
@@ -122,11 +139,11 @@ package
 		
 		override public function update():void {
 			//updates game stats only if this is running on the server, or if it is client controlled
+			lastDamageTaken+=FlxG.elapsed;
 			if((parent.clientSide && this.clientControlled) || (!parent.clientSide && !this.clientControlled)){
 				this.tempx = this.x;
 				this.tempy = this.y;
 				
-				this.temphp = this.hp;
 				this.oldFace = this.facing;
 				if (this._curAnim != null)
 				{
@@ -157,9 +174,6 @@ package
 				if ((int)(this.x) != tempx || (int)(this.y) != tempy) {
 					parent.updatePosition(this);
 				}
-				if (this.hp != temphp) {
-					parent.updateHealth(this);
-				}
 				if (this._curAnim != null && this.oldanimname != this._curAnim.name || this.facing!=this.oldFace) {
 					parent.updateAnimation(this);
 				}
@@ -179,9 +193,22 @@ package
 			}
 		}
 		
+		protected static var lastDamageRefreshTime = 1;
+		public var lastDamageTaken = 1;
+		
 		public override function draw():void {
 			super.draw();
 			drawDecals();
+			if(lastDamageTaken<lastDamageRefreshTime){
+				drawHPBar();
+			}
+		}
+		
+		public function drawHPBar():void{
+			hpBar.x=this.getMidpoint().x-8;
+			hpBar.y=this.y-3;
+			hpBar.scale.x=(this.health/this.maxHP);
+			hpBar.draw();
 		}
 		
 		public function drawDecals():void {
