@@ -91,8 +91,9 @@ package archetypes
 					player.velocity.y=moveSpeed
 				}
 				
-				if (FlxG.keys.Q)
+				if (FlxG.keys.Q && player.cooldowns[0]==0)
 				{
+					player.cooldowns[0]=2;
 					player.play("shot");
 					this.channeling = true;
 					this.stopMotion = true;
@@ -107,9 +108,28 @@ package archetypes
 					s.align=Manager.align_friend;
 					player.parent.spawn(s);
 				}
-					
-				else if (FlxG.keys.E)
+				
+				else if (FlxG.keys.W && player.cooldowns[1]==0)
 				{
+					player.cooldowns[1]=1;
+					player.play("cast");
+					this.channeling = true;
+					this.stopMotion = true;
+					var b:BurnAOE;
+					if(player.facing == 0){
+						b = new BurnAOE(player.getMidpoint().x + BurnAOE.distancePlaced - BurnAOE.nullWidth/2, player.getMidpoint().y-3, player.parent, null);
+						b.facing = 0;
+					} else {
+						b = new BurnAOE(player.getMidpoint().x - BurnAOE.distancePlaced - BurnAOE.nullWidth/2 , player.getMidpoint().y - 3, player.parent, null);
+						b.facing = 1;
+					}
+					b.align = Manager.align_friend;
+					player.parent.spawn(b);
+				}
+				
+				else if (FlxG.keys.E && player.cooldowns[2]==0)
+				{
+					player.cooldowns[2]=4;
 					player.play("roll");
 					this.stopMotion = false;
 					this.channeling = true;
@@ -127,26 +147,10 @@ package archetypes
 						player.drag.y = 0;
 					}
 				}
-					
-				else if (FlxG.keys.W)
+				
+				else if (FlxG.keys.R && player.cooldowns[3]==0)
 				{
-					player.play("cast");
-					this.channeling = true;
-					this.stopMotion = true;
-					var b:BurnAOE;
-					if(player.facing == 0){
-						b = new BurnAOE(player.getMidpoint().x + BurnAOE.distancePlaced - BurnAOE.nullWidth/2, player.getMidpoint().y-3, player.parent, null);
-						b.facing = 0;
-					} else {
-						b = new BurnAOE(player.getMidpoint().x - BurnAOE.distancePlaced - BurnAOE.nullWidth/2 , player.getMidpoint().y - 3, player.parent, null);
-						b.facing = 1;
-					}
-					b.align = Manager.align_friend;
-					player.parent.spawn(b);
-				}
-					
-				else if (FlxG.keys.R)
-				{
+					player.cooldowns[3]=10;
 					trace(player.parent);
 					player.play("ulti");
 					this.channeling = true;

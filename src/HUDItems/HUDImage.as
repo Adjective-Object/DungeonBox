@@ -12,6 +12,7 @@ package HUDItems
 		{
 			super(FlxG.width/2/FlxG.camera.zoom+x, FlxG.height/2/FlxG.camera.zoom+y);
 			this.loadGraphic(image);
+			this.scrollFactor.x=this.scrollFactor.y=0;
 			screenOff = new FlxPoint(x,y);	
 		}
 	}
