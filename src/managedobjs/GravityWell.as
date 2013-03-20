@@ -37,7 +37,7 @@ package managedobjs
 					this.captured=new Array();
 					for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
 					{
-						if(gameObject!= null && gameObject.align!=this.align && MSLib.distance(this,gameObject)<=GravityWell.drawDist){
+						if(gameObject!= null && gameObject.align!=this.align && gameObject.align!=Manager.align_none && MSLib.distance(this,gameObject)<=GravityWell.drawDist){
 							this.captured.push(gameObject.managedID);
 							gameObject.applyDebuff(DebuffHandler.GRAVITY_WELL);
 						}

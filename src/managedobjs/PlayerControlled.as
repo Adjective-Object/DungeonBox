@@ -20,14 +20,26 @@ package managedobjs
 		
 		public var pstate:PlayState;
 		
+		public var cooldowns:Array;
+		
 		public function PlayerControlled(x:Number, y:Number, parent:Manager, managedID:int)
 		{
 			super(x, y, parent, managedID);
 			this.type=PlayerControlled.MSType;
 			//defining archetype of player
+			for(var i:int =0; i<6; i++){
+				cooldowns[i]=0; //Q, W , E, R, use item (D), and consume item (F).
+			}
 		}
 		
 		override public function updateTrackedQualities():void {
+			cooldowns[i]-=FlxG.elapsed;
+			for(var i:int =0; i<cooldowns.length; i++){
+				if(cooldowns[i]<0){
+					cooldowns[i]=0;
+				}
+			}
+			
 			this.archetype.updateTracked(this);
 			super.updateTrackedQualities();
 			
