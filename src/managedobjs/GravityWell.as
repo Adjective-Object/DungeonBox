@@ -9,7 +9,7 @@ package managedobjs
 	{
 		[Embed(source = "/../res/GravityWell.png")] private var wellSprite:Class;
 		
-		public static var MSType:int = 3, chargeTime = 0.5, drawTime = 0.2, drawDist = 100;
+		public static var MSType:int = 3, chargeTime = 0.5, drawTime = 0.35, drawDist = 100;
 		
 		protected var elapsed:Number = 0;
 		protected var captured = null, capturedCoords = null;

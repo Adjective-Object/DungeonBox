@@ -15,22 +15,28 @@ package archetypes
 	public class ArchetypeWarrior extends Archetype
 	{
 		
-		[Embed(source = "/../res/Mage.png")] private var playerSprite:Class;
+		[Embed(source = "/../res/Warrior.png")] private var playerSprite:Class;
 		[Embed(source="/../res/laser_fire.mp3")] private var laserSound:Class;
 		
 		public var channeling:Boolean = false;
 		public var stopMotion:Boolean = false;
-
 		
 		public override function defineAnimations(player:PlayerDummy):void{
-			player.loadGraphic(playerSprite, true, true, 11, 15);
+			player.loadGraphic(playerSprite, true, true, 19, 15);
 			player.replaceColor(0xffff00ff, 0x00ffffff);
+			player.replaceColor(0xffaa00aa, 0x00ffffff);
+			
 			player.addAnimation("stnd", [0], 10, true);
 			player.addAnimation("walk", [1, 2, 3, 2], 5, true);
-			player.addAnimation("shot", [9,10,10,10,11,11,10,12,12], 10, false);
-			player.addAnimation("roll", [18,19,20,21,22,23,24,25,26,26], 25, false);
-			player.addAnimation("cast", [14,15,16,17,16,16,16,16,15,14,14], 20, false);
-			player.addAnimation("ulti", [27,28,29,30,30,30,30,29,28,31,31], 20, false);
+			
+			player.addAnimation("shot", [5, 5, 5, 5, 6, 7, 8, 7, 7], 15, false);
+			player.addAnimation("cast", [10, 10, 10, 10, 12, 13, 14, 15, 15, 16, 17, 17], 15, false);
+			player.addAnimation("roll", [1, 2, 3, 2], 5, false);
+			player.addAnimation("ulti", [41, 41, 42, 43, 44, 45, 44, 44], 15, false);
+			
+			player.addAnimation("sla1", [5, 5, 5, 5, 6, 7, 8, 7, 7], 15, false);
+			player.addAnimation("sla2", [10, 10, 10, 10, 12, 13, 14, 15, 15, 16, 17, 17], 15, false);
+			player.addAnimation("sla3", [41, 41, 42, 43, 44, 45, 44, 44], 15, false);
 			player.play("stnd");
 		}
 		
@@ -54,7 +60,12 @@ package archetypes
 			}
 		}
 		
+		protected var chainedCasts:uint = 0;
+		protected var elapsedSinceCast:Number = 0;
+		protected static var castResetTime = 0.75;
+		
 		public override function updateTracked(player:PlayerControlled):void{
+			this.elapsedSinceCast+=FlxG.elapsed;
 			if (!channeling) {
 				this.stopMotion = true;
 			}
@@ -94,10 +105,32 @@ package archetypes
 				
 				if (FlxG.keys.Q)
 				{
-					DebuffHandler.applyDebuff(player,DebuffHandler.SPARK);
-					player.play("shot");
+					if(elapsedSinceCast>castResetTime){
+						this.chainedCasts=0;
+					}
+					
+					switch(chainedCasts){
+						case 0:
+							player.play("sla1");
+							break;
+						case 1:
+							player.play("sla3");
+							break;
+						case 2:
+							player.play("sla2");
+							this.chainedCasts=0
+							break;
+						default:
+							player.play("sla2");
+							this.chainedCasts=0
+							trace("panic!");
+							break
+					}
+					
 					this.channeling = true;
 					this.stopMotion = true;
+					
+					//TODO differentiate from mage
 					var s:ShortLaser;
 					if(player.facing == 0){
 						s = new ShortLaser(player.x+player.width, player.getMidpoint().y-3, player.parent, null);
@@ -108,6 +141,10 @@ package archetypes
 					}
 					s.align=Manager.align_friend;
 					player.parent.spawn(s);
+					
+					
+					this.chainedCasts++;
+					this.elapsedSinceCast=0;
 				}
 					
 				else if (FlxG.keys.W)

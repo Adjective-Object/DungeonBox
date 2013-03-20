@@ -30,6 +30,14 @@ package managedobjs
 			this.type = PlayerDummy.MSType;
 			this.makeGraphic(10, 12, 0xffaa1111);
 			
+			if (this.managedID==0) {
+				this.archetype = new ArchetypeWarrior();
+			} else if (this.managedID==1) {
+				this.archetype = new ArchetypeMage();
+			} else {
+				this.archetype = new ArchetypeMage();
+			}
+			
 			//ARCHETYPE USE
 			this.maxVelocity.x = archetype.moveSpeed*2;
 			this.maxVelocity.y = archetype.moveSpeed * 2;

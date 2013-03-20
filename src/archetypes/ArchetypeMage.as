@@ -15,7 +15,7 @@ package archetypes
 	{
 		
 		[Embed(source = "/../res/Mage.png")] private var playerSprite:Class;
-		[Embed(source="/../res/laser_fire.mp3")] private var laserSound:Class;
+		[Embed(source="/../res/laser_fire.mp3")] private var laserSound:Class;	
 		
 		public var channeling:Boolean = false;
 		public var stopMotion:Boolean = false;
@@ -108,7 +108,7 @@ package archetypes
 					player.parent.spawn(s);
 				}
 					
-				else if (FlxG.keys.W)
+				else if (FlxG.keys.E)
 				{
 					player.play("roll");
 					this.stopMotion = false;
@@ -128,7 +128,7 @@ package archetypes
 					}
 				}
 					
-				else if (FlxG.keys.E)
+				else if (FlxG.keys.W)
 				{
 					player.play("cast");
 					this.channeling = true;
