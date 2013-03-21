@@ -22,6 +22,7 @@ package items
 			this.type = GreenStone.IMType;
 			this.image=GreenstoneImage;
 			this.isUseItem=true;
+			this.description = "large self heal";
 		}
 		
 		public override function onUse(){

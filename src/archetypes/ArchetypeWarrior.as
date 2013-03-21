@@ -4,7 +4,7 @@ package archetypes
 	import managedobjs.PlayerControlled;
 	import managedobjs.PlayerDummy;
 	import managedobjs.WarriorSlash;
-	import managedobjs.BurnAOE;
+	import managedobjs.WarriorBash;
 	import managedobjs.GravityWell;
 	import managedobjs.DebuffHandler;
 	
@@ -61,15 +61,15 @@ package archetypes
 		}
 		
 		protected var chainedCasts:uint = 0;
-		protected var elapsedSinceCast:Number = 0;
-		protected static var castResetTime = 0.75;
+		protected var QelapsedSinceCast:Number = 0;
+		protected static var QcastResetTime = 1.5;
+		protected static var Qcooldown = 2.5;
 		
 		public override function updateTracked(player:PlayerControlled):void{
-			this.elapsedSinceCast+=FlxG.elapsed;
-			if(elapsedSinceCast>castResetTime && chainedCasts>0){
+			this.QelapsedSinceCast+=FlxG.elapsed;
+			if(QelapsedSinceCast>QcastResetTime && chainedCasts>0){
 				trace(chainedCasts);
 				chainedCasts=0;
-				player.cooldowns[0]=5;
 			}
 			if (!channeling) {
 				this.stopMotion = true;
@@ -110,66 +110,22 @@ package archetypes
 				
 				if (FlxG.keys.Q && player.cooldowns[0]==0)
 				{
-					if(elapsedSinceCast>castResetTime){
-						this.chainedCasts=0;
-					}
-					
-					var damage:int;
-					
-					switch(chainedCasts){
-						case 0:
-							player.play("sla1");
-							damage=1;
-							break;
-						case 1:
-							player.play("sla3");
-							damage=2;
-							break;
-						case 2:
-							player.play("sla2");
-							damage=3;
-							break;
-						default:
-							player.play("sla1");
-							damage=10;
-							trace("panic!");
-							break
-					}
-					
-					this.channeling = true;
-					this.stopMotion = true;
-					
-					//TODO differentiate from mage
-					var s:WarriorSlash;
-					if(player.facing == 0){//right
-						s = new WarriorSlash(player.x+player.width, player.y, player.parent, null, 3+this.chainedCasts );
-					} else {//left
-						s = new WarriorSlash(player.x-WarriorSlash.width, player.y, player.parent, null, this.chainedCasts);
-					}
-					s.align=Manager.align_friend;
-					player.parent.spawn(s);
-					
-					
-					this.chainedCasts++;
-					if(this.chainedCasts==3){
-						this.chainedCasts=0
-					}
-					this.elapsedSinceCast=0;
+					handleQ(player);
 				}
 					
 				else if (FlxG.keys.W && player.cooldowns[1]==0)
 				{
-					player.cooldowns[1]=8;
-					player.play("cast");
+					player.cooldowns[1]=4;
+					player.play("sla3");
 					this.channeling = true;
 					this.stopMotion = true;
-					var b:BurnAOE;
+					var b:WarriorBash;
 					if(player.facing == 0){
-						b = new BurnAOE(player.getMidpoint().x + BurnAOE.distancePlaced - BurnAOE.nullWidth/2, player.getMidpoint().y-3, player.parent, null);
-						b.facing = 0;
-					} else {
-						b = new BurnAOE(player.getMidpoint().x - BurnAOE.distancePlaced - BurnAOE.nullWidth/2 , player.getMidpoint().y - 3, player.parent, null);
+						b = new WarriorBash(player.x+player.width-WarriorBash.offset, player.y, player.parent, null);
 						b.facing = 1;
+					} else {
+						b = new WarriorBash(player.x-WarriorBash.width+WarriorBash.offset, player.y , player.parent, null);
+						b.facing = 0;
 					}
 					b.align = Manager.align_friend;
 					player.parent.spawn(b);
@@ -208,6 +164,58 @@ package archetypes
 				}
 			}
 			
+		}
+		
+		private  function handleQ(player:PlayerControlled):void{
+			if(player.facing==1){
+				player.knockBack(-5,0);
+			}else{
+				player.knockBack(5,0);
+			}
+			
+			if(chainedCasts!=0 && QelapsedSinceCast>QcastResetTime){
+				this.chainedCasts=0;
+				player.cooldowns[0]= Qcooldown;
+			}
+			
+			var damage:int;
+			
+			switch(chainedCasts){
+				case 0:
+					player.play("sla1");
+					break;
+				case 1:
+					player.play("sla3");
+					break;
+				case 2:
+					player.play("sla2");
+					break;
+				default:
+					player.play("sla1");
+					trace("panic!");
+					break
+			}
+			
+			this.channeling = true;
+			this.stopMotion = true;
+			
+			//TODO differentiate from mage
+			var s:WarriorSlash;
+			if(player.facing == 0){//right
+				s = new WarriorSlash(player.x+player.width, player.y, player.parent, null, 3+this.chainedCasts );
+			} else {//left
+				s = new WarriorSlash(player.x-WarriorSlash.width, player.y, player.parent, null, this.chainedCasts);
+			}
+			s.align=Manager.align_friend;
+			player.parent.spawn(s);
+			
+			
+			this.chainedCasts++;
+			if(this.chainedCasts==3){
+				this.chainedCasts=0
+				player.cooldowns[0]= Qcooldown;
+			}
+			this.QelapsedSinceCast=0;
 		}
 	}
 }

@@ -64,7 +64,9 @@ package managedobjs
 				{
 					if( gameObject!=null && !this.displayDebuffIcons[DebuffHandler.BURN] && gameObject.align != this.align && gameObject.align!=Manager.align_none && MSLib.overlap(this, gameObject))
 					{
-						gameObject.applyDebuff(DebuffHandler.BURN);
+						if(!gameObject.displayDebuffIcons[DebuffHandler.BURN]){
+							gameObject.applyDebuff(DebuffHandler.BURN);
+						}
 					}
 				}
 				super.updateTrackedQualities();

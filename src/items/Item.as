@@ -8,6 +8,7 @@ package items
 		protected var owner:PlayerDummy = null;
 		public var isUseItem:Boolean, isConsumable:Boolean;
 		public var type:int;
+		public var description:String;//short string that describes item effects
 				
 		[Embed(source = "/../res/NoItem.png")] private var noItem:Class;
 		public var image = noItem;

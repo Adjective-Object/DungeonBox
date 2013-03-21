@@ -39,6 +39,12 @@ package managedobjs
 					collisionRecord[gameObject.managedID] = true;
 					gameObject.damage( this.getDamage() );
 					if(this.state % 3 == 2){
+						if(!gameObject.displayDebuffIcons[DebuffHandler.SPARK]){
+							gameObject.applyDebuff(DebuffHandler.SPARK);
+						} else{
+							gameObject.removeDebuff(DebuffHandler.SPARK);
+							gameObject.applyDebuff(DebuffHandler.STUN);
+						}
 						if(this.facing==1){
 							this.parent.knockBack(gameObject, 30, 0);
 						}

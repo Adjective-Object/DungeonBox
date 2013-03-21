@@ -24,7 +24,7 @@ package managedobjs
 		
 		public function ExampleEnemy(x:Number, y:Number, parent:Manager, managedID:int) 
 		{
-			super(x, y, parent, managedID, 10);
+			super(x, y, parent, managedID, 30);
 			this.type = ExampleEnemy.MSType;
 			loadGraphic(enemy, true, true, 11, 15);
 			this.replaceColor(0xffff00ff, 0x00ffffff);
@@ -52,7 +52,7 @@ package managedobjs
 		}
 		
 		override public function updateTrackedQualities():void {	
-			if(this.health>0){
+			if(this.health>0 && !this.displayDebuffIcons[DebuffHandler.STUN]){
 				livingBehavior();
 			} else{
 				this.play("dead")

@@ -26,6 +26,7 @@ package managedobjs
 			MSLib.managedIDs[PlayerDummy.MSType] = PlayerDummy;				//6
 			MSLib.managedIDs[ItemOnGround.MSType] = ItemOnGround;			//7
 			MSLib.managedIDs[WarriorSlash.MSType] = WarriorSlash;			//8
+			MSLib.managedIDs[WarriorBash.MSType] = WarriorBash;				//9
 		}
 		
 		/**

@@ -17,12 +17,6 @@ package managedobjs
 		{
 			parent.displayDebuffIcon(debuffID,true)
 			switch(debuffID){
-				case STUN://stunned
-					parent.stunned=true;
-					break;
-				default:
-					
-				break;
 			}
 		}
 		
@@ -30,7 +24,6 @@ package managedobjs
 		{
 			switch(debuffID){
 				case STUN://stunned
-					parent.stunned=true;
 					break;
 				case BURN://cosmetic, marked to be sucked in by mage R
 					if (FlxG.random() * 1.0< FlxG.elapsed) { parent.damage(1); }
@@ -46,11 +39,6 @@ package managedobjs
 		{
 			parent.displayDebuffIcon(debuffID, false);
 			switch(debuffID){
-				case STUN://stunned
-					parent.stunned=true;
-					break;
-				case GRAVITY_WELL://cosmetic, marked to be sucked in by mage R
-					break;
 				default:
 					
 				break;

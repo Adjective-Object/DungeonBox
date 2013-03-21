@@ -1,6 +1,7 @@
 package managedobjs
 {
 	import HUDItems.HUDImage;
+	import HUDItems.HUDText;
 	
 	import archetypes.ArchetypeMage;
 	import archetypes.ArchetypeWarrior;
@@ -43,7 +44,7 @@ package managedobjs
 			
 			this.archetype.updateTracked(this);
 			
-			if(this.cooldowns[4]==0 && FlxG.keys.D){
+			if(this.cooldowns[4]==0 && FlxG.keys.D && this.useItem!=null){
 				this.useItem.onUse();
 			}
 			
@@ -62,9 +63,10 @@ package managedobjs
 		
 		public override function addItem(p:Item){
 			super.addItem(p);
+			this.pstate.add(new HUDText(FlxG.width/FlxG.camera.zoom-110,10,100,p.description,1,"right"));
 			if(p.isUseItem){
 				var d:HUDImage = new HUDImage(35,10,this.useItem.image);
-				d.alpha=0.7;
+				d.alpha=0.9;
 				if(this.useItemSprite!=null){
 					this.pstate.remove(this.useItemSprite);
 				}

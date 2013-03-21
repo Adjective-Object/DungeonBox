@@ -9,9 +9,9 @@ package items
 	{
 		public static var IMType = 1;
 		
-		protected static var damageValue = 1;
+		protected static var damageValue = 3;
 		protected static var range = 100;
-		protected static var cooldownHit = 10;
+		protected static var cooldownHit = 5;
 		protected static var cooldownMiss = 2;
 		
 		protected var elapsed=0;
@@ -23,6 +23,7 @@ package items
 			this.type = RedStone.IMType;
 			this.image=RedStoneImage;
 			this.isUseItem=true;
+			this.description = "damage in large AOE";
 		}
 		
 		public override function onUse(){

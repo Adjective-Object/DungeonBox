@@ -52,7 +52,6 @@ package
 		[Embed(source = "/../res/SparkIcon.png")] private var sparkIcon:Class;
 		[Embed(source = "/../res/InvulnIcon.png")] private var invulnIcon:Class;
 		
-		public var stunned:Boolean = false
 		public var displayDebuffIcons:Array = new Array();
 		public var debuffDecals:Array = new Array();
 		protected var hpBar:FlxSprite;
@@ -159,7 +158,6 @@ package
 				updateTrackedQualities();
 				
 				if(Math.abs(knockVelocity.x)>0.5 || Math.abs(knockVelocity.y)>0.5){
-					PlayState.consoleOutput.text = "ff";
 					this.velocity.x=knockVelocity.x;
 					this.velocity.y=knockVelocity.y;
 					
@@ -197,7 +195,6 @@ package
 		 */
 		public function updateTrackedQualities():void
 		{
-			this.stunned=false;
 			for (var i:int = 0; i < this.displayDebuffIcons.length; i++) {
 				if(displayDebuffIcons[i]){
 					DebuffHandler.handleDebuff(this, i);

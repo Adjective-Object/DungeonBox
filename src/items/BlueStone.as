@@ -18,6 +18,7 @@ package items
 		{
 			this.type = BlueStone.IMType;
 			this.image=blueStoneImage;
+			this.description = "heal out of combat";
 		}
 		
 		public override function onEvent(event:Array)
