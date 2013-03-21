@@ -245,6 +245,7 @@ package
 			if ( isControlled() ){
 				this.parent.kill(this);
 				super.kill();
+				//this.destroy();
 			}
 		}
 		

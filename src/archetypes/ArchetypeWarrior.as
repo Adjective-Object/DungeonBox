@@ -3,7 +3,7 @@ package archetypes
 	import managedobjs.DebuffHandler;
 	import managedobjs.PlayerControlled;
 	import managedobjs.PlayerDummy;
-	import managedobjs.ShortLaser;
+	import managedobjs.WarriorSlash;
 	import managedobjs.BurnAOE;
 	import managedobjs.GravityWell;
 	import managedobjs.DebuffHandler;
@@ -114,20 +114,24 @@ package archetypes
 						this.chainedCasts=0;
 					}
 					
+					var damage:int;
+					
 					switch(chainedCasts){
 						case 0:
 							player.play("sla1");
+							damage=1;
 							break;
 						case 1:
 							player.play("sla3");
+							damage=2;
 							break;
 						case 2:
 							player.play("sla2");
-							this.chainedCasts=0
+							damage=3;
 							break;
 						default:
-							player.play("sla2");
-							this.chainedCasts=0
+							player.play("sla1");
+							damage=10;
 							trace("panic!");
 							break
 					}
@@ -136,19 +140,20 @@ package archetypes
 					this.stopMotion = true;
 					
 					//TODO differentiate from mage
-					var s:ShortLaser;
-					if(player.facing == 0){
-						s = new ShortLaser(player.x+player.width, player.getMidpoint().y-3, player.parent, null);
-						s.facing = 0;
-					} else {
-						s = new ShortLaser(player.x-ShortLaser.laserLength, player.getMidpoint().y-3, player.parent, null);
-						s.facing = 1;
+					var s:WarriorSlash;
+					if(player.facing == 0){//right
+						s = new WarriorSlash(player.x+player.width, player.y, player.parent, null, 3+this.chainedCasts );
+					} else {//left
+						s = new WarriorSlash(player.x-WarriorSlash.width, player.y, player.parent, null, this.chainedCasts);
 					}
 					s.align=Manager.align_friend;
 					player.parent.spawn(s);
 					
 					
 					this.chainedCasts++;
+					if(this.chainedCasts==3){
+						this.chainedCasts=0
+					}
 					this.elapsedSinceCast=0;
 				}
 					

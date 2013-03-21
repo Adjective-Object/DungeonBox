@@ -24,7 +24,7 @@ package managedobjs
 		
 		protected var collidedWith:Array = new Array(), collisionRecord:Array = new Array();
 		
-		public function ShortLaser(x:Number, y:Number, parent:Manager, managedID:int)
+		public function ShortLaser(x:Number, y:Number, parent:Manager, managedID:int, damage:int=1)
 		{
 			super(x, y, parent, managedID, 100);
 			this.type = ShortLaser.MSType;
@@ -33,6 +33,8 @@ package managedobjs
 			this.width = laserLength;
 			this.height = 5;
 			this.offset.y = -2.5;
+			
+			this.setState(damage);
 		}
 		
 		override public function update():void
@@ -60,7 +62,7 @@ package managedobjs
 					if( gameObject!=null && gameObject.align != this.align && gameObject.align!=Manager.align_none && !collisionRecord[gameObject.managedID] && MSLib.overlap(this, gameObject))
 					{
 						collisionRecord[gameObject.managedID] = true;
-						gameObject.damage(1);
+						gameObject.damage( this.state );
 						if(this.facing==0){
 							this.parent.knockBack(gameObject, 30, 0);
 						}

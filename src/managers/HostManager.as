@@ -161,6 +161,7 @@ package managers
 				case Manager.event_kill:
 					trace("kill_via_event "+this.objectMap.members[args[1]]);
 					delete this.objectMap.members[args[1]];
+					//(FlxSprite)(this.objectMap.remove(this.objectMap.members[args[1]])).destroy();
 				break;
 				case Manager.event_knockback:
 					this.objectMap.members[args[1]].knockBack(args[2], args[3]);
