@@ -66,7 +66,6 @@ package managers
 				case Manager.event_kill:
 					delete this.child.managedSprites.remove(this.gameObjects.members[event[1]]);
 					delete this.gameObjects.remove(this.gameObjects.members[event[1]]);
-					trace("killing "+event[1]);
 					break;
 				case Manager.event_update_position:
 					this.gameObjects.members[event[1]].x = event[2];

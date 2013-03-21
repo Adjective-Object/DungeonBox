@@ -3,6 +3,8 @@ package items
 	import org.flixel.FlxG;
 	import managers.Manager;
 	import managedobjs.MSLib;
+	import managedobjs.PlayerControlled;
+	
 	public class RedStone extends Item
 	{
 		public static var IMType = 1;
@@ -32,9 +34,9 @@ package items
 				}
 			}
 			if(hit){
-				this.owner.cooldowns[4]=cooldownHit;
+				(PlayerControlled)(this.owner).cooldowns[4]=cooldownHit;
 			} else{
-				this.owner.cooldowns[4]=cooldownMiss;
+				(PlayerControlled)(this.owner).cooldowns[4]=cooldownMiss;
 			}
 		}
 

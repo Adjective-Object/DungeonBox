@@ -38,16 +38,22 @@ package managedobjs
 			if(firstUpdate || !this.canBeCollided){//TODO this *should* work for preventing picking up items you just dropped, but it is untested
 				this.canBeCollided=true;
 				for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members){
-					if( gameObject!= null && (gameObject.type == PlayerDummy.MSType || gameObject.type == PlayerControlled.MSType) && MSLib.overlap(gameObject,this)){
+					if( gameObject!= null && ( gameObject.type == PlayerDummy.MSType) && MSLib.overlap(gameObject,this)){
 						this.canBeCollided=false;
 					}
 				}
 				this.firstUpdate=false;
 			} else{
 				for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members){
-					if( gameObject!=null && ( gameObject.type == PlayerDummy.MSType || gameObject.type == PlayerControlled.MSType) && MSLib.overlap(gameObject,this)){
+					if( gameObject!=null && ( gameObject.type == PlayerDummy.MSType) && MSLib.overlap(gameObject,this)){
 						parent.giveItem(gameObject,this.internalItem.type);
-						this.kill();
+						var targetPlayer:PlayerDummy = (PlayerDummy)(gameObject);
+						if( !this.internalItem.isUseItem || (this.internalItem.isUseItem && targetPlayer.useItem==null) ){
+							this.kill();
+						} else if (this.internalItem.isUseItem){
+							this.changeState(targetPlayer.useItem.type);
+							this.firstUpdate=true;
+						}
 					}
 				}
 			}

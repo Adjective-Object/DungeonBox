@@ -146,7 +146,7 @@ package
 		override public function update():void {
 			//updates game stats only if this is running on the server, or if it is client controlled
 			lastDamageTaken+=FlxG.elapsed;
-			if(isControlled){
+			if(isControlled() && this.alive){
 				this.tempx = this.x;
 				this.tempy = this.y;
 				

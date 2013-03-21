@@ -6,15 +6,18 @@ package managedobjs
 	import archetypes.*;
 	import managers.Manager;
 	
+	import items.Item;
 	
 	/**
 	 * I RUV ME SOME OBJECTS
 	 * @author Maxwell Huang-Hobbs
 	 */
 	public class PlayerDummy extends ManagedFlxSprite
-	{
-		
+	{	
 		public static var MSType:int = 5;
+		
+		var inventory:Array = new Array();
+		var useItem:Item;
 				
 		public var lastDamage = 0;
 		public static var damageRefreshTime = 0.25;
@@ -50,6 +53,17 @@ package managedobjs
 			lastDamage += FlxG.elapsed;
 			
 			this.archetype.update(this);
+		}
+		
+		public function addItem(p:Item){
+			if(!p.isUseItem && !p.isConsumable){
+				p.setOwner(this);
+				inventory.push(p);
+			}
+			else if (p.isUseItem){ 
+				this.useItem=p;
+				this.useItem.setOwner(this);
+			}
 		}
 		
 		override public function damage( dmg:int ){

@@ -57,7 +57,7 @@ package managedobjs
 			if(this.counter>waitTime+chargeTime){
 				for each( var gameObject:ManagedFlxSprite in parent.getAllSprites().members)
 				{
-					if( gameObject.align != this.align && gameObject.align!=Manager.align_none && !collisionRecord[gameObject.managedID] && MSLib.overlap(this, gameObject))
+					if( gameObject!=null && gameObject.align != this.align && gameObject.align!=Manager.align_none && !collisionRecord[gameObject.managedID] && MSLib.overlap(this, gameObject))
 					{
 						collisionRecord[gameObject.managedID] = true;
 						gameObject.damage(1);

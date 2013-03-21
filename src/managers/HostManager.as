@@ -2,14 +2,14 @@ package managers
 {
 	import flash.utils.Dictionary;
 	
+	import items.*;
+	
 	import managedobjs.*;
 	
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
-	
-	import items.*;
 	
 	/**
 	 * ...
@@ -177,6 +177,8 @@ package managers
 					this.pushEvent(args);
 					break;
 				case Manager.event_give_item:
+					var targetPlayer: PlayerDummy = (PlayerDummy)( this.getEntity(args[1]) )
+					targetPlayer.addItem( IMLib.getIMItem(args[2]) );
 					this.pushEvent(args);
 					break;
 				case Manager.event_set_state:
@@ -224,7 +226,7 @@ package managers
 		public override function kill( e:ManagedFlxSprite):void
 		{
 			this.pushEvent( Manager.getKillEvent(e) );
-			delete this.objectMap.members[e.managedID];
+			this.objectMap.remove(e)
 		}
 		public override function knockBack(e:ManagedFlxSprite, x:int, y:int):void{
 			this.reportEvent( Manager.getKnockbackEvent(e,x,y) );

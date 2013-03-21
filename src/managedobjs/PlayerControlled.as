@@ -15,9 +15,7 @@ package managedobjs
 	
 	public class PlayerControlled extends PlayerDummy
 	{
-		var inventory:Array = new Array();
 		public var inventorySprites:Array = new Array();
-		var useItem:Item;
 		var useItemSprite:HUDImage;
 		
 		public static var MSType = 0;
@@ -30,6 +28,7 @@ package managedobjs
 		{
 			super(x, y, parent, managedID);
 			this.type=PlayerControlled.MSType;
+			this.clientControlled=true;
 			//defining archetype of player
 			cooldowns = new Array(0,0,0,0,0);//Q, W , E, R, and use item (D).
 		}
@@ -61,29 +60,23 @@ package managedobjs
 			}
 		}
 		
-		public function addItem(p:Item){
-			if(!p.isUseItem && !p.isConsumable){
-				p.setOwner(this);
-				var d:HUDImage = new HUDImage(10,10+35*inventory.length,p.image);
-				d.alpha=0.7;
-				
-				this.pstate.add(d);
-				inventory.push(p);
-				inventorySprites.push(d)
-			}
-			else if (p.isUseItem){ 
-				if(this.useItem!=null){//mutual exlcusivity of use items
-					new ItemOnGround(this.getMidpoint().x-8,this.getMidpoint().y-8,this.parent,null,this.useItem.type).spawn();
-				}
-				this.useItem=p;
-				this.useItem.setOwner(this);
+		public override function addItem(p:Item){
+			super.addItem(p);
+			if(p.isUseItem){
 				var d:HUDImage = new HUDImage(35,10,this.useItem.image);
 				d.alpha=0.7;
-				this.pstate.remove(this.useItemSprite);
+				if(this.useItemSprite!=null){
+					this.pstate.remove(this.useItemSprite);
+				}
 				this.useItemSprite=d;
 				this.pstate.add(d);
+			} else{
+				var d:HUDImage = new HUDImage(10,10+35*(inventory.length-1),p.image);
+				d.alpha=0.7;
+				
+				inventorySprites.push(d)
+				this.pstate.add(d);
 			}
-			
 		}
 		
 		override public function postUpdate():void {

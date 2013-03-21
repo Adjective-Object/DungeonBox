@@ -2,6 +2,9 @@ package items
 {
 	import org.flixel.FlxG;
 	import managers.Manager;
+	
+	import managedobjs.PlayerControlled;
+	
 	public class GreenStone extends Item
 	{
 		public static var IMType = 2;
@@ -23,7 +26,7 @@ package items
 		
 		public override function onUse(){
 			this.owner.damage(-healValue);
-			this.owner.cooldowns[4] = GreenStone.cooldown;
+			(PlayerControlled)(this.owner).cooldowns[4] = GreenStone.cooldown;
 		}
 
 	}
