@@ -15,13 +15,11 @@ package managers
 		
 		protected var server:Socket;
 		
-		public function NetClientManager(child:PlayState, address:String, port:uint) 
+		public function NetClientManager(toServer:Socket) 
 		{
-			this.server = new Socket();
+			this.server = toServer;
 			configureListeners(this.server);
-			this.server.connect( address, port );
-			trace("Client connected to",address,port,"socket",this.server);
-			super(child);
+			super();
 		}
 		
 		private function configureListeners( s:Socket ):void {

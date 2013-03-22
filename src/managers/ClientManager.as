@@ -22,11 +22,14 @@ package managers
 		private var child:PlayState;
 		protected var gameEvents:Array = new Array();
 		
-		public function ClientManager(child:PlayState) 
+		public function ClientManager() 
 		{	
 			super();
 			this.clientSide = true;
-			this.child = child;
+		}
+		
+		public function SetChild(r:PlayState){
+			this.child=r;
 		}
 		
 		override public function update():void

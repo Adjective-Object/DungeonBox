@@ -53,17 +53,10 @@ package
 		
 		var cooldownText:Array = new Array();
 		
-		
-		
-		public var hostGame:Boolean;
-		public var addressIP:String;
-		public var addressPort:uint;
-		
-		public function PlayState(host:Boolean, addressIP:String = "127.0.0.1", addressPort:uint=1337){
+		public function PlayState(clientManager:ClientManager, hostManager:HostManager=null){
 			super();
-			this.hostGame=host;
-			this.addressIP=addressIP;
-			this.addressPort=addressPort;
+			this.manager=clientManager;
+			this.serverManager=hostManager;
 		}
 		
 		override public function create():void
@@ -71,13 +64,6 @@ package
 			FlxG.bgColor = 0xff000000;
 			FlxG.worldBounds = new FlxRect(0, 0,  data[0].length * 32, data.length * 32);
 			FlxG.mouse.show(cursor);
-			
-			if(this.hostGame){ 
-				this.serverManager = new NetServerManager(addressPort);
-				this.manager = new NetClientManager(this, addressIP, addressPort);
-			}else{
-				this.manager = new NetClientManager(this, addressIP, addressPort);
-			}
 			
 			FlxG.camera.zoom = 2;
 			for (var y:int = 0; y < data.length; y++ ) {
@@ -113,8 +99,8 @@ package
 		
 		override public function update():void
 		{
-			if(this.hostGame){
-				this.serverManager.update();//bullshit
+			if(this.serverManager!=null){
+				this.serverManager.update();
 			}
 			this.manager.update();
 			

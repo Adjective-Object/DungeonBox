@@ -1,8 +1,6 @@
 package managers 
 {
 	import flash.events.ProgressEvent;
-	import flash.events.ServerSocketConnectEvent;
-	import flash.net.ServerSocket;
 	import flash.net.Socket;
 	import flash.utils.Dictionary;
 	
@@ -16,23 +14,18 @@ package managers
 	 */
 	public class NetServerManager extends HostManager
 	{
-		protected var hostSocket:ServerSocket;
 		protected var clients:Array = new Array();
 		protected var referenceNumbers:Dictionary = new Dictionary();
 		
-		protected var pushMessages:Array = new Array();//messages to push to clients
-		
-		public function NetServerManager(port:uint)
+		public function NetServerManager(sockets:Array)
 		{
-			super();
+			super(sockets.length);
 			this.parsedEvents = new Array();
-			this.hostSocket = new ServerSocket();
-            this.hostSocket.addEventListener( ServerSocketConnectEvent.CONNECT, onConnect );
-			this.hostSocket.bind( port );
-			this.hostSocket.listen();
-			
-			trace("Serversocket bound "+this.hostSocket.bound);
-			trace("Serversocket listening "+this.hostSocket.listening);
+			this.clients = sockets;
+			for ( var socketIndex:uint = 0; socketIndex<clients.length ; socketIndex++ ){
+				referenceNumbers[clients[socketIndex]] = socketIndex;
+				clients[socketIndex].addEventListener( ProgressEvent.SOCKET_DATA, onClientData );
+			}
 		}
 		
 		public override function update():void{
@@ -44,30 +37,6 @@ package managers
 				}
 				msg = getGameEvent();
 			}
-		}
-		
-		private function onConnect( event:ServerSocketConnectEvent ):void
-		{
-			var clientSocket:Socket = event.socket;
-			this.pushMessages.push( new Array() );
-			referenceNumbers[clientSocket] = clients.length;
-			clientSocket.addEventListener( ProgressEvent.SOCKET_DATA, onClientData );
-			
-			trace( "Connection from " + clientSocket.remoteAddress + ":" + clientSocket.remotePort );
-			
-			for each( var gameObject:ManagedFlxSprite in objectMap.members){
-				if(gameObject.managedID==clients.length){
-					trace(gameObject.managedID);
-					var p = Manager.getSpawnEvent(gameObject);
-					p[4]=PlayerControlled.MSType//changes type to controlled variety
-					sendEventMessage( clientSocket,  p);
-					//sendEventMessage( clientSocket,  Manager.getGiveItemEvent( gameObject , BlueStone.IMType) );
-				}else{
-					var p = Manager.getSpawnEvent(gameObject);
-					sendEventMessage( clientSocket,  p);
-				}
-			}
-			clients.push(clientSocket);
 		}
 		
 		public function onClientData( event:ProgressEvent ):void {

@@ -18,8 +18,7 @@ package managers
 	public class HostManager extends Manager
 	{	
 		protected var objectMap:FlxGroup = new FlxGroup();//dictionary of server-handled object
-		protected var playerOne:ManagedFlxSprite;
-		protected var playerTwo:ManagedFlxSprite;
+		protected var players:Array;
 		
 		protected static var numPlayers:int = 2;
 		
@@ -27,20 +26,21 @@ package managers
 		protected var parsedEvents:Array = new Array();
 		protected var idCounter:int;
 
-		public function HostManager( clientSide:Boolean = false) 
+		public function HostManager( numClients:uint ) 
 		{
-			this.clientSide = clientSide;
+			this.clientSide = false;
 			
 			this.idCounter = 0;
 			
 			this.mapSize = new FlxPoint(PlayState.data[0].length * 32, PlayState.data.length * 32);
 			
-			
-			this.playerOne = new PlayerDummy(mapSize.x / 2 - 50, mapSize.y / 2, this, idCounter);
-			this.playerOne.spawn();
-			
-			this.playerTwo = new PlayerDummy(mapSize.x / 2 + 50, mapSize.y / 2, this, idCounter);
-			this.playerTwo.spawn();
+			var sep = 25;
+			var p = -1;
+			for(var i:uint=0; i<numClients; i++){
+				this.players.push( new PlayerDummy(mapSize.x / 2 + sep*(i/2)*p , mapSize.y / 2, this, idCounter) );
+				this.players[i].spawn();
+				p=-p;
+			}
 			
 			new ItemOnGround(10, 10, this, idCounter, BlueStone.IMType).spawn();
 			new ItemOnGround(100, 200, this, idCounter, RedStone.IMType).spawn();
@@ -123,14 +123,7 @@ package managers
 		
 		public override function getPlayers():Array
 		{
-			var a:Array = new Array();
-			if (playerOne != null) {
-				a.push(playerOne);
-			}
-			if (playerTwo != null) {
-				a.push(playerTwo);
-			}
-			return a;
+			return this.players;
 		}
 		
 		public override function getEntity( id:uint):ManagedFlxSprite

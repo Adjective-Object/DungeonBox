@@ -86,10 +86,10 @@ package
 			{
 				switch(focus){
 					case 0:
-						FlxG.switchState(new PlayState(true));
+						FlxG.switchState( new HostLobby() );
 						break;
 					case 1:
-						FlxG.switchState(new PlayState(false));
+						//FlxG.switchState(new PlayState(false));
 						break;
 					case 2:
 						System.exit(0);
