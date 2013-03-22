@@ -36,6 +36,7 @@ package managers
 			
 			var sep = 25;
 			var p = -1;
+			this.players = new Array();
 			for(var i:uint=0; i<numClients; i++){
 				this.players.push( new PlayerDummy(mapSize.x / 2 + sep*(i/2)*p , mapSize.y / 2, this, idCounter) );
 				this.players[i].spawn();

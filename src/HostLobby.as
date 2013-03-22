@@ -12,7 +12,7 @@ package
 	public class HostLobby extends FlxState
 	{
 		protected var hostSocket:ServerSocket;
-		protected var clients:Array;
+		protected var clients:Array = new Array();
 		public var listenPort:uint;
 		protected var mastraubatorySocket:Socket;
 		
@@ -42,7 +42,10 @@ package
 			this.clientTexts = new Array();
 			
 			//connect to self
+			this.mastraubatorySocket = new Socket();
 			this.mastraubatorySocket.connect( "127.0.0.1", listenPort );
+			this.mastraubatorySocket.writeUTF("HOST");
+			this.mastraubatorySocket.flush();
 		}
 		
 		public function createBonesGUI():void{
