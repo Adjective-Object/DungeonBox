@@ -60,6 +60,7 @@ package managers
 					trace(message[0],msgTyping,"i dunno how to '",msgTyping.charAt(i),"'");
 				}
 			}
+			client.flush();
 		}
 			
 		public static function handleMessage( m:Manager, client:Socket, verbose:Boolean=false):Array {

@@ -18,7 +18,7 @@ package managers
 	public class ClientManager extends Manager
 	{
 		
-		protected var gameObjects:FlxGroup = new FlxGroup();//dictionary of manager-handled object
+		protected var gameObjects:FlxGroup;//dictionary of manager-handled object
 		private var child:PlayState;
 		protected var gameEvents:Array = new Array();
 		
@@ -26,6 +26,7 @@ package managers
 		{	
 			super();
 			this.clientSide = true;
+			this.gameObjects  = new FlxGroup();
 		}
 		
 		public function SetChild(r:PlayState){

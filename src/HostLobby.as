@@ -1,6 +1,8 @@
 package
 {
 	import flash.events.ServerSocketConnectEvent;
+	import flash.events.ProgressEvent;
+	
 	import flash.net.ServerSocket;
 	import flash.net.Socket;
 	
@@ -90,8 +92,12 @@ package
 			}
 			
 			if( FlxG.keys.justPressed("K") ){//kicking selected player
-				removePlayer(focus);
-				focus=focus%clientTexts.length;
+				if(clients[focus].remoteAddress!="127.0.0.1"){
+					removePlayer(focus);
+					focus=focus%clientTexts.length;
+				} else{
+					trace("cannot kick self from lobby");
+				}
 			}
 			
 			if( FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE") ){//kicking selected player
@@ -137,9 +143,21 @@ package
 		private function onConnect( event:flash.events.ServerSocketConnectEvent ):void
 		{
 			var clientSocket:flash.net.Socket = event.socket;
+			clientSocket.addEventListener( ProgressEvent.SOCKET_DATA, getName );
 			
 			trace( "Connection from " + clientSocket.remoteAddress + ":" + clientSocket.remotePort );
+			var newText:FlxText = new FlxText(0, HostLobby.textOrigin+HostLobby.textSpacing*clients.length, FlxG.width, "NO_NAME" );
+			newText.setFormat (null, 12, 0xFFFFFFFF, "center");
 			clients.push(clientSocket);
+			clientTexts.push(newText);
+			this.add(newText);
+			doColors();
+		}
+		
+		private function getName(  event:ProgressEvent ):void{
+			trace("get message");
+			var clientNum:uint = clients.indexOf(event.target);
+			clientTexts[clientNum].text=event.target.readUTF();
 		}
 		
 	}

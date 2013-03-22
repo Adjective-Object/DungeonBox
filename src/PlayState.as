@@ -42,8 +42,8 @@ package
 			new Array(6,7,7,7,7,7,8)
 			 );
 		
-		public var manager:Manager;//manager that simulates server connectio
-		public var serverManager:Manager //manager that runs fake server (threading doesn't work in as3) 
+		public var manager:ClientManager;//manager that simulates server connectio
+		public var serverManager:HostManager //manager that runs fake server (threading doesn't work in as3) 
 		
 		public var player:PlayerControlled;
 		
@@ -56,6 +56,7 @@ package
 		public function PlayState(clientManager:ClientManager, hostManager:HostManager=null){
 			super();
 			this.manager=clientManager;
+			this.manager.SetChild(this);
 			this.serverManager=hostManager;
 		}
 		
