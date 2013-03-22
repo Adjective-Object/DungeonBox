@@ -22,15 +22,15 @@ package managers
 		
 		protected var pushMessages:Array = new Array();//messages to push to clients
 		
-		public function NetServerManager() 
+		public function NetServerManager(port:uint)
 		{
 			super();
 			this.parsedEvents = new Array();
 			this.hostSocket = new ServerSocket();
-			trace("Serversocket.isSupported "+ServerSocket.isSupported);
             this.hostSocket.addEventListener( ServerSocketConnectEvent.CONNECT, onConnect );
-			this.hostSocket.bind( 13756 );
+			this.hostSocket.bind( port );
 			this.hostSocket.listen();
+			
 			trace("Serversocket bound "+this.hostSocket.bound);
 			trace("Serversocket listening "+this.hostSocket.listening);
 		}

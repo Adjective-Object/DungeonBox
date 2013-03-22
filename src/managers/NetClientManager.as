@@ -15,11 +15,12 @@ package managers
 		
 		protected var server:Socket;
 		
-		public function NetClientManager(child:PlayState) 
+		public function NetClientManager(child:PlayState, address:String, port:uint) 
 		{
 			this.server = new Socket();
 			configureListeners(this.server);
-			this.server.connect( "127.0.0.1", 13756 );
+			this.server.connect( address, port );
+			trace("Client connected to",address,port,"socket",this.server);
 			super(child);
 		}
 		
@@ -48,7 +49,6 @@ package managers
 		 */
 		override public function reportEvent( event:Array ):void
 		{
-			//trace("client reporting event "+event);
 			NetServerManager.sendEventMessage( this.server, event);
 		}
 		

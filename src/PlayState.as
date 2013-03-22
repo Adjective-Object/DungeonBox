@@ -42,9 +42,6 @@ package
 			new Array(6,7,7,7,7,7,8)
 			 );
 		
-		public static var simulateNetworkPlay:Boolean = false;
-			 
-		
 		public var manager:Manager;//manager that simulates server connectio
 		public var serverManager:Manager //manager that runs fake server (threading doesn't work in as3) 
 		
@@ -56,21 +53,30 @@ package
 		
 		var cooldownText:Array = new Array();
 		
+		
+		
+		public var hostGame:Boolean;
+		public var addressIP:String;
+		public var addressPort:uint;
+		
+		public function PlayState(host:Boolean, addressIP:String = "127.0.0.1", addressPort:uint=1337){
+			super();
+			this.hostGame=host;
+			this.addressIP=addressIP;
+			this.addressPort=addressPort;
+		}
+		
 		override public function create():void
 		{
-			PlayState.consoleOutput = new FlxText(0,0,100,"START");
-			//FlxG.stage.displayState = StageDisplayState.FULL_SCREEN;
-			
 			FlxG.bgColor = 0xff000000;
 			FlxG.worldBounds = new FlxRect(0, 0,  data[0].length * 32, data.length * 32);
 			FlxG.mouse.show(cursor);
 			
-			if(PlayState.simulateNetworkPlay){
-				this.serverManager = new NetServerManager();
-				this.manager = new NetClientManager(this);
+			if(this.hostGame){ 
+				this.serverManager = new NetServerManager(addressPort);
+				this.manager = new NetClientManager(this, addressIP, addressPort);
 			}else{
-				this.serverManager = new HostManager();
-				this.manager = new DummyManager(this, (HostManager)(this.serverManager));
+				this.manager = new NetClientManager(this, addressIP, addressPort);
 			}
 			
 			FlxG.camera.zoom = 2;
@@ -107,7 +113,7 @@ package
 		
 		override public function update():void
 		{
-			if(PlayState.simulateNetworkPlay){
+			if(this.hostGame){
 				this.serverManager.update();//bullshit
 			}
 			this.manager.update();
