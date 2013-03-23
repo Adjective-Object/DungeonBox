@@ -23,15 +23,16 @@ package managers
 		protected static var numPlayers:int = 2;
 		
 		protected var gameEvents:Array = new Array();
-		protected var parsedEvents:Array = new Array();
+		protected var parsedEvents:Array;
 		protected var idCounter:int;
 
 		public function HostManager( numClients:uint ) 
 		{
 			this.clientSide = false;
+			super();
 			
 			this.idCounter = 0;
-			
+			this.parsedEvents = new Array();
 			this.mapSize = new FlxPoint(PlayState.data[0].length * 32, PlayState.data.length * 32);
 			
 			var sep = 25;
@@ -55,7 +56,6 @@ package managers
 			this.playerTwo =  new Player(mapSize.x / 2 + 50, mapSize.y / 2, this, idCounter);
 			this.playerTwo.spawn();
 			*/
-			super();
 		}
 		
 		/**

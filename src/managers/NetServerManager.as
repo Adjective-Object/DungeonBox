@@ -20,7 +20,6 @@ package managers
 		public function NetServerManager(sockets:Array)
 		{
 			super(sockets.length);
-			this.parsedEvents = new Array();
 			this.clients = sockets;
 			for ( var socketIndex:uint = 0; socketIndex<clients.length ; socketIndex++ ){
 				referenceNumbers[clients[socketIndex]] = socketIndex;

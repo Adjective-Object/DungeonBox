@@ -76,6 +76,7 @@ package managers
 					this.gameObjects.members[event[1]].y = event[3];
 					break;
 				case Manager.event_update_animation:
+					trace(this.gameObjects,event);
 					this.gameObjects.members[event[1]].play(event[2]);
 					this.gameObjects.members[event[1]].facing = event[3];
 					break;
