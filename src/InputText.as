@@ -6,30 +6,32 @@ package
 	
 	public class InputText extends FlxText
 	{
-		public var alwaysFocused:Boolean;
+		public var responsive:Boolean;
 		
-		public function InputText(X:Number, Y:Number, Width:uint, EmbeddedFont:Boolean=true, alwaysFocused:Boolean=true)
+		public function InputText(X:Number, Y:Number, Width:uint, EmbeddedFont:Boolean=true, responsive:Boolean=true)
 		{
 			super(X,Y,Width,null,EmbeddedFont);
 			FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, processKeystrokeDOWN);
-			this.alwaysFocused=alwaysFocused;
+			this.responsive=responsive;
 		}
 		
 		public function processKeystrokeDOWN(keyEvent:KeyboardEvent):void{
-			if( 
-				(65<=keyEvent.keyCode && keyEvent.keyCode<=90)|| //letters
-				(48<=keyEvent.keyCode && keyEvent.keyCode<=57)|| //numbers
-				(96<=keyEvent.keyCode && keyEvent.keyCode<=111)|| //numpad
-				(186<=keyEvent.keyCode && keyEvent.keyCode<=191) //special chars
-				){
-				if(this.text==null){
-					this.text="";
+			if(this.responsive){
+				if( 
+					(65<=keyEvent.keyCode && keyEvent.keyCode<=90)|| //letters
+					(48<=keyEvent.keyCode && keyEvent.keyCode<=57)|| //numbers
+					(96<=keyEvent.keyCode && keyEvent.keyCode<=111)|| //numpad
+					(186<=keyEvent.keyCode && keyEvent.keyCode<=191) //special chars
+					){
+					if(this.text==null){
+						this.text="";
+					}
+					this.text= this.text+String.fromCharCode(keyEvent.charCode);
 				}
-				this.text= this.text+String.fromCharCode(keyEvent.charCode);
-			}
-			
-			if(keyEvent.keyCode==8){//backspace
-				this.text = this.text.slice(0,this.text.length-1);
+				
+				if(keyEvent.keyCode==8){//backspace
+					this.text = this.text.slice(0,this.text.length-1);
+				}
 			}
 		}
 		

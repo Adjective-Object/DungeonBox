@@ -18,6 +18,10 @@ package
 		
 		protected var inputText:InputText;
 		protected var errorText:FlxText;
+		protected var promptText:FlxText;
+		
+		protected var  gettingName:Boolean = true;
+		protected var  name:String = "nameless";
 		
 		public function ClientLobby(){}
 		
@@ -40,6 +44,10 @@ package
 			this.errorText.setFormat (null, 8, 0xFFFFFFFF, "center");
 			add(this.errorText);
 			
+			this.promptText = new FlxText(0, 188, FlxG.width, "name?");
+			this.promptText.setFormat (null, 8, 0xFFFFFFFF, "center");
+			add(this.promptText);
+			
 			//visual things
 			createBonesGUI();
 		}
@@ -47,15 +55,26 @@ package
 		public override function update():void{
 			super.update();
 			
-			if(FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE")){
-				this.errorText.text = this.attemptConnect(this.inputText.text);
+			if(gettingName)
+			{
+				if(FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE")){
+					this.name=this.inputText.text;
+					this.inputText.text = "";
+					this.promptText.text = "server address?"
+					this.gettingName=false;
+				}
+			}
+			else
+			{	
+				if(FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE")){
+					this.errorText.text = this.attemptConnect(this.inputText.text);
+				}
 			}
 			
 			if( FlxG.keys.justPressed("ESCAPE")){//leaving lobby
 				this.abortLobby();
 				FlxG.switchState ( new MenuState() );
 			}
-			
 		}
 		
 		
@@ -111,7 +130,8 @@ package
 		
 		public function connectHandler(event:Event){
 			trace(event);
-			this.errorText.text = "socket connect to" + this.socket.remoteAddress+":"+this.socket.remotePort+" sucessful.";
+			this.errorText.text = "connected to server at " + this.socket.remoteAddress+":"+this.socket.remotePort;
+			socket.writeUTF(this.name);
 		}
 		
 		public function ioErrorHandler(event:IOErrorEvent){
