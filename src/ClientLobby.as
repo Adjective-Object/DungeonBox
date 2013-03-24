@@ -1,10 +1,135 @@
 package
 {
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
+	import flash.events.SecurityErrorEvent;
+	import flash.net.Socket;
+	
+	import managers.NetClientManager;
+	
 	import org.flixel.*;
+	
+
 	public class ClientLobby extends FlxState
 	{
-		public function ClientLobby()
-		{
+		
+		protected var socket:Socket;
+		
+		protected var inputText:InputText;
+		protected var errorText:FlxText;
+		
+		public function ClientLobby(){}
+		
+		
+		public override function create():void{
+			//create listening server
+			this.socket = new Socket();
+			this.socket.addEventListener(Event.CLOSE, closeHandler);
+			this.socket.addEventListener(Event.CONNECT, connectHandler);
+			this.socket.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+			this.socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+			this.socket.addEventListener(ProgressEvent.SOCKET_DATA, socketDataHandler);
+			
+			this.inputText = new InputText(0, 200, FlxG.width);
+			this.inputText.setFormat (null, 20, 0xFFFFFFFF, "center");
+			this.add(this.inputText);
+			
+			
+			this.errorText = new FlxText(0, 224, FlxG.width, "");
+			this.errorText.setFormat (null, 8, 0xFFFFFFFF, "center");
+			add(this.errorText);
+			
+			//visual things
+			createBonesGUI();
+		}
+		
+		public override function update():void{
+			super.update();
+			
+			if(FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE")){
+				this.errorText.text = this.attemptConnect(this.inputText.text);
+			}
+			
+			if( FlxG.keys.justPressed("ESCAPE")){//leaving lobby
+				this.abortLobby();
+				FlxG.switchState ( new MenuState() );
+			}
+			
+		}
+		
+		
+		
+		
+		
+		
+		public function attemptConnect(addressString:String):String{
+			var temp:Array = addressString.split(":");
+			var ip:String = temp[0];
+			var port:int;
+
+			port = int(temp[1]);
+
+			socket.connect(ip,port);
+			
+			return "attempting to connect to "+addressString+"..."
+		}
+		
+		public function createBonesGUI():void{
+			var title:FlxText;
+			title = new FlxText(0, 16, FlxG.width, "Client Lobby");
+			title.setFormat (null, 20, 0xFFFFFFFF, "center");
+			this.add(title);
+			
+			var instructions:FlxText;
+			instructions = new FlxText(0, FlxG.height - 56, FlxG.width, "type out address, format ip:port. default port is 1337 ");
+			instructions.setFormat (null, 8, 0xFFFFFFFF, "center");
+			add(instructions);
+			
+			instructions = new FlxText(0, FlxG.height - 44, FlxG.width, "space / enter to attempt connection");
+			instructions.setFormat (null, 8, 0xFFFFFFFF, "center");
+			add(instructions);
+			
+			instructions = new FlxText(0, FlxG.height - 32, FlxG.width, "esc to abort lobby and return to main screen");
+			instructions.setFormat (null, 8, 0xFFFFFFFF, "center");
+			add(instructions);
+		}
+		
+		public function abortLobby(){
+			if(this.socket.connected){
+				this.socket.close();
+			}
+		}
+		
+		
+		
+		
+		
+		public function closeHandler(event:Event){
+			trace(event);
+		}
+		
+		public function connectHandler(event:Event){
+			trace(event);
+			this.errorText.text = "socket connect to" + this.socket.remoteAddress+":"+this.socket.remotePort+" sucessful.";
+		}
+		
+		public function ioErrorHandler(event:IOErrorEvent){
+			trace("IOERROR",event);
+			if( event.errorID==2031 ){//URL fail event
+				this.errorText.text = "cannot connect to server";
+			}
+			else{
+				this.errorText.text = event.text;
+			}
+		}
+		
+		public function securityErrorHandler(event:SecurityErrorEvent){
+			trace("socket security error",event);
+		}
+		
+		public function socketDataHandler(event:ProgressEvent){
+			trace("socket got data",event);
 		}
 	}
 }

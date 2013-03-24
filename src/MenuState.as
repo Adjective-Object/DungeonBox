@@ -90,6 +90,7 @@ package
 						break;
 					case 1:
 						//FlxG.switchState(new PlayState(false));
+						FlxG.switchState( new ClientLobby() );
 						break;
 					case 2:
 						System.exit(0);
