@@ -6,6 +6,8 @@ package managers
 	import flash.events.SecurityErrorEvent;
 	import flash.net.Socket;
 	
+	import managedobjs.PlayerControlled;
+	
 	/**
 	 * ...
 	 * @author Maxwell Huang-Hobbs
@@ -39,6 +41,15 @@ package managers
 				parseEvent(event);
 				event = this.getGameEvent();
 			}
+		}
+		
+		override public function getGameEvent():Array
+		{
+			var p:Array =  super.getGameEvent();
+			if ( p!=null && p[0]==Manager.event_spawn && p[1] == 0){
+				p[4]=PlayerControlled.MSType;
+			}
+			return p
 		}
 
 		

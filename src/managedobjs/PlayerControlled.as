@@ -25,9 +25,9 @@ package managedobjs
 		
 		public var cooldowns:Array;
 		
-		public function PlayerControlled(x:Number, y:Number, parent:Manager, managedID:int)
+		public function PlayerControlled(x:Number, y:Number, parent:Manager, managedID:int, archetypeID:uint = -1)
 		{
-			super(x, y, parent, managedID);
+			super(x, y, parent, managedID, archetypeID);
 			this.type=PlayerControlled.MSType;
 			this.clientControlled=true;
 			//defining archetype of player

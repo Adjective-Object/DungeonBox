@@ -68,7 +68,6 @@ package archetypes
 		public override function updateTracked(player:PlayerControlled):void{
 			this.QelapsedSinceCast+=FlxG.elapsed;
 			if(QelapsedSinceCast>QcastResetTime && chainedCasts>0){
-				trace(chainedCasts);
 				chainedCasts=0;
 			}
 			if (!channeling) {
@@ -155,7 +154,6 @@ package archetypes
 				else if (FlxG.keys.R && player.cooldowns[3]==0)
 				{
 					player.cooldowns[3]=15;
-					trace(player.parent);
 					player.play("ulti");
 					this.channeling = true;
 					var g = new GravityWell(player.getMidpoint().x, player.getMidpoint().y, player.parent, null);

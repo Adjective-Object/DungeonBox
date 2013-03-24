@@ -24,7 +24,7 @@ package managedobjs
 		
 		protected var archetype:Archetype = new ArchetypeMage();
 		
-		public function PlayerDummy(x:Number, y:Number, parent:Manager, managedID:int) 
+		public function PlayerDummy(x:Number, y:Number, parent:Manager, managedID:int, archetypeID:uint= -1) 
 		{
 			super(x, y, parent, managedID, 10);
 			this.clientControlled = true;
@@ -32,13 +32,23 @@ package managedobjs
 			
 			this.type = PlayerDummy.MSType;
 			this.makeGraphic(10, 12, 0xffaa1111);
-			
-			if (this.managedID==0) {
-				this.archetype = new ArchetypeWarrior();
-			} else if (this.managedID==1) {
-				this.archetype = new ArchetypeMage();
-			} else {
-				this.archetype = new ArchetypeMage();
+			if( archetypeID!=-1 ){
+				this.setState(archetypeID);
+			}
+		}
+		
+		override public function setState(archetypeID:int):void{
+			switch(archetypeID)
+			{
+				case 0:
+					this.archetype = new ArchetypeWarrior();
+					break
+				case 1:
+					this.archetype = new ArchetypeMage();
+					break;
+				default:
+					this.archetype = new ArchetypeMage();
+					break;
 			}
 			
 			//ARCHETYPE USE

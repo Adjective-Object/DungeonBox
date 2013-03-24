@@ -39,7 +39,7 @@ package managers
 			var p = -1;
 			this.players = new Array();
 			for(var i:uint=0; i<numClients; i++){
-				this.players.push( new PlayerDummy(mapSize.x / 2 + sep*(i/2)*p , mapSize.y / 2, this, idCounter) );
+				this.players.push( new PlayerDummy(mapSize.x / 2 + sep*(i/2)*p , mapSize.y / 2, this, idCounter, (int)( Math.round(FlxG.random()) ) ) );
 				this.players[i].spawn();
 				p=-p;
 			}
@@ -91,10 +91,11 @@ package managers
 					FlxG.random() * this.mapSize.x,
 					FlxG.random() * this.mapSize.y,
 					this,
-					this.idCounter);
-				m.facing = (int)(Math.round(FlxG.random()));//cosmetic
-				m.align = Manager.align_enemy;	
-				this.spawn(m);
+					this.idCounter,
+					(int)(Math.round(FlxG.random())),
+					Manager.align_enemy,
+					0);
+				m.spawn();
 			}
 		}
 		
@@ -187,10 +188,7 @@ package managers
 		}	
 		
 		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, align:int, facing:int, state:int):ManagedFlxSprite {
-			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID, x, y, this, id);
-			f.facing = facing;
-			f.align = align;
-			f.setState(state);
+			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID, x, y, this, id, facing, align, state);
 			return f
 		}
 		

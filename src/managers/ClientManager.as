@@ -76,7 +76,6 @@ package managers
 					this.gameObjects.members[event[1]].y = event[3];
 					break;
 				case Manager.event_update_animation:
-					trace(this.gameObjects,event);
 					this.gameObjects.members[event[1]].play(event[2]);
 					this.gameObjects.members[event[1]].facing = event[3];
 					break;
@@ -104,7 +103,7 @@ package managers
 				case Manager.event_set_state:
 					var d = gameObjects.members[event[1]];
 					d.setState( event[2] );
-					trace("se state evt",event);
+					trace("set state event",event);
 					break;
 				default:
 					break;
@@ -121,10 +120,7 @@ package managers
 		}
 		
 		protected function makeGameSprite(id:int, x:int, y:int, MSID:int, align:int, facing:int , state:int):FlxSprite {
-			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID,x,y,this,id);
-			f.facing = facing;
-			f.align=align;
-			f.setState(state);
+			var f:ManagedFlxSprite = MSLib.getMFlxSprite(MSID,x,y,this,id,facing, align, state);
 			return f
 		}
 		

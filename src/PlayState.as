@@ -49,8 +49,6 @@ package
 		
 		public var managedSprites:FlxGroup = new FlxGroup();
 		
-		public static var consoleOutput:FlxText;
-		
 		var cooldownText:Array = new Array();
 		
 		public function PlayState(clientManager:ClientManager, hostManager:HostManager=null){
@@ -89,7 +87,6 @@ package
 			*/
 			this.add(managedSprites);
 			
-			this.add(PlayState.consoleOutput);
 		}
 		
 		public function setPlayer(p:PlayerControlled):void
@@ -123,14 +120,12 @@ package
 			//removing dead entities
 			for each( var gameObject:FlxBasic in this.managedSprites.members){
 				if(gameObject!=null && !gameObject.alive){
-					PlayState.consoleOutput.text=gameObject.toString()+" died";
 					this.remove(gameObject,true);
 				}
 			}
 			
 			for each( var gameObject:FlxBasic in this.members){
 				if(gameObject!=null && !gameObject.alive){
-					PlayState.consoleOutput.text=gameObject.toString()+" died";
 					this.remove(gameObject,true);
 				}
 			}

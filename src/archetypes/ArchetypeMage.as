@@ -151,7 +151,6 @@ package archetypes
 				else if (FlxG.keys.R && player.cooldowns[3]==0)
 				{
 					player.cooldowns[3]=10;
-					trace(player.parent);
 					player.play("ulti");
 					this.channeling = true;
 					var g = new GravityWell(player.getMidpoint().x, player.getMidpoint().y, player.parent, null);

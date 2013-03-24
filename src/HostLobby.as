@@ -20,6 +20,7 @@ package
 		
 		protected var clientTexts:Array;
 		protected var focus:uint=0;
+		protected var socketBound:Boolean;
 		
 		protected static var textSpacing:uint = 40;
 		protected static var textOrigin:uint = 200;
@@ -33,11 +34,24 @@ package
 			//create listening server
 			this.hostSocket = new ServerSocket();
 			this.hostSocket.addEventListener( ServerSocketConnectEvent.CONNECT, onConnect );
-			this.hostSocket.bind( listenPort );
-			this.hostSocket.listen();
 			
-			trace("Serversocket bound "+this.hostSocket.bound);
-			trace("Serversocket listening "+this.hostSocket.listening);
+			try{
+				this.hostSocket.bind( listenPort );
+				this.hostSocket.listen();
+				
+				trace("Serversocket bound "+this.hostSocket.bound);
+				trace("Serversocket listening "+this.hostSocket.listening);
+				this.socketBound=true;
+			}catch(error:Error){
+				var errorText = new FlxText(0, HostLobby.textOrigin , FlxG.width, "Could not bind server socket.");
+				errorText.setFormat (null, 20, 0xFFFFFFFF, "center");
+				this.add(errorText);
+				errorText = new FlxText(0, HostLobby.textOrigin + 24 , FlxG.width, "Something else is bound to it?");
+				errorText.setFormat (null, 12, 0xFFFFFFFF, "center");
+				this.add(errorText);
+				this.socketBound=false;
+			}	 
+			
 			
 			//visual things
 			createBonesGUI();
@@ -100,12 +114,15 @@ package
 				}
 			}
 			
-			if( FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE") ){//kicking selected player
+			if( FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE") ){//entering game
+				for(var i:uint =0; i<this.clients.length; i++){
+					this.clients[i].removeEventListener( ProgressEvent.SOCKET_DATA, getName );
+				}
 				FlxG.switchState ( new PlayState(new NetClientManager( this.mastraubatorySocket ) , new NetServerManager(clients) ) );
 			}
 			
-			if( FlxG.keys.justPressed("ESCAPE")){//kicking selected player
-				this.abortLobby()
+			if( FlxG.keys.justPressed("ESCAPE")){//leaving lobby
+				if(this.socketBound) {this.abortLobby();}
 				FlxG.switchState ( new MenuState() );
 			}
 			

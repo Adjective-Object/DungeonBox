@@ -25,6 +25,7 @@ package managers
 				referenceNumbers[clients[socketIndex]] = socketIndex;
 				clients[socketIndex].addEventListener( ProgressEvent.SOCKET_DATA, onClientData );
 			}
+			
 		}
 		
 		public override function update():void{
@@ -48,7 +49,6 @@ package managers
 		
 		public static function sendEventMessage( client:Socket, message:Array, verbose:Boolean=false):void {
 			var msgTyping:String = Manager.msgConfigs[message[0]];
-			//trace(message);
 			client.writeInt(message[0]);
 			for(var i:int = 1; i<message.length; i++){
 				if(msgTyping.charAt(i-1)=='i'){
@@ -69,9 +69,6 @@ package managers
 			
 			var args:Array = new Array();
 			args.push(evtType);
-			
-			//trace(Manager.msgConfigs, evtType);
-			//trace(argsConfig);
 			
 			for (var i:int = 0; i < argsConfig.length; i++ ) {
 				if (argsConfig.charAt(i) == 'i') {
