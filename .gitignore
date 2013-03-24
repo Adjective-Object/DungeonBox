@@ -19,5 +19,6 @@ local.properties
 # Mac crap
 .DS_Store
 
-#photoshop
+#FlashDevelop
 *.psd
+bin-debug/*
