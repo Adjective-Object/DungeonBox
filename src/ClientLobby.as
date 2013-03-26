@@ -29,11 +29,7 @@ package
 		public override function create():void{
 			//create listening server
 			this.socket = new Socket();
-			this.socket.addEventListener(Event.CLOSE, closeHandler);
-			this.socket.addEventListener(Event.CONNECT, connectHandler);
-			this.socket.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-			this.socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
-			this.socket.addEventListener(ProgressEvent.SOCKET_DATA, socketDataHandler);
+			establishListeners();
 			
 			this.inputText = new InputText(0, 200, FlxG.width);
 			this.inputText.setFormat (null, 20, 0xFFFFFFFF, "center");
@@ -87,11 +83,15 @@ package
 			var ip:String = temp[0];
 			var port:int;
 
-			port = int(temp[1]);
-
+			if(temp.length>1){
+				port = int(temp[1]);
+			} else{
+				port = 1337;
+			}
+			trace (ip, port);
 			socket.connect(ip,port);
 			
-			return "attempting to connect to "+addressString+"..."
+			return "attempting to connect to "+ip+":"+port+"..."
 		}
 		
 		public function createBonesGUI():void{
@@ -121,9 +121,6 @@ package
 		}
 		
 		
-		
-		
-		
 		public function closeHandler(event:Event){
 			trace(event);
 		}
@@ -131,17 +128,14 @@ package
 		public function connectHandler(event:Event){
 			trace(event);
 			this.errorText.text = "connected to server at " + this.socket.remoteAddress+":"+this.socket.remotePort;
+			socket.writeShort(this.name.length);//because writeUTF donot work
 			socket.writeUTF(this.name);
 		}
 		
 		public function ioErrorHandler(event:IOErrorEvent){
 			trace("IOERROR",event);
-			if( event.errorID==2031 ){//URL fail event
-				this.errorText.text = "cannot connect to server";
-			}
-			else{
-				this.errorText.text = event.text;
-			}
+			this.errorText.text = "cannot connect to server\n"+event.text;
+
 		}
 		
 		public function securityErrorHandler(event:SecurityErrorEvent){
@@ -149,7 +143,29 @@ package
 		}
 		
 		public function socketDataHandler(event:ProgressEvent){
-			trace("socket got data",event);
+			var msg = this.socket.readUTF();
+			trace(msg);
+			if(msg=="StartGame"){
+				this.removeListeners();
+				FlxG.switchState(new PlayState( new NetClientManager(this.socket) ));
+			}
 		}
+		
+		public function establishListeners(){
+			this.socket.addEventListener(Event.CLOSE, closeHandler);
+			this.socket.addEventListener(Event.CONNECT, connectHandler);
+			this.socket.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+			this.socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+			this.socket.addEventListener(ProgressEvent.SOCKET_DATA, socketDataHandler);
+		}
+		
+		public function removeListeners(){
+			this.socket.removeEventListener(Event.CLOSE, closeHandler);
+			this.socket.removeEventListener(Event.CONNECT, connectHandler);
+			this.socket.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+			this.socket.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+			this.socket.removeEventListener(ProgressEvent.SOCKET_DATA, socketDataHandler);
+		}
+		
 	}
 }

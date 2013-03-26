@@ -15,7 +15,7 @@
 
 	<!-- A universally unique application identifier. Must be unique across all AIR applications.
 	Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-	<id>DungeonBox</id>
+	<id>com.PurpleTengu.DungeonBox</id>
 
 	<!-- Used as the filename for the application. Required. -->
 	<filename>DungeonBox</filename>
@@ -34,10 +34,11 @@
 
 	<!-- Description, displayed in the AIR application installer.
 	May have multiple values for each language. See samples or xsd schema file. Optional. -->
-	<!-- <description></description> -->
+	<description>let's a networked game!</description>
 
 	<!-- Copyright information. Optional -->
-	<!-- <copyright></copyright> -->
+	<copyright>Copyright (c) 2013 Maxwell Huang-Hobbs</copyright>
+    <!-- why am I doing dis? -->
 
 	<!-- Publisher ID. Used if you're updating an application created prior to 1.5.3 -->
 	<!-- <publisherID></publisherID> -->
