@@ -117,6 +117,7 @@ package
 			if( FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE") ){//entering game
 				for(var i:uint =0; i<this.clients.length; i++){
 					this.clients[i].removeEventListener( ProgressEvent.SOCKET_DATA, getName );
+					this.clients[i].writeUTF("start game");
 				}
 				FlxG.switchState ( new PlayState(new NetClientManager( this.mastraubatorySocket ) , new NetServerManager(clients) ) );
 			}
@@ -158,6 +159,7 @@ package
 		
 		
 		public function cleanSocket(event:Event):void{
+			trace("cleaning up (removing) socket", event.target, this.clients.indexOf(event.target) );
 			this.removePlayer( this.clients.indexOf(event.target) );
 		}
 		

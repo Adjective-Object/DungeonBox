@@ -145,7 +145,7 @@ package
 		public function socketDataHandler(event:ProgressEvent){
 			var msg = this.socket.readUTF();
 			trace(msg);
-			if(msg=="StartGame"){
+			if(msg=="start game"){
 				this.removeListeners();
 				FlxG.switchState(new PlayState( new NetClientManager(this.socket) ));
 			}
