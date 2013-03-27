@@ -21,6 +21,7 @@ package
 		protected var clientTexts:Array;
 		protected var focus:uint=0;
 		protected var socketBound:Boolean;
+		protected var errorQuit:Boolean=false;
 		
 		protected static var textSpacing:uint = 40;
 		protected static var textOrigin:uint = 200;
@@ -43,6 +44,7 @@ package
 				trace("Serversocket listening on "+this.hostSocket.localPort);
 				this.socketBound=true;
 			}catch(error:Error){
+				this.errorQuit=true;
 				var errorText = new FlxText(0, HostLobby.textOrigin , FlxG.width, "Could not bind server socket.");
 				errorText.setFormat (null, 20, 0xFFFFFFFF, "center");
 				this.add(errorText);
@@ -114,10 +116,13 @@ package
 				}
 			}
 			
-			if( FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE") ){//entering game
+			if( (FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE")) && !this.errorQuit ){//entering game
 				for(var i:uint =0; i<this.clients.length; i++){
 					this.clients[i].removeEventListener( ProgressEvent.SOCKET_DATA, getName );
+					this.clients[i].removeEventListener( Event.CLOSE, cleanSocket );
 					this.clients[i].writeUTF("start game");
+					this.clients[i].flush();
+					var s:Socket = this.clients[i];
 				}
 				FlxG.switchState ( new PlayState(new NetClientManager( this.mastraubatorySocket ) , new NetServerManager(clients) ) );
 			}
@@ -141,11 +146,15 @@ package
 		public function removePlayer(playerNumber:uint):void{
 			trace("removing client",playerNumber)
 			this.clients[playerNumber].close();
-			this.remove( this.clientTexts[playerNumber] );
+			this.remove(this.clientTexts[playerNumber]);
+			delete this.clients[playerNumber];
 			delete this.clientTexts[playerNumber];
 			for(var i:uint=playerNumber+1; i<clientTexts.length; i++){
 				clientTexts[i].y-=HostLobby.textSpacing;
+				this.clientTexts[i-1]=this.clientTexts[i];
+				this.clients[i-1]=this.clients[i];
 			}
+			delete this.clientTexts[this.clientTexts.length-1];
 		}
 		
 		public function abortLobby(){
@@ -183,23 +192,9 @@ package
 			var clientNum:uint = clients.indexOf(event.target);
 			trace("attempting to get name from",event.target.remoteAddress,"client",clientNum);
 			var s:Socket = clients[clientNum];
-			var l:int = s.readUnsignedShort();
-			var got:Boolean = true;
-			
-			var startTime:Number = new Date().time;
-			while(s.bytesAvailable<l-1){//ugly, eats up too many processor cycles
-				trace("waitin' for",l);
-				if(new Date().time<startTime+(waitTime*1000)){
-					got=false;
-					break;
-				}
-			}
-			if(got){
-				clientTexts[clientNum].text=s.readUTFBytes(l);
-				trace(clientTexts[clientNum].text);
-			} else{
-				trace("can't get name");
-			}
+			s.readShort();
+			clientTexts[clientNum].text=s.readUTFBytes(s.bytesAvailable);
+			trace("name is \"",clientTexts[clientNum].text,"\"");
 		}
 		
 	}

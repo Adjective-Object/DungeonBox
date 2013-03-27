@@ -15,14 +15,16 @@ package managers
 	public class NetServerManager extends HostManager
 	{
 		protected var clients:Array = new Array();
-		protected var referenceNumbers:Dictionary = new Dictionary();
 		
 		public function NetServerManager(sockets:Array)
 		{
 			super(sockets.length);
 			this.clients = sockets;
 			for ( var socketIndex:uint = 0; socketIndex<clients.length ; socketIndex++ ){
-				referenceNumbers[clients[socketIndex]] = socketIndex;
+				while(clients[socketIndex].bytesAvailable>0){
+					trace("server has leftover bytes",clients[socketIndex].bytesAvailable);
+					clients[socketIndex].readByte();
+				}
 				clients[socketIndex].addEventListener( ProgressEvent.SOCKET_DATA, onClientData );
 			}
 			
@@ -40,10 +42,12 @@ package managers
 		}
 		
 		public function onClientData( event:ProgressEvent ):void {
-			var clientNumber = referenceNumbers[event.target];
+			var clientNumber = clients.indexOf(event.target);
 			while(clients[clientNumber].bytesAvailable>0){
 				var msg = handleMessage(this,clients[clientNumber],false);
-				this.parseEvent(msg);
+				if(msg!=null){
+					this.parseEvent(msg);
+				}
 			}
 		}
 		
@@ -61,11 +65,13 @@ package managers
 			}
 			client.flush();
 		}
-			
+		
 		public static function handleMessage( m:Manager, client:Socket, verbose:Boolean=false):Array {
 			var evtType:int = client.readInt();
 			var argsConfig:String = Manager.msgConfigs[evtType];
-			
+			if(argsConfig==null){
+				return null;
+			}
 			
 			var args:Array = new Array();
 			args.push(evtType);
@@ -77,6 +83,7 @@ package managers
 					args.push(client.readUTF());
 				} else if (verbose){
 					trace("Server doesn't know how to handle",argsConfig.charAt(i));
+					return null;
 				}
 			}
 			if(verbose){

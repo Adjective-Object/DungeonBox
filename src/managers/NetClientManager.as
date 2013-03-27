@@ -20,6 +20,10 @@ package managers
 		public function NetClientManager(toServer:Socket) 
 		{
 			this.server = toServer;
+			while(this.server.bytesAvailable>0){
+				trace("client has leftover bytes",this.server.bytesAvailable);
+				this.server.readByte();
+			}
 			configureListeners(this.server);
 			super();
 		}
@@ -63,7 +67,10 @@ package managers
 		
 		private function socketDataHandler(event:ProgressEvent):void {
 			while (this.server.bytesAvailable>0){
-				this.gameEvents.push( NetServerManager.handleMessage(this,this.server, false) );
+				var p =NetServerManager.handleMessage(this,this.server, false);
+				if(p!=null){
+					this.gameEvents.push( p );
+				}
 			}
 			//for(var i:int=0; i<gameEvents.length; i++){
 			//	trace(i, ":", this.gameEvents[i]);
