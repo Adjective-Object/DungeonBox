@@ -55,6 +55,7 @@ package
 			{
 				if(FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE")){
 					this.name=this.inputText.text;
+					trace("name:", this.name);
 					this.inputText.text = "";
 					this.promptText.text = "server address?"
 					this.gettingName=false;
@@ -122,13 +123,12 @@ package
 		
 		
 		public function closeHandler(event:Event){
-			trace(event);
+			this.errorText.text = "you were kicked from the server!";
 		}
 		
 		public function connectHandler(event:Event){
 			trace(event);
 			this.errorText.text = "connected to server at " + this.socket.remoteAddress+":"+this.socket.remotePort;
-			socket.writeShort(this.name.length);//because writeUTF donot work
 			socket.writeUTF(this.name);
 		}
 		
