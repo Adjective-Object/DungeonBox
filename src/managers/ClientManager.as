@@ -77,15 +77,21 @@ package managers
 					delete this.gameObjects.remove(this.gameObjects.members[event[1]]);
 					break;
 				case Manager.event_update_position:
-					this.gameObjects.members[event[1]].x = event[2];
-					this.gameObjects.members[event[1]].y = event[3];
+						if(!gameObjects.members[event[1]].clientControlled){
+							this.gameObjects.members[event[1]].x = event[2];
+							this.gameObjects.members[event[1]].y = event[3];
+						}
 					break;
 				case Manager.event_update_animation:
-					this.gameObjects.members[event[1]].play(event[2]);
-					this.gameObjects.members[event[1]].facing = event[3];
+					if(!gameObjects.members[event[1]].clientControlled){
+						this.gameObjects.members[event[1]].play(event[2]);
+						this.gameObjects.members[event[1]].facing = event[3];
+					}
 					break;
 				case Manager.event_update_health:
-					this.gameObjects.members[event[1]].health = event[2];
+					if(!gameObjects.members[event[1]].clientControlled){
+						this.gameObjects.members[event[1]].health = event[2];
+					}
 					break;
 				case Manager.event_damage:
 					var s = gameObjects.members[event[1]];
