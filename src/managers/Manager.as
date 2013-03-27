@@ -59,6 +59,8 @@ package managers
 		
 		public function Manager(){}
 		
+		public function make():void{}
+		
 		/**
 		 * updates each of the sprites in the game, reporting the events that happen as a result
 		 * will do nothing on networked version

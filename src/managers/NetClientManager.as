@@ -16,16 +16,17 @@ package managers
 	{
 		
 		protected var server:Socket;
+		protected var playerID:int = -1;
 		
 		public function NetClientManager(toServer:Socket) 
 		{
 			this.server = toServer;
-			while(this.server.bytesAvailable>0){
-				trace("client has leftover bytes",this.server.bytesAvailable);
-				this.server.readByte();
-			}
 			configureListeners(this.server);
 			super();
+		}
+		
+		public override function make():void{
+			super.make();
 		}
 		
 		private function configureListeners( s:Socket ):void {
@@ -50,7 +51,7 @@ package managers
 		override public function getGameEvent():Array
 		{
 			var p:Array =  super.getGameEvent();
-			if ( p!=null && p[0]==Manager.event_spawn && p[1] == 0){
+			if ( p!=null && p[0]==Manager.event_spawn && p[1] == this.playerID){
 				p[4]=PlayerControlled.MSType;
 			}
 			return p
@@ -66,6 +67,10 @@ package managers
 		}
 		
 		private function socketDataHandler(event:ProgressEvent):void {
+			if(this.playerID == -1){
+				this.playerID=this.server.readShort();
+				trace("playerID",this.playerID);
+			}
 			while (this.server.bytesAvailable>0){
 				var p =NetServerManager.handleMessage(this,this.server, false);
 				if(p!=null){

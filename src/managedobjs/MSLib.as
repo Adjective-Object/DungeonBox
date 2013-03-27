@@ -2,9 +2,10 @@ package managedobjs
 {
 	import flash.utils.Dictionary;
 	
-	import org.flixel.FlxObject;
-	import org.flixel.FlxG;
 	import managers.Manager;
+	
+	import org.flixel.FlxG;
+	import org.flixel.FlxObject;
 	
 	/**
 	 * ...
@@ -39,7 +40,7 @@ package managedobjs
 		 * @param	managedID the ID in the manager
 		 */
 		public static function getMFlxSprite(type:int, x:int, y:int, parent:Manager, managedID:int, facing:int, align:int, state:int):ManagedFlxSprite {
-			if (type != ManagedFlxSprite.TYPE_UNDECLARED) {
+			if (type != ManagedFlxSprite.TYPE_UNDECLARED && MSLib.managedIDs[type]!=null) {
 				var clazz:Class = MSLib.managedIDs[type];
 				var f = new clazz(x, y, parent, managedID);
 				f.facing = facing;

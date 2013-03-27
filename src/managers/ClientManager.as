@@ -26,6 +26,11 @@ package managers
 		{	
 			super();
 			this.clientSide = true;
+		}
+		
+		public override function make():void
+		{
+			super.make();
 			this.gameObjects  = new FlxGroup();
 		}
 		

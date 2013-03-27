@@ -20,14 +20,22 @@ package managers
 		{
 			super(sockets.length);
 			this.clients = sockets;
+		}
+		
+		public override function make():void{
+			super.make();
 			for ( var socketIndex:uint = 0; socketIndex<clients.length ; socketIndex++ ){
 				while(clients[socketIndex].bytesAvailable>0){
 					trace("server has leftover bytes",clients[socketIndex].bytesAvailable);
 					clients[socketIndex].readByte();
 				}
 				clients[socketIndex].addEventListener( ProgressEvent.SOCKET_DATA, onClientData );
+				
+				//send id
+				trace("sending id",socketIndex);
+				clients[socketIndex].writeShort(socketIndex);
+				clients[socketIndex].flush();
 			}
-			
 		}
 		
 		public override function update():void{

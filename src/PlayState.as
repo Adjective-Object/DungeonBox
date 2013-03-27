@@ -60,6 +60,12 @@ package
 		
 		override public function create():void
 		{
+			
+			if(serverManager!=null){
+				serverManager.make();
+			}
+			manager.make();
+			
 			FlxG.bgColor = 0xff000000;
 			FlxG.worldBounds = new FlxRect(0, 0,  data[0].length * 32, data.length * 32);
 			FlxG.mouse.show(cursor);
@@ -107,6 +113,13 @@ package
 			if(this.player!=null){
 				FlxG.camera.scroll.x = player.getMidpoint().x-FlxG.width/2;
 				FlxG.camera.scroll.y = player.getMidpoint().y-FlxG.height/2;
+			}
+			
+			if(FlxG.keys.justPressed("O")){
+				FlxG.camera.zoom=FlxG.camera.zoom/2;
+			}
+			if(FlxG.keys.justPressed("P")){
+				FlxG.camera.zoom=FlxG.camera.zoom*2;
 			}
 			
 			//updating HUD text

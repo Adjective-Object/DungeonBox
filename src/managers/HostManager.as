@@ -25,16 +25,21 @@ package managers
 		protected var gameEvents:Array = new Array();
 		protected var parsedEvents:Array;
 		protected var idCounter:int;
+		protected var numClients:int;
 
-		public function HostManager( numClients:uint ) 
+		public function HostManager( numberClients:uint ) 
 		{
 			this.clientSide = false;
 			super();
 			
 			this.idCounter = 0;
+			this.numClients=numberClients;
 			this.parsedEvents = new Array();
 			this.mapSize = new FlxPoint(PlayState.data[0].length * 32, PlayState.data.length * 32);
-			
+		}
+		
+		override public function make():void{
+			super.make();
 			var sep = 25;
 			var p = -1;
 			this.players = new Array();
@@ -57,6 +62,7 @@ package managers
 			this.playerTwo.spawn();
 			*/
 		}
+		
 		
 		/**
 		 * updates each of the sprites in the game, reporting the events that happen as a result

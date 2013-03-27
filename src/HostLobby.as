@@ -62,8 +62,14 @@ package
 			//connect to self
 			this.mastraubatorySocket = new Socket();
 			this.mastraubatorySocket.connect( "127.0.0.1", listenPort );
+			this.mastraubatorySocket.addEventListener(ProgressEvent.SOCKET_DATA,clearMastraubatorySocket);
 			this.mastraubatorySocket.writeUTF("HOST");
 			this.mastraubatorySocket.flush();
+		}
+		
+		public function clearMastraubatorySocket(event:ProgressEvent){
+			event.target.readUTF();
+			event.target.removeEventListener(ProgressEvent.SOCKET_DATA,clearMastraubatorySocket);
 		}
 		
 		public function createBonesGUI():void{

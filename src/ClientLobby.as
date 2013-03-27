@@ -130,6 +130,7 @@ package
 			trace(event);
 			this.errorText.text = "connected to server at " + this.socket.remoteAddress+":"+this.socket.remotePort;
 			socket.writeUTF(this.name);
+			socket.flush();
 		}
 		
 		public function ioErrorHandler(event:IOErrorEvent){
