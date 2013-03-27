@@ -155,17 +155,19 @@ package managers
 				case Manager.event_update_position:
 					this.objectMap.members[args[1]].x = args[2];
 					this.objectMap.members[args[1]].y = args[3];
+					this.pushEvent(args);
 				break;
 				case Manager.event_update_health:
 					this.objectMap.members[args[1]].health = args[2];
 				break;
 				case Manager.event_kill:
-					trace("kill_via_event "+this.objectMap.members[args[1]]);
 					delete this.objectMap.members[args[1]];
+					this.pushEvent(args);
 					//(FlxSprite)(this.objectMap.remove(this.objectMap.members[args[1]])).destroy();
 				break;
 				case Manager.event_knockback:
 					this.objectMap.members[args[1]].knockBack(args[2], args[3]);
+					this.pushEvent(args);
 					break;
 				case Manager.event_debuff:
 					if (args[3] == 0) {

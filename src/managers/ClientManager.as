@@ -61,7 +61,7 @@ package managers
 					trace("spawnin",event);
 					this.gameObjects.members[event[1]] = makeGameSprite(event[1], event[2], event[3], event[4], event[5], event[6], event[7])
 					if (this.gameObjects.members[event[1]].type == PlayerControlled.MSType) {
-						var p:PlayerControlled = (PlayerControlled)(this.gameObjects.members[event[1]]);
+						var p = this.gameObjects.members[event[1]];
 						this.child.setPlayer(p);
 						p.pstate = this.child;
 						//p.addItem(new BlueStone());
@@ -102,6 +102,7 @@ package managers
 				case Manager.event_give_item:
 					var p = gameObjects.members[event[1]];
 					if(p.type==PlayerControlled.MSType){
+						trace (p,p.type);
 						(PlayerControlled)(p).addItem( IMLib.getIMItem(event[2]) );
 					}
 					break
