@@ -160,6 +160,9 @@ package managers
 				case Manager.event_update_health:
 					this.objectMap.members[args[1]].health = args[2];
 				break;
+				case Manager.event_update_animation:
+					this.pushEvent(args);
+					break;
 				case Manager.event_kill:
 					delete this.objectMap.members[args[1]];
 					this.pushEvent(args);

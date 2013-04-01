@@ -61,7 +61,11 @@ package managedobjs
 			super.update();
 			lastDamage += FlxG.elapsed;
 			
+			this.oldanimname = this._curAnim.name;
 			this.archetype.update(this);
+			if(this.oldanimname!=this._curAnim.name){
+				this.parent.updateAnimation(this);
+			}
 		}
 		
 		public function addItem(p:Item){
