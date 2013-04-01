@@ -140,15 +140,6 @@ package
 			
 		}
 		
-		
-		public function addNewPlayer(s:Socket):void{
-			this.clients.push(s);
-			var text:FlxText = new FlxText(0, FlxG.height - 56, FlxG.width, s.readUTF());//reads UTF string from socket and assigns that as the name of the user
-			text.setFormat (null, 8, 0xFFFFFFFF, "center");
-			add(text);
-			this.clientTexts.add(text);
-		}
-		
 		public function removePlayer(playerNumber:uint):void{
 			trace("removing client",playerNumber)
 			this.clients[playerNumber].close();
@@ -185,7 +176,7 @@ package
 			clientSocket.addEventListener( Event.CLOSE, cleanSocket );
 			
 			trace( "Connection from " + clientSocket.remoteAddress + ":" + clientSocket.remotePort );
-			var newText:FlxText = new FlxText(0, HostLobby.textOrigin+HostLobby.textSpacing*clients.length, FlxG.width, "NO_NAME" );
+			var newText:FlxText = new FlxText(0, HostLobby.textOrigin+HostLobby.textSpacing*clients.length, FlxG.width, "NO_NAME ("+s.remoteAddress+")" );
 			newText.setFormat (null, 12, 0xFFFFFFFF, "center");
 			clients.push(clientSocket);
 			clientTexts.push(newText);
@@ -199,9 +190,9 @@ package
 			trace("attempting to get name from",event.target.remoteAddress,"client",clientNum);
 			var s:Socket = clients[clientNum];
 			s.readShort();
-			clientTexts[clientNum].text=s.readUTFBytes(s.bytesAvailable);
+			clientTexts[clientNum].text=s.readUTFBytes(s.bytesAvailable ) + " ("+s.remoteAddress+")" ;
 			if(clientTexts[clientNum].text==""){
-				clientTexts[clientNum].text="un-named client"
+				clientTexts[clientNum].text="un-named client ("+s.remoteAddress+")"
 			}
 			trace("name is \"",clientTexts[clientNum].text,"\"");
 		}
