@@ -58,7 +58,6 @@ package managers
 			switch(event[0])
 			{
 				case Manager.event_spawn:
-					trace("spawnin",event);
 					this.gameObjects.members[event[1]] = makeGameSprite(event[1], event[2], event[3], event[4], event[5], event[6], event[7])
 					if (this.gameObjects.members[event[1]].type == PlayerControlled.MSType) {
 						var p = this.gameObjects.members[event[1]];
@@ -73,6 +72,7 @@ package managers
 					
 					break;
 				case Manager.event_kill:
+					
 					delete this.child.managedSprites.remove(this.gameObjects.members[event[1]]);
 					delete this.gameObjects.remove(this.gameObjects.members[event[1]]);
 					break;

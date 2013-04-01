@@ -63,7 +63,7 @@ package
 			}
 			else
 			{	
-				if(FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE")){
+				if(FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("SPACE") && !this.socket.connected){
 					this.errorText.text = this.attemptConnect(this.inputText.text);
 				}
 			}
