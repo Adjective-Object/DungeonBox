@@ -27,7 +27,6 @@ package managedobjs
 		public function PlayerDummy(x:Number, y:Number, parent:Manager, managedID:int, archetypeID:uint= -1) 
 		{
 			super(x, y, parent, managedID, 10);
-			this.clientControlled = true;
 			this.align=Manager.align_friend;
 			
 			this.type = PlayerDummy.MSType;

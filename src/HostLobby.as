@@ -200,6 +200,9 @@ package
 			var s:Socket = clients[clientNum];
 			s.readShort();
 			clientTexts[clientNum].text=s.readUTFBytes(s.bytesAvailable);
+			if(clientTexts[clientNum].text==""){
+				clientTexts[clientNum].text="un-named client"
+			}
 			trace("name is \"",clientTexts[clientNum].text,"\"");
 		}
 		
